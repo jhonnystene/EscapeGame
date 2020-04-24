@@ -6,13 +6,12 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 
 public class Keybinds {
     // Function for initializing keybinds
     public void initKeybinds(InputManager inputManager, ActionListener actionListener, AnalogListener analogListener) {
-        inputManager.addMapping("Action", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("Action", new KeyTrigger(KeyInput.KEY_E), new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("Forward", new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
