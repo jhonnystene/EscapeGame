@@ -4,7 +4,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-<<<<<<< HEAD
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -13,12 +12,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-=======
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.material.Material;
->>>>>>> 8dec6695b4e57f0c30f357332ad51a37caeda98a
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -46,7 +39,6 @@ public class Main extends SimpleApplication {
         app.setSettings(appSettings);
         app.start();
     }
-<<<<<<< HEAD
         
     protected Geometry player;
     
@@ -76,22 +68,6 @@ public class Main extends SimpleApplication {
         boxMaterial.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg"));
         box.setMaterial(boxMaterial);
         
-=======
-    
-    // Init game
-    public void simpleInitApp() {
-        initPickups();
-        initKeybinds();
-        
-        this.flyCam.setMoveSpeed(10); // Raise camera speed to an acceptable level
-        
-        // Create test box my guy
-        Geometry box = new Geometry("Box", new Box(1, 1, 1));
-        Material boxMaterial = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
-        boxMaterial.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg"));
-        box.setMaterial(boxMaterial);
-        
->>>>>>> 8dec6695b4e57f0c30f357332ad51a37caeda98a
         // Make box respond to raycasting
         // Do the same thing for other objects to make it so they can be picked up
         pickables.attachChild(box);
@@ -103,10 +79,6 @@ public class Main extends SimpleApplication {
         pickables = new Node(); // Java!
         rootNode.attachChild(pickables);
         
-<<<<<<< HEAD
-=======
-        setDisplayStatView(false); // Disable debug view
->>>>>>> 8dec6695b4e57f0c30f357332ad51a37caeda98a
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt"); // Load a font
         
         // Create a text object that says +
@@ -123,7 +95,6 @@ public class Main extends SimpleApplication {
     // Function for initializing keybinds
     private void initKeybinds() {
         inputManager.addMapping("Action", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-<<<<<<< HEAD
         inputManager.addMapping("Forward", new KeyTrigger(KeyInput.KEY_I));
         inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_K));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
@@ -137,13 +108,6 @@ public class Main extends SimpleApplication {
     
     // Action input
     private final ActionListener actionListener = new ActionListener() {
-=======
-        inputManager.addListener(actionListener, "Action");
-    }
-    
-    // Handles input
-    private ActionListener actionListener = new ActionListener() {
->>>>>>> 8dec6695b4e57f0c30f357332ad51a37caeda98a
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
             if(name.equals("Action") && !keyPressed) { // LMB
@@ -166,7 +130,6 @@ public class Main extends SimpleApplication {
             }
         }
     };
-<<<<<<< HEAD
     
     // Movement input
     private final AnalogListener analogListener = new AnalogListener() {
@@ -192,6 +155,4 @@ public class Main extends SimpleApplication {
             }
         }
     };    
-=======
->>>>>>> 8dec6695b4e57f0c30f357332ad51a37caeda98a
 }
