@@ -4,12 +4,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
@@ -18,6 +14,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+
+import mygame.Keybinds;
 
 public class Main extends SimpleApplication {
     Node pickables;
@@ -46,7 +44,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         initPickups();
-        initKeybinds();
+        Keybinds keybinds = new Keybinds();
+        keybinds.initKeybinds(inputManager, actionListener, analogListener);
         
         // Disable debug and fps - Press F5 to re-enable in game if you really want
         setDisplayStatView(false); 
@@ -90,20 +89,6 @@ public class Main extends SimpleApplication {
         settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
         
         guiNode.attachChild(ch); // Throw it in the center
-    }
-    
-    // Function for initializing keybinds
-    private void initKeybinds() {
-        inputManager.addMapping("Action", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        inputManager.addMapping("Forward", new KeyTrigger(KeyInput.KEY_I));
-        inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_K));
-        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
-        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_L));
-        inputManager.addMapping("Sprint", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addListener(actionListener, "Action");
-        inputManager.addListener(analogListener, "Forward", "Backward");
-        inputManager.addListener(analogListener, "Left", "Right");
-        inputManager.addListener(analogListener, "Sprint");
     }
     
     // Action input
