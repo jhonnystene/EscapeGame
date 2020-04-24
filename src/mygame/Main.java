@@ -4,10 +4,12 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
+import com.jme3.input.ChaseCamera;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -15,10 +17,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 
-import mygame.Keybinds;
 
 public class Main extends SimpleApplication {
-    Node pickables;
+    Node pickables; // Items that can be picked up
+    Quaternion cameraRotation = new Quaternion(0, 0, 0, 0);
+    
+    // Player and player variables
+    protected Geometry player;
     int playerNormalSpeed = 10;
     int playerSpeed = 10;
     int playerSprintSpeed = 20;
@@ -40,8 +45,6 @@ public class Main extends SimpleApplication {
         app.setSettings(appSettings);
         app.start();
     }
-        
-    protected Geometry player;
     
     // Init game
     @Override
@@ -49,12 +52,6 @@ public class Main extends SimpleApplication {
         initPickups();
         Keybinds keybinds = new Keybinds();
         keybinds.initKeybinds(inputManager, actionListener, analogListener);
-        
-        // Disable debug and fps - Press F5 to re-enable in game if you really want
-        setDisplayStatView(false); 
-        setDisplayFps(false); 
-        
-        this.flyCam.setMoveSpeed(10); // Raise camera speed to an acceptable level
         
         // Creates test player
         Box b = new Box(1, 1, 1);
@@ -73,6 +70,22 @@ public class Main extends SimpleApplication {
         // Make box respond to raycasting
         // Do the same thing for other objects to make it so they can be picked up
         pickables.attachChild(box);
+        
+        // Setup camera
+        setDisplayStatView(false); 
+        setDisplayFps(false);
+        ChaseCamera chaseCam = new ChaseCamera(cam, player, inputManager);
+        chaseCam.setDragToRotate(false); // Make camera move with mouse movement
+        chaseCam.setInvertVerticalAxis(true); // Make camera move properly
+        // Put camera inside player
+        chaseCam.setMaxDistance(0);
+        chaseCam.setMinDistance(0);
+    }
+    
+    @Override
+    public void simpleUpdate(float tpf) {
+        //cam.setLocation(player.getLocalTranslation());
+        //dscam.setRotation(cameraRotation);
     }
     
     // Function for initializing pickups and crosshair and stuff
