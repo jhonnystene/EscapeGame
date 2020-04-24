@@ -19,6 +19,9 @@ import mygame.Keybinds;
 
 public class Main extends SimpleApplication {
     Node pickables;
+    int playerNormalSpeed = 10;
+    int playerSpeed = 10;
+    int playerSprintSpeed = 20;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -113,6 +116,10 @@ public class Main extends SimpleApplication {
                     // TODO: Make item picked up follow camera, Portal-style
                 }
             }
+            if(name.equals("Sprint")) {
+                if(keyPressed) playerSpeed = playerSprintSpeed;
+                else playerSpeed = playerNormalSpeed;
+            }
         }
     };
     
@@ -121,7 +128,6 @@ public class Main extends SimpleApplication {
         @Override
         public void onAnalog(String name, float value, float tpf) {
             // Written by Ethan S
-            int playerSpeed = 10;
             if (name.equals("Right")) {
                 Vector3f v = player.getLocalTranslation();
                 player.setLocalTranslation(v.x + value * playerSpeed, v.y, v.z);

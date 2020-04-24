@@ -21,6 +21,6 @@ public class Keybinds {
         inputManager.addListener(actionListener, "Action");
         inputManager.addListener(analogListener, "Forward", "Backward");
         inputManager.addListener(analogListener, "Left", "Right");
-        inputManager.addListener(analogListener, "Sprint");
+        inputManager.addListener(actionListener, "Sprint");
     }
 }
