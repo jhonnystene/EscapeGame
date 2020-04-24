@@ -19,8 +19,6 @@ public class Keybinds {
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
         inputManager.addMapping("Sprint", new KeyTrigger(KeyInput.KEY_SPACE));
         
-        inputManager.addMapping("RotateLeft", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        
         // Digital Listeners
         inputManager.addListener(actionListener, "Action");
         inputManager.addListener(actionListener, "Sprint");

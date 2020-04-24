@@ -84,8 +84,7 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleUpdate(float tpf) {
-        //cam.setLocation(player.getLocalTranslation());
-        //dscam.setRotation(cameraRotation);
+        
     }
     
     // Function for initializing pickups and crosshair and stuff
