@@ -1,2 +1,1 @@
-# EscapeGame
-Escape game for Computer Science class
+# EscapeGame2D
