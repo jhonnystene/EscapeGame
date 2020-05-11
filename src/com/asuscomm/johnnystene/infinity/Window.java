@@ -25,6 +25,10 @@ public class Window extends JFrame implements MouseListener {
 	public int windowWidth = 0;
 	public int windowHeight = 0;
 	
+	public int mouseClickX = -1;
+	public int mouseClickY = -1;
+	public boolean mouseDown = false;
+	
 	public int cameraX = 0;
 	public int cameraY = 0;
 	public boolean enableCamera = true;
@@ -72,8 +76,16 @@ public class Window extends JFrame implements MouseListener {
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+		mouseDown = true;
+		mouseClickX = e.getX();
+		mouseClickY = e.getY();
+	}
+	public void mouseReleased(MouseEvent e) {
+		mouseDown = false;
+		mouseClickX = -1;
+		mouseClickY = -1;
+	}
 	
 	public boolean drawMenuButton(int x, int y, int width, int height, String text, Color textColor, Color backgroundColor) {
 		// TODO: Detect if button clicked
@@ -82,12 +94,20 @@ public class Window extends JFrame implements MouseListener {
 		graphics.setColor(backgroundColor);
 		graphics.fillRect(x, y, width, height);
 		FontMetrics metrics = graphics.getFontMetrics(font);
-		x = x + (width - metrics.stringWidth(text)) / 2;
-		y = y + ((height - metrics.getHeight()) / 2) + metrics.getAscent();
+		int textX = x + (width - metrics.stringWidth(text)) / 2;
+		int textY = y + ((height - metrics.getHeight()) / 2) + metrics.getAscent();
 		graphics.setColor(textColor);
 		graphics.setFont(font);
-		graphics.drawString(text, x, y);
+		graphics.drawString(text, textX, textY);
 		graphics.dispose();
+		
+		if(mouseDown) {
+			if(mouseClickX > x && mouseClickX < x + width) {
+				if(mouseClickY > y && mouseClickY < y + height)
+					return true;
+			}
+		}
+		
 		return false;
 	}
 }

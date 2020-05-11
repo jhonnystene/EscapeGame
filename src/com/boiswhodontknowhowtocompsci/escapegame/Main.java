@@ -28,7 +28,10 @@ public class Main {
 		box.y = 200;
 		
 		while(1 == 1) {
-			window.drawMenuButton(100, 100, 350, 100, "Java can eat my ass", Color.WHITE, Color.ORANGE);
+			if(window.drawMenuButton(100, 100, 350, 100, "Java can eat my ass", Color.WHITE, new Color(255, 66, 28))) {
+				System.out.println("Frick!");
+			}
+			
 			if(!window.keyListener.KEY_ACTION) { 
 				// Manage keyboard input
 				if(window.keyListener.KEY_LEFT) player.x -= 10; 
