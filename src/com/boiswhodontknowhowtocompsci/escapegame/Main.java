@@ -48,8 +48,12 @@ public class Main {
 			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.BLACK);
 			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.BLACK);
 			
-			if(window.drawMenuButton(225, 300, 350, 100, "put me in coach.", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+			if(window.drawMenuButton(25, 475, 350, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 				inTitleScreen = false;
+			}
+			
+			if(window.drawMenuButton(425, 475, 350, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+				System.exit(0);
 			}
 			
 			window.repaint();
