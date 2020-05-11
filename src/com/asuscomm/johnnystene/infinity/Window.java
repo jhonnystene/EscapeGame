@@ -90,6 +90,16 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	public void mouseDragged(MouseEvent e) {}
 	
+	public void drawTextCentered(int x, int y, String text, int fontSize, Color fontColor) {
+		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setColor(fontColor);
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		x = x - (metrics.stringWidth(text) / 2);
+		y = y - (metrics.getHeight() / 2);
+		graphics.setFont(font);
+		graphics.drawString(text, x, y);
+	}
 	
 	public boolean drawMenuButton(int x, int y, int width, int height, String text, Color textColor, Color backgroundColor, Color backgroundColorHover) {
 		boolean checkForClick = false;

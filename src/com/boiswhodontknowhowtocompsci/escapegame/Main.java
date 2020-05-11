@@ -27,11 +27,20 @@ public class Main {
 		box.x = 200;
 		box.y = 200;
 		
-		while(1 == 1) {
-			if(window.drawMenuButton(100, 100, 350, 100, "Java can eat my ass", Color.WHITE, new Color(255, 66, 28), new Color(0, 0, 0))) {
-				System.out.println("Frick!");
+		boolean inTitleScreen = true;
+		while(inTitleScreen) {
+			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.BLACK);
+			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.BLACK);
+			
+			if(window.drawMenuButton(225, 300, 350, 100, "put me in coach.", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+				inTitleScreen = false;
 			}
 			
+			window.repaint();
+			Thread.sleep(1000 / 60); // FPS cap needed in menus too
+		}
+		
+		while(1 == 1) {
 			if(!window.keyListener.KEY_ACTION) { 
 				// Manage keyboard input
 				if(window.keyListener.KEY_LEFT) player.x -= 10; 
