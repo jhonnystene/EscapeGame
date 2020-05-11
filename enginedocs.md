@@ -45,6 +45,9 @@ Whenever you wish to update the screen, you simply need to call the `repaint` fu
 ### Drawing to the window as a Graphics2D object
 The window's graphics are stored in a `BufferedImage` object named `frameBuffer`. You can directly modify its contents by calling `frameBuffer.createGraphics()` and running Graphics2D operations on the returned object. Please note that this will not factor in the camera.
 
+### Getting mouse information
+The variables `mouseX`, `mouseY`, and `mouseDown` will be constantly updated so long as the mouse is in the Window object you are referencing them from.
+
 ## The Keyboard Class
 The Keyboard class is intended to be modified to add and remove keybindings and key variable definitions. To add a keybinding, add a boolean value to the top-level of the Keyboard class in `Keyboard.java` as well as an integer value. The boolean value is used to tell whether or not a key is pressed, and the integer value stores the `KeyEvent` scan code. Once those variables have been added, add a line to the `keyPressed` and `keyReleased` functions in the Keyboard class enabling and disabling the key's boolean value when `keycode` is equal to the integer value.
 
