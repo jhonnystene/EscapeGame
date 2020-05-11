@@ -11,8 +11,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -89,6 +87,14 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		mouseY = e.getY();
 	}
 	public void mouseDragged(MouseEvent e) {}
+	
+	public void drawText(int x, int y, String text, int fontSize, Color fontColor) {
+		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setColor(fontColor);
+		graphics.setFont(font);
+		graphics.drawString(text, x, y);
+	}
 	
 	public void drawTextCentered(int x, int y, String text, int fontSize, Color fontColor) {
 		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
