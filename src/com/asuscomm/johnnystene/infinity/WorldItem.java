@@ -31,6 +31,10 @@ public class WorldItem {
 		graphics.dispose();
 	}
 	
+	public WorldItem(BufferedImage setSprite) {
+		sprite = setSprite;
+	}
+	
 	public WorldItem(String filename, boolean url) { // Load in a sprite
 		try {
 			System.out.print("Loading file " + filename + "... ");

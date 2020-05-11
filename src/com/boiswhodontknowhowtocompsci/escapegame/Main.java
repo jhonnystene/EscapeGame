@@ -26,23 +26,22 @@ public class Main {
 		// Create a player object
 		// CollisionItem(width, height, color);
 		// Can also do CollisionItem(filename);
-		CollisionItem player = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/player/test_player.png", true);
+		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
 		player.x = 100;
 		player.y = 200;
 		
 		// Create a box
-		CollisionItem box = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_00.png", true);
+		BufferedImage boxSW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_00.png")));
+		BufferedImage boxW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_01.png")));
+		BufferedImage boxNW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_02.png")));
+		BufferedImage boxN = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_03.png")));
+		BufferedImage boxNE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_04.png")));
+		BufferedImage boxE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_05.png")));
+		BufferedImage boxSE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_06.png")));
+		BufferedImage boxS = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_07.png")));
+		CollisionItem box = new CollisionItem(boxE);
 		box.x = 200;
 		box.y = 200;
-		
-		BufferedImage boxSW = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_00.png"));
-		BufferedImage boxW = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_01.png"));
-		BufferedImage boxNW = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_02.png"));
-		BufferedImage boxN = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_03.png"));
-		BufferedImage boxNE = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_04.png"));
-		BufferedImage boxE = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_05.png"));
-		BufferedImage boxSE = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_06.png"));
-		BufferedImage boxS = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_07.png"));
 		
 		boolean inTitleScreen = true;
 		while(inTitleScreen) {

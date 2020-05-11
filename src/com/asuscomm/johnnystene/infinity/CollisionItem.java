@@ -7,6 +7,7 @@
 package com.asuscomm.johnnystene.infinity;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 public class CollisionItem extends WorldItem {
 	public Line[] collisionShape; // Sets itself to be a box around the whole image by default
@@ -23,8 +24,13 @@ public class CollisionItem extends WorldItem {
 		collisionShape = tempCollisionShape;
 	}
 	
+	public CollisionItem(BufferedImage setSprite) {
+		super(setSprite);
+	}
+	
 	public boolean collidingWith(CollisionItem item) {
 		if(item == null) return false;
+		if(item.collisionShape == null) return false;
 		
 		for(Line line : item.collisionShape) {
 			if(collidingWith(line)) {
