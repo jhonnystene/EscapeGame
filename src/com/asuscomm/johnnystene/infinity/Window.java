@@ -131,4 +131,11 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		
 		return false;
 	}
+	
+	public void drawRectangle(int x, int y, int width, int height, Color color) {
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setColor(color);
+		graphics.fillRect(x, y, width, height);
+		graphics.dispose();
+	}
 }

@@ -14,10 +14,14 @@ public class Main {
 		Window window = new Window(800, 600, "Escape The Robots and Oh Gosh They're Coming Run"); // Create window that is 800x600
 		window.enableCamera = true; // Make sure camera is enabled
 		
+		window.drawRectangle(0, 0, 800, 600, new Color(59, 59, 59));
+		window.drawTextCentered(400, 300, "Now Loading...", 40, Color.WHITE);
+		window.repaint();
+		
 		// Create a player object
 		// CollisionItem(width, height, color);
 		// Can also do CollisionItem(filename);
-		CollisionItem player = new CollisionItem(32, 32, Color.BLACK);
+		CollisionItem player = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/test/giphy.gif", true);
 		player.x = 100;
 		player.y = 200;
 		

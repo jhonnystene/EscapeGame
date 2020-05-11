@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -30,10 +31,11 @@ public class WorldItem {
 		graphics.dispose();
 	}
 	
-	public WorldItem(String filename) { // Load in a sprite
+	public WorldItem(String filename, boolean url) { // Load in a sprite
 		try {
 			System.out.print("Loading file " + filename + "... ");
-			sprite = ImageIO.read(new File(filename));
+			if(url) sprite = ImageIO.read(new URL(filename));
+			else sprite = ImageIO.read(new File(filename));
 			width = sprite.getWidth();
 			height = sprite.getHeight();
 			System.out.println("Success!");
