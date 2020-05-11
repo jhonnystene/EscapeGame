@@ -45,8 +45,9 @@ public class Main {
 		
 		boolean inTitleScreen = true;
 		while(inTitleScreen) {
-			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.BLACK);
-			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.BLACK);
+			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
+			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
+			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.WHITE);
 			
 			if(window.drawMenuButton(25, 475, 350, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 				inTitleScreen = false;

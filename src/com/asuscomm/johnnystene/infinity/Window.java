@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -91,6 +92,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public void drawText(int x, int y, String text, int fontSize, Color fontColor) {
 		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
 		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		graphics.setColor(fontColor);
 		graphics.setFont(font);
 		graphics.drawString(text, x, y);
@@ -99,6 +101,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public void drawTextCentered(int x, int y, String text, int fontSize, Color fontColor) {
 		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
 		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		graphics.setColor(fontColor);
 		FontMetrics metrics = graphics.getFontMetrics(font);
 		x = x - (metrics.stringWidth(text) / 2);
@@ -117,6 +120,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		} else
 			graphics.setColor(backgroundColor);
 		graphics.fillRect(x, y, width, height);
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		FontMetrics metrics = graphics.getFontMetrics(font);
 		int textX = x + (width - metrics.stringWidth(text)) / 2;
 		int textY = y + ((height - metrics.getHeight()) / 2) + metrics.getAscent();
