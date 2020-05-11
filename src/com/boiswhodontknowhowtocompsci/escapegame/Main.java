@@ -21,7 +21,29 @@ public class Main {
 		Window window = new Window(800, 600, "Escape The Robots and Oh Gosh They're Coming Run"); // Create window that is 800x600
 		window.enableCamera = true; // Make sure camera is enabled
 		
-		System.out.println("Loading...");
+		boolean inTitleScreen = true;
+		while(inTitleScreen) {
+			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
+			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
+			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.WHITE);
+			
+			if(window.drawMenuButton(25, 475, 350, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+				inTitleScreen = false;
+			}
+			
+			if(window.drawMenuButton(425, 475, 350, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+				System.exit(0);
+			}
+			
+			window.repaint();
+			Thread.sleep(1000 / 60); // FPS cap needed in menus too
+		}
+		
+		window.drawRectangle(0, 0, 800, 600, new Color(0, 0, 0));
+		window.drawTextCentered(400, 300, "Loading...", 40, Color.WHITE);
+		Thread.sleep(100);
+		window.repaint();
+		Thread.sleep(100);
 		
 		// Create a player object
 		// CollisionItem(width, height, color);
@@ -42,24 +64,6 @@ public class Main {
 		CollisionItem box = new CollisionItem(boxE);
 		box.x = 200;
 		box.y = 200;
-		
-		boolean inTitleScreen = true;
-		while(inTitleScreen) {
-			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
-			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
-			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.WHITE);
-			
-			if(window.drawMenuButton(25, 475, 350, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
-				inTitleScreen = false;
-			}
-			
-			if(window.drawMenuButton(425, 475, 350, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
-				System.exit(0);
-			}
-			
-			window.repaint();
-			Thread.sleep(1000 / 60); // FPS cap needed in menus too
-		}
 		
 		while(1 == 1) {
 			if(!window.keyListener.KEY_ACTION) { 
@@ -115,6 +119,8 @@ public class Main {
 				System.out.println("Colliding!");
 			}
 			
+			// Draw UI
+			window.drawTextCentered(400, 30, "ALPHA VERSION", 40, Color.WHITE);
 			// This should always be at the end of the game loop when not using an fps cap
 			window.repaint();
 			Thread.sleep(1000 / 60); // This is how to do an fps cap
