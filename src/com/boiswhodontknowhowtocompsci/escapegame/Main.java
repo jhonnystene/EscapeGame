@@ -26,7 +26,7 @@ public class Main {
 		player.y = 200;
 		
 		// Create a box
-		CollisionItem box = new CollisionItem(32, 32, Color.BLUE);
+		CollisionItem box = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_00.png", true);
 		box.x = 200;
 		box.y = 200;
 		
@@ -53,10 +53,15 @@ public class Main {
 				
 				window.centerCamera(player);
 			} else {
-				if(window.keyListener.KEY_LEFT) box.x -= 10; 
-				if(window.keyListener.KEY_RIGHT) box.x += 10;
-				if(window.keyListener.KEY_UP) box.y -= 10;
-				if(window.keyListener.KEY_DOWN) box.y += 10; 
+				int movementX = 0;
+				int movementY = 0;
+				if(window.keyListener.KEY_LEFT) movementX -= 10; 
+				if(window.keyListener.KEY_RIGHT) movementX += 10;
+				if(window.keyListener.KEY_UP) movementY -= 10;
+				if(window.keyListener.KEY_DOWN) movementY += 10;
+				
+				box.x += movementX;
+				box.y += movementY;
 				
 				window.centerCamera(box);
 			}
