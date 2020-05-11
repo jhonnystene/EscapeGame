@@ -7,21 +7,26 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+
 import com.asuscomm.johnnystene.infinity.*;
 
 public class Main {
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, MalformedURLException, IOException {
 		Window window = new Window(800, 600, "Escape The Robots and Oh Gosh They're Coming Run"); // Create window that is 800x600
 		window.enableCamera = true; // Make sure camera is enabled
 		
-		window.drawRectangle(0, 0, 800, 600, new Color(59, 59, 59));
-		window.drawTextCentered(400, 300, "Now Loading...", 40, Color.WHITE);
-		window.repaint();
+		System.out.println("Loading...");
 		
 		// Create a player object
 		// CollisionItem(width, height, color);
 		// Can also do CollisionItem(filename);
-		CollisionItem player = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/test/giphy.gif", true);
+		CollisionItem player = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/player/test_player.png", true);
 		player.x = 100;
 		player.y = 200;
 		
@@ -29,6 +34,15 @@ public class Main {
 		CollisionItem box = new CollisionItem("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_00.png", true);
 		box.x = 200;
 		box.y = 200;
+		
+		BufferedImage boxSW = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_00.png"));
+		BufferedImage boxW = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_01.png"));
+		BufferedImage boxNW = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_02.png"));
+		BufferedImage boxN = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_03.png"));
+		BufferedImage boxNE = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_04.png"));
+		BufferedImage boxE = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_05.png"));
+		BufferedImage boxSE = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_06.png"));
+		BufferedImage boxS = ImageIO.read(new URL("https://github.com/jhonnystene/EscapeGame/raw/master/res/img/roboboi/tile_07.png"));
 		
 		boolean inTitleScreen = true;
 		while(inTitleScreen) {
@@ -59,6 +73,30 @@ public class Main {
 				if(window.keyListener.KEY_RIGHT) movementX += 10;
 				if(window.keyListener.KEY_UP) movementY -= 10;
 				if(window.keyListener.KEY_DOWN) movementY += 10;
+				
+				if(movementX > 0) {
+					if(movementY > 0) {
+						box.sprite = boxSE;
+					} else if(movementY < 0) {
+						box.sprite = boxNE;
+					} else {
+						box.sprite = boxE;
+					}
+				} else if(movementX < 0) {
+					if(movementY > 0) {
+						box.sprite = boxSW;
+					} else if(movementY < 0) {
+						box.sprite = boxNW;
+					} else {
+						box.sprite = boxW;
+					}
+				} else {
+					if(movementY > 0) {
+						box.sprite = boxS;
+					} else if(movementY < 0) {
+						box.sprite = boxN;
+					}
+				}
 				
 				box.x += movementX;
 				box.y += movementY;
