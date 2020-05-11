@@ -7,6 +7,8 @@
 package com.asuscomm.johnnystene.infinity;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
@@ -72,4 +74,20 @@ public class Window extends JFrame implements MouseListener {
 	public void mouseExited(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
+	
+	public boolean drawMenuButton(int x, int y, int width, int height, String text, Color textColor, Color backgroundColor) {
+		// TODO: Detect if button clicked
+		Font font = new Font("Sans Serif", Font.BOLD, 32);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setColor(backgroundColor);
+		graphics.fillRect(x, y, width, height);
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		x = x + (width - metrics.stringWidth(text)) / 2;
+		y = y + ((height - metrics.getHeight()) / 2) + metrics.getAscent();
+		graphics.setColor(textColor);
+		graphics.setFont(font);
+		graphics.drawString(text, x, y);
+		graphics.dispose();
+		return false;
+	}
 }

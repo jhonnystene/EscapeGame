@@ -28,12 +28,13 @@ public class Main {
 		box.y = 200;
 		
 		while(1 == 1) {
+			window.drawMenuButton(100, 100, 350, 100, "Java can eat my ass", Color.WHITE, Color.ORANGE);
 			if(!window.keyListener.KEY_ACTION) { 
 				// Manage keyboard input
 				if(window.keyListener.KEY_LEFT) player.x -= 10; 
 				if(window.keyListener.KEY_RIGHT) player.x += 10;
 				if(window.keyListener.KEY_UP) player.y -= 10;
-				if(window.keyListener.KEY_DOWN)player.y += 10; 
+				if(window.keyListener.KEY_DOWN) player.y += 10; 
 				
 				window.centerCamera(player);
 			} else {
