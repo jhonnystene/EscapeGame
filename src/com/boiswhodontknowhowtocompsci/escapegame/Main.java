@@ -28,7 +28,7 @@ public class Main {
 		box.y = 200;
 		
 		while(1 == 1) {
-			if(window.drawMenuButton(100, 100, 350, 100, "Java can eat my ass", Color.WHITE, new Color(255, 66, 28))) {
+			if(window.drawMenuButton(100, 100, 350, 100, "Java can eat my ass", Color.WHITE, new Color(255, 66, 28), new Color(0, 0, 0))) {
 				System.out.println("Frick!");
 			}
 			

@@ -15,18 +15,19 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
-public class Window extends JFrame implements MouseListener {
+public class Window extends JFrame implements MouseListener, MouseMotionListener {
 	public BufferedImage frameBuffer;
 	public Keyboard keyListener;
 	
 	public int windowWidth = 0;
 	public int windowHeight = 0;
 	
-	public int mouseClickX = -1;
-	public int mouseClickY = -1;
+	public int mouseX = -1;
+	public int mouseY = -1;
 	public boolean mouseDown = false;
 	
 	public int cameraX = 0;
@@ -39,6 +40,7 @@ public class Window extends JFrame implements MouseListener {
 		windowHeight = height;
 		setTitle(name); // Set window title
 		addMouseListener(this); // Setup mouse listening
+		addMouseMotionListener(this);
 		keyListener = new Keyboard();
 		addKeyListener(keyListener);
 		setSize(width, height); // Set window size
@@ -78,20 +80,26 @@ public class Window extends JFrame implements MouseListener {
 	public void mouseExited(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {
 		mouseDown = true;
-		mouseClickX = e.getX();
-		mouseClickY = e.getY();
 	}
 	public void mouseReleased(MouseEvent e) {
 		mouseDown = false;
-		mouseClickX = -1;
-		mouseClickY = -1;
 	}
+	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+	}
+	public void mouseDragged(MouseEvent e) {}
 	
-	public boolean drawMenuButton(int x, int y, int width, int height, String text, Color textColor, Color backgroundColor) {
-		// TODO: Detect if button clicked
+	
+	public boolean drawMenuButton(int x, int y, int width, int height, String text, Color textColor, Color backgroundColor, Color backgroundColorHover) {
+		boolean checkForClick = false;
 		Font font = new Font("Sans Serif", Font.BOLD, 32);
 		Graphics2D graphics = frameBuffer.createGraphics();
-		graphics.setColor(backgroundColor);
+		if(mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
+			checkForClick = true;
+			graphics.setColor(backgroundColorHover);
+		} else
+			graphics.setColor(backgroundColor);
 		graphics.fillRect(x, y, width, height);
 		FontMetrics metrics = graphics.getFontMetrics(font);
 		int textX = x + (width - metrics.stringWidth(text)) / 2;
@@ -101,11 +109,8 @@ public class Window extends JFrame implements MouseListener {
 		graphics.drawString(text, textX, textY);
 		graphics.dispose();
 		
-		if(mouseDown) {
-			if(mouseClickX > x && mouseClickX < x + width) {
-				if(mouseClickY > y && mouseClickY < y + height)
-					return true;
-			}
+		if(mouseDown && checkForClick) {
+			return true;
 		}
 		
 		return false;
