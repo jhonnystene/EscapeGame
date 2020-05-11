@@ -7,7 +7,6 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
-
 import com.asuscomm.johnnystene.infinity.*;
 
 public class Main {
