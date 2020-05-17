@@ -39,11 +39,7 @@ public class Main {
 			Thread.sleep(1000 / 60); // FPS cap needed in menus too
 		}
 		
-		window.drawRectangle(0, 0, 800, 600, new Color(0, 0, 0));
-		window.drawTextCentered(400, 300, "Loading...", 40, Color.WHITE);
-		Thread.sleep(100);
-		window.repaint();
-		Thread.sleep(100);
+		window.drawLoadingScreen("Downloading content...");
 		
 		// Create a player object
 		// CollisionItem(width, height, color);

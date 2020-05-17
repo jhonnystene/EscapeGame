@@ -142,4 +142,11 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		graphics.fillRect(x, y, width, height);
 		graphics.dispose();
 	}
+	
+	public void drawLoadingScreen(String hint) {
+		drawRectangle(0, 0, 800, 600, new Color(0, 0, 0));
+		drawTextCentered(400, 300, "Loading", 40, Color.WHITE);
+		drawTextCentered(400, 340, hint, 30, Color.WHITE);
+		repaint();
+	}
 }

@@ -10,8 +10,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public class CollisionItem extends WorldItem {
-	public Line[] collisionShape; // Sets itself to be a box around the whole image by default
-	
 	public CollisionItem(int width, int height, Color color) {
 		super(width, height, color);
 	}

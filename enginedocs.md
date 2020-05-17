@@ -1,5 +1,5 @@
 
-# Escape Engine version 1.1.1b
+# Escape Engine version 1.1.2b
 
 ## Preamble
 The Escape Engine is a heavily modified and reworked version of the Infinity Engine, focusing primarily on static escape-the-room style games rather than infinite procedurally-generated worlds. The Escape Engine does not include some of the features of the Infinity Engine, such as: Tiles, Chunks, Batch Rendering, or Perlin Noise. It does, however, have features that are not yet present in the mainline version of the Infinity Engine such as UI Elements, constant mouse monitoring, and URL sprite loading.
@@ -48,6 +48,8 @@ The window's graphics are stored in a `BufferedImage` object named `frameBuffer`
 
 ### Getting mouse information
 The variables `mouseX`, `mouseY`, and `mouseDown` will be constantly updated so long as the mouse is in the Window object you are referencing them from.
+### Creating a loading screen
+You can create a loading screen by passing hint text in a `String` to the `drawLoadingScreen` function.
 
 ## The Keyboard Class
 The Keyboard class is intended to be modified to add and remove keybindings and key variable definitions. To add a keybinding, add a boolean value to the top-level of the Keyboard class in `Keyboard.java` as well as an integer value. The boolean value is used to tell whether or not a key is pressed, and the integer value stores the `KeyEvent` scan code. Once those variables have been added, add a line to the `keyPressed` and `keyReleased` functions in the Keyboard class enabling and disabling the key's boolean value when `keycode` is equal to the integer value.
@@ -74,6 +76,9 @@ The CollisionItem is an extension of WorldItem that provides collision functions
 The Escape Engine does not have a built-in way of telling the time since the last frame, so adding an FPS limiter is usually needed.
 
 ## Changelog
+### Version 1.1.2b:
+- Bug fix
+- Added loading screen function
 ### Version 1.1.1b:
 - Removed unused code and classes left in from v1.0b
 ### Version 1.1b:
