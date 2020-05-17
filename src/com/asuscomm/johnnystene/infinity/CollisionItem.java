@@ -31,7 +31,6 @@ public class CollisionItem extends WorldItem {
 	public boolean collidingWith(CollisionItem item) {
 		if(item == null) return false;
 		if(x < item.x + item.width && x + width > item.x && y < item.y + item.height&& y + height > item.y) {
-			System.out.println("Colliding!");
 			return true;
 		}
 		return false;
