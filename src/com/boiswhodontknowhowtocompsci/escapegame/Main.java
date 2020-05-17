@@ -13,17 +13,26 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.asuscomm.johnnystene.infinity.CollisionItem;
 import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 
 public class Main {
-	public static void main(String[] args) throws InterruptedException, MalformedURLException, IOException {
+	public static void main(String[] args) throws InterruptedException, MalformedURLException, IOException, LineUnavailableException, UnsupportedAudioFileException {
 		Window window = new Window(800, 600, "Escape The Robots And Oh Gosh They're Coming Run");
 		
-		boolean inTitleScreen = true;
+		Clip clip = AudioSystem.getClip();
+		AudioInputStream titleInputStream = AudioSystem.getAudioInputStream(new URL(GithubUtils.getFullPath("msc/title.wav")));
+		clip.open(titleInputStream);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
+		boolean inTitleScreen = true;
 		while(inTitleScreen) {
 			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
 			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
