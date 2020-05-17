@@ -66,21 +66,19 @@ public class Main {
 		box.y = 200;
 		
 		while(1 == 1) {
+			int movementX = 0;
+			int movementY = 0;
+			if(window.keyListener.KEY_LEFT) movementX -= 10; 
+			if(window.keyListener.KEY_RIGHT) movementX += 10;
+			if(window.keyListener.KEY_UP) movementY -= 10;
+			if(window.keyListener.KEY_DOWN) movementY += 10;
+			
+			CollisionItem[] worldItems = {box}; // Put all items the player will collide with in here, so you can do collision stuff all at once
+			
 			if(!window.keyListener.KEY_ACTION) { 
-				// Manage keyboard input
-				if(window.keyListener.KEY_LEFT) player.x -= 10; 
-				if(window.keyListener.KEY_RIGHT) player.x += 10;
-				if(window.keyListener.KEY_UP) player.y -= 10;
-				if(window.keyListener.KEY_DOWN) player.y += 10; 
-				
+				player.moveAndCollide(movementX, movementY, worldItems);
 				window.centerCamera(player);
 			} else {
-				int movementX = 0;
-				int movementY = 0;
-				if(window.keyListener.KEY_LEFT) movementX -= 10; 
-				if(window.keyListener.KEY_RIGHT) movementX += 10;
-				if(window.keyListener.KEY_UP) movementY -= 10;
-				if(window.keyListener.KEY_DOWN) movementY += 10;
 				
 				if(movementX > 0) {
 					if(movementY > 0) {
@@ -118,9 +116,6 @@ public class Main {
 			if(player.collidingWith(box)) {
 				System.out.println("Colliding!");
 			}
-			
-			// Draw UI
-			window.drawTextCentered(400, 30, "ALPHA VERSION", 40, Color.WHITE);
 			// This should always be at the end of the game loop when not using an fps cap
 			window.repaint();
 			Thread.sleep(1000 / 60); // This is how to do an fps cap

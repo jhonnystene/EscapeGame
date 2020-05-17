@@ -30,46 +30,59 @@ public class CollisionItem extends WorldItem {
 	
 	public boolean collidingWith(CollisionItem item) {
 		if(item == null) return false;
-		if(item.collisionShape == null) return false;
-		
-		for(Line line : item.collisionShape) {
-			if(collidingWith(line)) {
-				return true;
-			}
+		if(x < item.x + item.width && x + width > item.x && y < item.y + item.height&& y + height > item.y) {
+			System.out.println("Colliding!");
+			return true;
 		}
-		
 		return false;
-		
-		/* Old, sad box collision detection
-			if(x < item.x + item.width && x + width > item.x && y < item.y + item.width && y + height > item.y)
-				return true;
-			return false;
-		*/
 	}
 	
-	public boolean collidingWith(Line line) {
-		// TODO: Check vertical/horizontal line collision
-		
-		for(Line myline : collisionShape) {
-			// Are the lines parallel?
-			if(myline.slope == line.slope)
-				return false;
-			
-			// Do we have a vertical or horizontal line?
-			if(myline.slope != 0 && line.slope != 0 && myline.slope != 25565 && line.slope != 25565) {
-				// Get where the lines would intercept.
-				double interceptX = (line.yIntercept - myline.yIntercept) / (myline.slope - line.slope);
-				double interceptY = myline.slope * interceptX + myline.yIntercept;
-				
-				// Check if it's a real point on both lines
-				if(interceptY == myline.slope * interceptX + myline.yIntercept && interceptY == line.slope * interceptX + line.yIntercept) {
-					return true;
+	public void moveAndCollide(int moveX, int moveY, CollisionItem[] items) {
+		x = x + moveX;
+		for(CollisionItem item : items) {
+			while(collidingWith(item)) {
+				if(moveX > 0) {
+					x = x - 1;
+				} else {
+					x = x + 1;
 				}
-			} else {
-				// We do.
-				//TODO: this shit
 			}
 		}
-		return false;
+		
+		y = y + moveY;
+		for(CollisionItem item : items) {
+			while(collidingWith(item)) {
+				while(collidingWith(item)) {
+					if(moveY > 0) {
+						y = y- 1;
+					} else {
+						y = y + 1;
+					}
+				}
+			}
+		}
+	}
+	
+	public void moveAndCollide(int moveX, int moveY, CollisionItem item) {
+		// We move horizontally and vertically separately so we can actually tell how we need to move if we collide.
+		// Horizontally first, because I can.
+		x = x + moveX;
+		while(collidingWith(item)) {
+			if(moveX > 0) {
+				x = x - 1;
+			} else {
+				x = x + 1;
+			}
+		}
+		
+		// Then we do the same thing vertically.
+		y = y + moveY;
+		while(collidingWith(item)) {
+			if(moveY > 0) {
+				y = y- 1;
+			} else {
+				y = y + 1;
+			}
+		}
 	}
 }

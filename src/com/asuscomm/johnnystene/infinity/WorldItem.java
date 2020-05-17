@@ -29,10 +29,15 @@ public class WorldItem {
 		graphics.setColor(color);
 		graphics.fillRect(0, 0, setWidth, setHeight);
 		graphics.dispose();
+		
+		width = sprite.getWidth();
+		height = sprite.getHeight();
 	}
 	
 	public WorldItem(BufferedImage setSprite) {
 		sprite = setSprite;
+		width = setSprite.getWidth();
+		height = setSprite.getHeight();
 	}
 	
 	public WorldItem(String filename, boolean url) { // Load in a sprite

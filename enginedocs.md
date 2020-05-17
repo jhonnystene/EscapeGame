@@ -1,4 +1,4 @@
-# Escape Engine version 1.0b
+# Escape Engine version 1.1b
 
 ## Preamble
 The Escape Engine is a heavily modified and reworked version of the Infinity Engine, focusing primarily on static escape-the-room style games rather than infinite procedurally-generated worlds. The Escape Engine does not include some of the features of the Infinity Engine, such as: Tiles, Chunks, Batch Rendering, or Perlin Noise. It does, however, have features that are not yet present in the mainline version of the Infinity Engine such as UI Elements, constant mouse monitoring, and URL sprite loading.
@@ -67,9 +67,24 @@ To create a sprite with a particular color, pass the desired width (as an intege
 The WorldItem's position in the world can be viewed or changed by accessing the `x` and `y` variables of the instance.
 
 ## The CollisionItem Class
-**The collision functions are not working in Escape Engine version 1.0b, and most functions are not even present. The collision system from the Infinity Engine will be ported to the Escape engine in version 1.1b.** 
-
-The CollisionItem is an extension of WorldItem that provides collision functions. To check for a collision with another CollisionItem, pass the other CollisionItem to the `collidingWith` function. To move in a direction while preventing collisions with another CollisionItem, pass the other CollisionItem to `moveAndCollide`. If you wish to move and collide with a group of other CollisionItems (which will be most cases), pass an array with all of the CollisionItems to `moveAndCollide`.
+The CollisionItem is an extension of WorldItem that provides collision functions. To check for a collision with another CollisionItem, pass the other CollisionItem to the `collidingWith` function. To move in a direction while preventing collisions with another CollisionItem, pass the desired movement and the other CollisionItem to `moveAndCollide`. If you wish to move and collide with a group of other CollisionItems (which will be most cases), pass the desired movement and an array with all of the CollisionItems to `moveAndCollide`.
 
 ## Common Issues
 The Escape Engine does not have a built-in way of telling the time since the last frame, so adding an FPS limiter is usually needed.
+
+## Changelog
+### Version 1.1b:
+
+ - Added collision functions from Infinity Engine
+
+### Version 1.0b:
+
+ - Added documentation
+ - Game can now be prototyped
+
+## To-do
+
+ - Animation System
+ - Delta Timer
+
+
