@@ -63,7 +63,7 @@ public class MainOld {
 		box.x = 200;
 		box.y = 200;
 		
-		while(1 == 1) {
+		while(true) {
 			int movementX = 0;
 			int movementY = 0;
 			if(window.keyListener.KEY_LEFT) movementX -= 10; 

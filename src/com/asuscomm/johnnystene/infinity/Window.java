@@ -18,6 +18,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class Window extends JFrame implements MouseListener, MouseMotionListener {
 	public BufferedImage frameBuffer;
 	public Keyboard keyListener;
