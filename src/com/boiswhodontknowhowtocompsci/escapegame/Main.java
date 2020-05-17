@@ -39,7 +39,7 @@ public class Main {
 			Thread.sleep(1000 / 60); // FPS cap needed in menus too
 		}
 		
-		window.drawLoadingScreen("Downloading content...");
+		window.drawLoadingScreen("Downloading player sprites...");
 		
 		// Create a player object
 		// CollisionItem(width, height, color);
@@ -47,6 +47,8 @@ public class Main {
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
 		player.x = 100;
 		player.y = 200;
+		
+		window.drawLoadingScreen("Downloading Roboboi sprites...");
 		
 		// Create a box
 		BufferedImage boxSW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_00.png")));
