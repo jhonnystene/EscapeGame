@@ -1,7 +1,7 @@
 /*
  * Main.java
  * 
- * Example game for the Infinity Engine.
+ * Main game class for Escape The Robots And Oh Gosh They're Coming Run
  */
 
 package com.boiswhodontknowhowtocompsci.escapegame;
@@ -14,14 +14,16 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.*;
+import com.asuscomm.johnnystene.infinity.CollisionItem;
+import com.asuscomm.johnnystene.infinity.GithubUtils;
+import com.asuscomm.johnnystene.infinity.Window;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException, MalformedURLException, IOException {
-		Window window = new Window(800, 600, "Escape The Robots and Oh Gosh They're Coming Run"); // Create window that is 800x600
-		window.enableCamera = true; // Make sure camera is enabled
+		Window window = new Window(800, 600, "Escape The Robots And Oh Gosh They're Coming Run");
 		
 		boolean inTitleScreen = true;
+		
 		while(inTitleScreen) {
 			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
 			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
@@ -39,84 +41,84 @@ public class Main {
 			Thread.sleep(1000 / 60); // FPS cap needed in menus too
 		}
 		
+		// Create the player object and preload the player sprite
 		window.drawLoadingScreen("Downloading player sprites...");
-		
-		// Create a player object
-		// CollisionItem(width, height, color);
-		// Can also do CollisionItem(filename);
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
 		player.x = 100;
 		player.y = 200;
 		
+		// Do the same for Roboboi
 		window.drawLoadingScreen("Downloading Roboboi sprites...");
+		BufferedImage roboboiSW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_00.png")));
+		BufferedImage roboboiW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_01.png")));
+		BufferedImage roboboiNW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_02.png")));
+		BufferedImage roboboiN = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_03.png")));
+		BufferedImage roboboiNE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_04.png")));
+		BufferedImage roboboiE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_05.png")));
+		BufferedImage roboboiSE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_06.png")));
+		BufferedImage roboboiS = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_07.png")));
+		CollisionItem roboboi = new CollisionItem(roboboiE);
+		roboboi.x = 200;
+		roboboi.y = 200;
 		
-		// Create a box
-		BufferedImage boxSW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_00.png")));
-		BufferedImage boxW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_01.png")));
-		BufferedImage boxNW = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_02.png")));
-		BufferedImage boxN = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_03.png")));
-		BufferedImage boxNE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_04.png")));
-		BufferedImage boxE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_05.png")));
-		BufferedImage boxSE = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_06.png")));
-		BufferedImage boxS = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_07.png")));
-		CollisionItem box = new CollisionItem(boxE);
-		box.x = 200;
-		box.y = 200;
-		
-		while(1 == 1) {
-			int movementX = 0;
-			int movementY = 0;
-			if(window.keyListener.KEY_LEFT) movementX -= 10; 
-			if(window.keyListener.KEY_RIGHT) movementX += 10;
-			if(window.keyListener.KEY_UP) movementY -= 10;
-			if(window.keyListener.KEY_DOWN) movementY += 10;
+		// Start the game loop
+		boolean gameRunning = true;
+		while(gameRunning) {
+			// This is all of the items to collide with each other when moving.
+			CollisionItem[] worldItems = {roboboi, player};
 			
-			CollisionItem[] worldItems = {box}; // Put all items the player will collide with in here, so you can do collision stuff all at once
+			// Handle inputs
+			int moveX = 0;
+			int moveY = 0;
 			
-			if(!window.keyListener.KEY_ACTION) { 
-				player.moveAndCollide(movementX, movementY, worldItems);
-				window.centerCamera(player);
-			} else {
+			if(window.keyListener.KEY_LEFT) moveX -= 10;
+			if(window.keyListener.KEY_RIGHT) moveX += 10;
+			if(window.keyListener.KEY_UP) moveY -= 10;
+			if(window.keyListener.KEY_DOWN) moveY += 10; 
+			
+			// Move the player or Roboboi, depending on whether the action key is held
+			if(window.keyListener.KEY_ACTION) { // Roboboi
+				// TODO: Bake isometric sprite support into the engine
+				// TODO: Make Roboboi collide as well
+				roboboi.moveAndCollide(moveX, moveY, worldItems);
+				window.centerCamera(roboboi);
 				
-				if(movementX > 0) {
-					if(movementY > 0) {
-						box.sprite = boxSE;
-					} else if(movementY < 0) {
-						box.sprite = boxNE;
+				if(moveX > 0) {
+					if(moveY > 0) {
+						roboboi.sprite = roboboiSE;
+					} else if(moveY < 0) {
+						roboboi.sprite = roboboiNE;
 					} else {
-						box.sprite = boxE;
+						roboboi.sprite = roboboiE;
 					}
-				} else if(movementX < 0) {
-					if(movementY > 0) {
-						box.sprite = boxSW;
-					} else if(movementY < 0) {
-						box.sprite = boxNW;
+				} else if(moveX < 0) {
+					if(moveY > 0) {
+						roboboi.sprite = roboboiSW;
+					} else if(moveY < 0) {
+						roboboi.sprite = roboboiNW;
 					} else {
-						box.sprite = boxW;
+						roboboi.sprite = roboboiW;
 					}
 				} else {
-					if(movementY > 0) {
-						box.sprite = boxS;
-					} else if(movementY < 0) {
-						box.sprite = boxN;
+					if(moveY > 0) {
+						roboboi.sprite = roboboiS;
+					} else if(moveY < 0) {
+						roboboi.sprite = roboboiN;
 					}
 				}
-				
-				box.x += movementX;
-				box.y += movementY;
-				
-				window.centerCamera(box);
+			} else { // Player
+				player.moveAndCollide(moveX, moveY, worldItems);
+				window.centerCamera(player);
 			}
 			
-			window.drawWorldItem(box);
-			window.drawWorldItem(player); // Draw the player into the world
-			
-			if(player.collidingWith(box)) {
-				System.out.println("Colliding!");
-			}
-			// This should always be at the end of the game loop when not using an fps cap
+			// Draw all objects to the screen and update
+			window.drawWorldItem(player);
+			window.drawWorldItem(roboboi);
 			window.repaint();
-			Thread.sleep(1000 / 60); // This is how to do an fps cap
+			Thread.sleep(1000 / 60);
 		}
+		
+		// We've crashed.
+		// TODO: Draw crash screen
 	}
 }
