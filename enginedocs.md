@@ -1,4 +1,5 @@
-# Escape Engine version 1.1b
+
+# Escape Engine version 1.1.1b
 
 ## Preamble
 The Escape Engine is a heavily modified and reworked version of the Infinity Engine, focusing primarily on static escape-the-room style games rather than infinite procedurally-generated worlds. The Escape Engine does not include some of the features of the Infinity Engine, such as: Tiles, Chunks, Batch Rendering, or Perlin Noise. It does, however, have features that are not yet present in the mainline version of the Infinity Engine such as UI Elements, constant mouse monitoring, and URL sprite loading.
@@ -73,6 +74,8 @@ The CollisionItem is an extension of WorldItem that provides collision functions
 The Escape Engine does not have a built-in way of telling the time since the last frame, so adding an FPS limiter is usually needed.
 
 ## Changelog
+### Version 1.1.1b:
+- Removed unused code and classes left in from v1.0b
 ### Version 1.1b:
 
  - Added collision functions from Infinity Engine

@@ -14,14 +14,10 @@ public class CollisionItem extends WorldItem {
 	
 	public CollisionItem(int width, int height, Color color) {
 		super(width, height, color);
-		Line[] tempCollisionShape = {new Line(0, 0, width, 0), new Line(0, 0, 0, height), new Line(width, 0, 0, height), new Line(0, height, width, 0)};
-		collisionShape = tempCollisionShape;
 	}
 	
 	public CollisionItem(String filename, boolean url) {
 		super(filename, url);
-		Line[] tempCollisionShape = {new Line(0, 0, width, 0), new Line(0, 0, 0, height), new Line(width, 0, 0, height), new Line(0, height, width, 0)};
-		collisionShape = tempCollisionShape;
 	}
 	
 	public CollisionItem(BufferedImage setSprite) {
