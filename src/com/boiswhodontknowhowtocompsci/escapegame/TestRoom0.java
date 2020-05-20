@@ -37,6 +37,8 @@ public class TestRoom0 {
 			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
 			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
 			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.WHITE);
+			window.drawTextCentered(400, 325, "Industry Standard Testing Level For Testing Industry Standard Games", 20, Color.BLUE);
+			window.drawTextCentered(400, 350, "(Test Room 0, Basic Maze Level)", 20, Color.BLUE);
 			
 			if(window.drawMenuButton(25, 475, 350, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 				inTitleScreen = false;
@@ -53,16 +55,67 @@ public class TestRoom0 {
 		// Create the player object and preload the player sprite
 		window.drawLoadingScreen("Downloading player sprites...");
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
-		player.x = 0;
-		player.y = 0;
+		player.x = 64;
+		player.y = 960;
 		
 		// Create the maze bounding box
+		CollisionItem mazeBoundingBoxN = new CollisionItem(2048, 512, Color.BLACK);
+		mazeBoundingBoxN.x = -512;
+		mazeBoundingBoxN.y = -512;
+		
+		CollisionItem mazeBoundingBoxE = new CollisionItem(512, 1024, Color.BLACK);
+		mazeBoundingBoxE.x = -512;
+		mazeBoundingBoxE.y = 0;
+		
+		CollisionItem mazeBoundingBoxS = new CollisionItem(2048, 512, Color.BLACK);
+		mazeBoundingBoxS.x = -512;
+		mazeBoundingBoxS.y = 1024;
+		
+		CollisionItem mazeBoundingBoxW = new CollisionItem(512, 1024, Color.BLACK);
+		mazeBoundingBoxW.x = 1024;
+		mazeBoundingBoxW.y = 0;
+		
+		// Create Maze Internals
+		CollisionItem mazeInside0 = new CollisionItem(832, 64, Color.BLACK);
+		mazeInside0.x = 0;
+		mazeInside0.y = 896;
+		
+		CollisionItem mazeInside1 = new CollisionItem(128, 64, Color.BLACK);
+		mazeInside1.x = 896;
+		mazeInside1.y = 896;
+		
+		CollisionItem mazeInside2 = new CollisionItem(320, 192, Color.BLACK);
+		mazeInside2.x = 384;
+		mazeInside2.y = 704;
+		
+		CollisionItem mazeInside3 = new CollisionItem(320, 128, Color.BLACK);
+		mazeInside3.x = 64;
+		mazeInside3.y = 704;
+		
+		CollisionItem mazeInside4 = new CollisionItem(384, 640, Color.BLACK);
+		mazeInside4.x = 0;
+		mazeInside4.y = 0;
+		
+		CollisionItem mazeInside5 = new CollisionItem(576, 640, Color.BLACK);
+		mazeInside5.x = 448;
+		mazeInside5.y = 0;
+		
+		CollisionItem mazeInside6 = new CollisionItem(192, 128, Color.BLACK);
+		mazeInside6.x = 768;
+		mazeInside6.y = 704;
+		
+		CollisionItem mazeFinish = new CollisionItem(64, 64, Color.BLUE);
+		mazeFinish.x = 384;
+		mazeFinish.y = 0;
 		
 		// Start the game loop
 		boolean gameRunning = true;
 		while(gameRunning) {
 			// This is all of the items to collide with each other when moving.
-			CollisionItem[] worldItems = {player};
+			CollisionItem[] worldItems = {player, 
+					mazeBoundingBoxN, mazeBoundingBoxE, mazeBoundingBoxS, mazeBoundingBoxW,
+					mazeInside0, mazeInside1, mazeInside2, mazeInside3, mazeInside4, mazeInside5,
+					mazeInside6};
 			
 			// Handle inputs
 			int moveX = 0;
@@ -78,11 +131,17 @@ public class TestRoom0 {
 			
 			// Draw all objects to the screen and update
 			window.drawWorldItems(worldItems);
+			window.drawWorldItem(mazeFinish);
+			
+			// See if player finished
+			if(player.collidingWith(mazeFinish)) {
+				gameRunning = false;
+			}
+			
 			window.repaint();
 			Thread.sleep(1000 / 60);
 		}
 		
-		// We've crashed.
-		// TODO: Draw crash screen
+		System.exit(0);
 	}
 }
