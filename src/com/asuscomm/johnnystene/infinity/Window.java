@@ -150,4 +150,10 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		drawTextCentered(400, 340, hint, 30, Color.WHITE);
 		repaint();
 	}
+	
+	public void drawWorldItems(WorldItem[] items) {
+		for(WorldItem item : items) {
+			drawWorldItem(item);
+		}
+	}
 }
