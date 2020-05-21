@@ -25,26 +25,30 @@ import com.asuscomm.johnnystene.infinity.Window;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException, MalformedURLException, IOException, LineUnavailableException, UnsupportedAudioFileException {
-		Window window = new Window(800, 600, "Escape The Robots And Oh Gosh They're Coming Run");
+		Window window = new Window(1136, 640, "Escape The Robots And Oh Gosh They're Coming Run"); // Create the game window
 		
+		// Download and play the music
 		Clip clip = AudioSystem.getClip();
 		AudioInputStream titleInputStream = AudioSystem.getAudioInputStream(new URL(GithubUtils.getFullPath("msc/title.wav")));
 		clip.open(titleInputStream);
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
+		// Title screen loop
 		boolean inTitleScreen = true;
 		while(inTitleScreen) {
-			window.drawRectangle(0, 0, 800, 600, Color.BLACK);
-			window.drawTextCentered(400, 250, "Escape The Robots And", 40, Color.WHITE);
-			window.drawTextCentered(400, 300, "Oh Gosh They're Coming Run", 40, Color.WHITE);
+			window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 			
-			if(window.drawMenuButton(25, 475, 350, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+			// Title Text
+			window.drawTextCentered(window.windowWidth / 2, (window.windowHeight / 2) - 50, "Escape The Robots And", 40, Color.WHITE);
+			window.drawTextCentered(window.windowWidth / 2, window.windowHeight / 2, "Oh Gosh They're Coming Run", 40, Color.WHITE);
+			
+			// PLAY button (duh)
+			if(window.drawMenuButton(25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
 				inTitleScreen = false;
-			}
 			
-			if(window.drawMenuButton(425, 475, 350, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+			// QUIT button (duh)
+			if(window.drawMenuButton((window.windowWidth / 2) + 25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
 				System.exit(0);
-			}
 			
 			window.repaint();
 			Thread.sleep(1000 / 60); // FPS cap needed in menus too
@@ -88,10 +92,10 @@ public class Main {
 			// Move the player or Roboboi, depending on whether the action key is held
 			if(window.keyListener.KEY_ACTION) { // Roboboi
 				// TODO: Bake isometric sprite support into the engine
-				// TODO: Make Roboboi collide as well
 				roboboi.moveAndCollide(moveX, moveY, worldItems);
 				window.centerCamera(roboboi);
 				
+				// Isometric sprites
 				if(moveX > 0) {
 					if(moveY > 0) {
 						roboboi.sprite = roboboiSE;
@@ -121,10 +125,10 @@ public class Main {
 			}
 			
 			// Draw all objects to the screen and update
-			window.drawWorldItem(player);
-			window.drawWorldItem(roboboi);
+			window.drawWorldItems(worldItems);
 			window.repaint();
-			Thread.sleep(1000 / 60);
+			
+			Thread.sleep(1000 / 60); // This is needed to stop the game from running WAAAAAAAYYY too fast, delta timer would be a better idea though
 		}
 		
 		// We've crashed.
