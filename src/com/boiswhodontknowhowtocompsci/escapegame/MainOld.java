@@ -2,8 +2,11 @@
  * MainOld.java
  * 
  * Example game for the Infinity Engine.
+ * This causes build errors because of engine changes.
+ * It has been commented out.
  */
 
+/*
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
@@ -120,3 +123,4 @@ public class MainOld {
 		}
 	}
 }
+*/

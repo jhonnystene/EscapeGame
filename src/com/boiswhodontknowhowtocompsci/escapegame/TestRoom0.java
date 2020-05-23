@@ -2,8 +2,10 @@
  * Main.java
  * 
  * Main game class for Escape The Robots And Oh Gosh They're Coming Run
+ * This causes build errors because of engine changes.
+ * It has been commented out.
  */
-
+/*
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
@@ -145,3 +147,4 @@ public class TestRoom0 {
 		System.exit(0);
 	}
 }
+*/

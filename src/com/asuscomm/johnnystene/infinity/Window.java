@@ -16,10 +16,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements MouseListener, MouseMotionListener {
+	public Clip musicPlayer;
+	
+	public ArrayList<WorldItem> backgroundLayer;
+	public ArrayList<CollisionItem> collisionItemLayer;
+	public ArrayList<WorldItem> effectLayer;
+	
 	public BufferedImage frameBuffer; // Screen is drawn here
 	public Keyboard keyListener; // Listens for keyboard inputs
 	
@@ -61,6 +74,18 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Terminate the game on window close
 		setLocationRelativeTo(null); // Center window
 		setVisible(true); // Make window visible
+		
+		// Initialize music system
+		try {
+			musicPlayer = AudioSystem.getClip();
+		} catch (Exception e) {
+			crash("Couldn't init sound system!", e);
+		}
+		
+		// Initialize layers
+		backgroundLayer = new ArrayList<WorldItem>();
+		collisionItemLayer = new ArrayList<CollisionItem>();
+		effectLayer = new ArrayList<WorldItem>();
 	}
 	
 	public void paint(Graphics g) {
@@ -73,6 +98,9 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		graphics.dispose();
 	}
 	
+	/*
+	 * METHODS FOR DRAWING ITEMS
+	 */
 	public void drawWorldItem(WorldItem item) {
 		Graphics2D graphics = frameBuffer.createGraphics();
 		if(enableCamera)
@@ -88,12 +116,31 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		}
 	}
 	
+	public void drawLayers() {
+		for(WorldItem item : backgroundLayer) {
+			drawWorldItem(item);
+		}
+		
+		for(WorldItem item : collisionItemLayer) {
+			drawWorldItem(item);
+		}
+		
+		for(WorldItem item : effectLayer) {
+			drawWorldItem(item);
+		}
+	}
+	
+	/*
+	 * METHODS FOR CAMERA
+	 */
 	public void centerCamera(WorldItem item) {
 		cameraX = item.x - ((windowWidth / 2) - (item.width / 2));
 		cameraY = item.y - ((windowHeight / 2) - (item.height / 2));
 	}
 	
-	// MouseListener functions
+	/*
+	 * METHODS FOR MOUSE LISTENING
+	 */
 	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
@@ -109,7 +156,9 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	public void mouseDragged(MouseEvent e) {}
 	
-	// UI Functions
+	/*
+	 * METHODS FOR UI
+	 */
 	public void drawText(int x, int y, String text, int fontSize, Color fontColor) {
 		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
 		Graphics2D graphics = frameBuffer.createGraphics();
@@ -166,5 +215,32 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		drawTextCentered(windowWidth / 2, windowHeight / 2, "Loading", 40, Color.WHITE);
 		drawTextCentered(windowWidth / 2, (windowHeight / 2) + 40, hint, 30, Color.WHITE);
 		repaint();
+	}
+	
+	/*
+	 * METHODS FOR MUSIC AND SFX
+	 */
+	public void loopMusic(AudioInputStream input) {
+		try {
+			musicPlayer.stop();
+			musicPlayer.open(input);
+		} catch (Exception e) {
+			crash("Couldn't play sound!", e);
+		}
+		musicPlayer.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
+	/*
+	 * METHOD FOR CRASHES
+	 */
+	public void crash(String message, Exception e) { 
+		System.out.println("shit dick the game crashed again");
+		drawRectangle(0, 0, windowWidth, windowHeight, new Color(0, 0, 0));
+		drawTextCentered(windowWidth / 2, windowHeight / 2, "The game crashed!", 40, Color.WHITE);
+		drawTextCentered(windowWidth / 2, (windowHeight / 2) + 40, message + " (" + e.getMessage() + ")", 30, Color.WHITE);
+		repaint();
+		try {
+			while(true) {Thread.sleep(500);}
+		} catch(Exception e2) {System.exit(1);}; // if the crash screen crashed fuck it just exit
 	}
 }
