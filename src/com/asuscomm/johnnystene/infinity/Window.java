@@ -16,19 +16,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements MouseListener, MouseMotionListener {
-	public Clip musicPlayer;
+	public Clip musicPlayer; // BG Music
 	
+	// Render layers
 	public ArrayList<WorldItem> backgroundLayer;
 	public ArrayList<CollisionItem> collisionItemLayer;
 	public ArrayList<WorldItem> effectLayer;
@@ -50,7 +49,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public int cameraY = 0;
 	public boolean enableCamera = true;
 	
-	public long lastFrameTime = 0;
+	public long lastFrameTime = 0; // Used for calculating FPS and delta time
 	
 	public Window(int width, int height, String name) {
 		super(); // Create JFrame
@@ -89,25 +88,27 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		collisionItemLayer = new ArrayList<CollisionItem>();
 		effectLayer = new ArrayList<WorldItem>();
 		
-		lastFrameTime = System.nanoTime();
+		lastFrameTime = System.nanoTime(); // It was a bitch figuring out i needed nanos rather than millis
 	}
 	
 	public float calculateFPS() {
 		long currentTime = System.nanoTime();
-		if(currentTime == lastFrameTime) return 0;
+		
+		// This should actually never happen, because getting the current time likely takes more than a nanosecond
+		// Left over from when I was using milliseconds to calculate delta
+		if(currentTime == lastFrameTime) return 0; 
+		
+		// Divide 1000000000 (one second in nanoseconds) by the difference between last frame time and now
 		float FPS = 1000000000 / (currentTime - lastFrameTime);
-		lastFrameTime = currentTime;
-		return FPS;
+		lastFrameTime = currentTime; // Set last frame time properly
+		return FPS; // We have our FPS cap
 	}
 	
 	// Calculates time since last frame as a fraction of a second, i want to kill myself btw
+	// Turns out I got this right but the FPS wrong in the time I was trying to figure out this BULLSHIT
 	public float calculateDelta() {
 		float FPS = calculateFPS();
 		float delta = FPS / 1000;
-		System.out.print("FPS: ");
-		System.out.print(FPS);
-		System.out.print(", Delta: ");
-		System.out.println(delta);
 		return delta;
 	}
 	
@@ -140,6 +141,8 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	
 	public void drawLayers() {
+		// fucking java and its inconsistent-ass syntax
+		// why can i have a one-liner if but not a one-liner for?
 		for(WorldItem item : backgroundLayer) {
 			drawWorldItem(item);
 		}
@@ -191,6 +194,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		graphics.drawString(text, x, y);
 	}
 	
+	// java makes the easy things hard. yay!
 	public void drawTextCentered(int x, int y, String text, int fontSize, Color fontColor) {
 		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
 		Graphics2D graphics = frameBuffer.createGraphics();
