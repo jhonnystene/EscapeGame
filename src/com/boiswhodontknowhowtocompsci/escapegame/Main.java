@@ -25,6 +25,8 @@ public class Main {
 	public static void main(String[] args) {
 		Window window = new Window(1136, 640, "Escape The Robots And Oh Gosh They're Coming Run"); // Create the game window
 		
+		MapGenerator mapgen = new MapGenerator();
+		
 		// Download and play the music
 		AudioInputStream titleInputStream;
 		try {
@@ -62,13 +64,15 @@ public class Main {
 		// Create the player object and preload the player sprite
 		window.drawLoadingScreen("Downloading player sprites...");
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
-		player.x = player.y = 0; // X and Y are the same here so we can condense it to one line
+		player.x = 24 * 80;
+		player.y = 30 * 80;
 		window.collisionItemLayer.add(player);
 		
 		// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
 		window.drawLoadingScreen("Downloading Roboboi sprites...");
 		CollisionItem roboboi = new CollisionItem(64, 64, Color.BLACK);
-		roboboi.x = roboboi.y = 200;
+		roboboi.x = 18 * 80;
+		roboboi.y = 30 * 80;
 		roboboi.isometricItem = true; // My lazy ass finally implemented this
 		
 		try {
@@ -89,6 +93,9 @@ public class Main {
 		roboboi.sprite = roboboi.isometricSprites[WorldItem.E];
 		window.collisionItemLayer.add(roboboi);
 		
+		window.drawLoadingScreen("Downloading and parsing map...");
+		mapgen.loadMap("map/mainMap.map", window);
+		
 		CollisionItem currentPlayer = player;
 		
 		// Start the game loop
@@ -101,10 +108,10 @@ public class Main {
 				float moveX = 0;
 				float moveY = 0;
 				
-				if(window.keyListener.KEY_LEFT) moveX -= 10;
-				if(window.keyListener.KEY_RIGHT) moveX += 10;
-				if(window.keyListener.KEY_UP) moveY -= 10;
-				if(window.keyListener.KEY_DOWN) moveY += 10; 
+				if(window.keyListener.KEY_LEFT) moveX -= 30;
+				if(window.keyListener.KEY_RIGHT) moveX += 30;
+				if(window.keyListener.KEY_UP) moveY -= 30;
+				if(window.keyListener.KEY_DOWN) moveY += 30; 
 				
 				moveX = moveX * delta;
 				moveY = moveY * delta;
