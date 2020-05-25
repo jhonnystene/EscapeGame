@@ -3,6 +3,7 @@
  * By Johnny
  * 
  * Downloads and converts .map files from the Github to playable maps.
+ * TODO: Make it able to load textures based on paths in the .map file
  */
 
 package com.boiswhodontknowhowtocompsci.escapegame;
@@ -26,18 +27,36 @@ public class MapGenerator {
 			
 			// Load it in line by line
 			String inputline;
+			
+			boolean inHeader = true;
+			int xOffset = 0;
+			int yOffset = 0;
+			
 			while((inputline = in.readLine()) != null) {
-				for(int x = 0; x < inputline.length(); x ++) {
-					if(inputline.charAt(x) == '#') {
-						// Put a CollisionItem at the proper coords
-						CollisionItem item = new CollisionItem(80, 80, Color.BLACK);
-						item.x = x * 80;
-						item.y = y * 80;
-						window.collisionItemLayer.add(item);
+				if(inHeader) {
+					if(inputline.contains("END HEADER DATA")) {
+						System.out.print("Exiting header.");
+						inHeader = false;
+					} else {
+						// parse the line
+						String[] command = inputline.split(" ", 2);
+						if(command[0] == "xOffset") xOffset = Integer.parseInt(command[1]);
+						if(command[0] == "yOffset") yOffset = Integer.parseInt(command[1]);
+						else System.out.println("Malformed header data: " + inputline);
 					}
-					// TODO add more shit you can put in
+				} else {
+					for(int x = 0; x < inputline.length(); x ++) {
+						if(inputline.charAt(x) == '#') {
+							// Put a CollisionItem at the proper coords
+							CollisionItem item = new CollisionItem(80, 80, Color.BLACK);
+							item.x = (x * 80) + xOffset;
+							item.y = (y * 80) + yOffset;
+							window.collisionItemLayer.add(item);
+						}
+						// TODO add more shit you can put in
+					}
+					y ++;
 				}
-				y ++;
 			}
 		} catch(Exception e) {
 			window.crash("Failed to load map file: " + path, e);

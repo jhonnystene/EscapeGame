@@ -24,7 +24,6 @@ import com.asuscomm.johnnystene.infinity.WorldItem;
 public class Main {
 	public static void main(String[] args) {
 		Window window = new Window(1136, 640, "Escape The Robots And Oh Gosh They're Coming Run"); // Create the game window
-		
 		MapGenerator mapgen = new MapGenerator();
 		
 		// Download and play the music
