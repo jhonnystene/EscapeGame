@@ -19,8 +19,8 @@ public class WorldItem {
 	public BufferedImage sprite;
 	public int height;
 	public int width;
-	public int x;
-	public int y;
+	public float x;
+	public float y;
 	public BufferedImage[] isometricSprites = new BufferedImage[8];
 	public boolean isometricItem = false;
 	

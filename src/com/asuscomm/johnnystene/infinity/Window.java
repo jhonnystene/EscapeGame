@@ -50,6 +50,8 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public int cameraY = 0;
 	public boolean enableCamera = true;
 	
+	public long lastFrameTime = 0;
+	
 	public Window(int width, int height, String name) {
 		super(); // Create JFrame
 		
@@ -86,6 +88,27 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		backgroundLayer = new ArrayList<WorldItem>();
 		collisionItemLayer = new ArrayList<CollisionItem>();
 		effectLayer = new ArrayList<WorldItem>();
+		
+		lastFrameTime = System.nanoTime();
+	}
+	
+	public float calculateFPS() {
+		long currentTime = System.nanoTime();
+		if(currentTime == lastFrameTime) return 0;
+		float FPS = 1000000000 / (currentTime - lastFrameTime);
+		lastFrameTime = currentTime;
+		return FPS;
+	}
+	
+	// Calculates time since last frame as a fraction of a second, i want to kill myself btw
+	public float calculateDelta() {
+		float FPS = calculateFPS();
+		float delta = FPS / 1000;
+		System.out.print("FPS: ");
+		System.out.print(FPS);
+		System.out.print(", Delta: ");
+		System.out.println(delta);
+		return delta;
 	}
 	
 	public void paint(Graphics g) {
@@ -104,9 +127,9 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public void drawWorldItem(WorldItem item) {
 		Graphics2D graphics = frameBuffer.createGraphics();
 		if(enableCamera)
-			graphics.drawImage(item.sprite, item.x - cameraX, item.y - cameraY, this);
+			graphics.drawImage(item.sprite, (int) item.x - cameraX, (int) item.y - cameraY, this);
 		else
-			graphics.drawImage(item.sprite, item.x, item.y, this);
+			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, this);
 		graphics.dispose();
 	}
 	
@@ -134,8 +157,8 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	 * METHODS FOR CAMERA
 	 */
 	public void centerCamera(WorldItem item) {
-		cameraX = item.x - ((windowWidth / 2) - (item.width / 2));
-		cameraY = item.y - ((windowHeight / 2) - (item.height / 2));
+		cameraX = (int) item.x - ((windowWidth / 2) - (item.width / 2));
+		cameraY = (int) item.y - ((windowHeight / 2) - (item.height / 2));
 	}
 	
 	/*
@@ -234,11 +257,12 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	 * METHOD FOR CRASHES
 	 */
 	public void crash(String message, Exception e) { 
-		System.out.println("shit dick the game crashed again");
+		System.out.println("shit dick the game crashed again (" + e.getMessage() + ":" + e.getCause() + ")");
 		drawRectangle(0, 0, windowWidth, windowHeight, new Color(0, 0, 0));
 		drawTextCentered(windowWidth / 2, windowHeight / 2, "The game crashed!", 40, Color.WHITE);
 		drawTextCentered(windowWidth / 2, (windowHeight / 2) + 40, message + " (" + e.getMessage() + ")", 30, Color.WHITE);
 		repaint();
+		e.printStackTrace();
 		try {
 			while(true) {Thread.sleep(500);}
 		} catch(Exception e2) {System.exit(1);}; // if the crash screen crashed fuck it just exit

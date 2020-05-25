@@ -9,13 +9,11 @@ package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.asuscomm.johnnystene.infinity.CollisionItem;
@@ -97,14 +95,19 @@ public class Main {
 		boolean gameRunning = true;
 		while(gameRunning) {
 			try { 
+				float delta = window.calculateDelta();
+				
 				// Handle inputs
-				int moveX = 0;
-				int moveY = 0;
+				float moveX = 0;
+				float moveY = 0;
 				
 				if(window.keyListener.KEY_LEFT) moveX -= 10;
 				if(window.keyListener.KEY_RIGHT) moveX += 10;
 				if(window.keyListener.KEY_UP) moveY -= 10;
 				if(window.keyListener.KEY_DOWN) moveY += 10; 
+				
+				moveX = moveX * delta;
+				moveY = moveY * delta;
 				
 				// Should we switch between player and roboboi?
 				if(window.keyListener.KEY_ACTION) {
@@ -123,13 +126,11 @@ public class Main {
 				window.drawLayers();
 				window.repaint();
 				
-				Thread.sleep(1000 / 60); // This is needed to stop the game from running WAAAAAAAYYY too fast, delta timer would be a better idea though
+				Thread.sleep(1000 / 144); // My code is too good for Java. It runs at tens of thousands of frames per second without this. Unfortunately, that breaks the delta timer
 			} catch(Exception e) {
 				window.crash("Unrecoverable error in main game loop", e);
 			}
 		}
-		
-		// We've crashed.
-		// TODO: Draw crash screen
+		System.exit(0);
 	}
 }

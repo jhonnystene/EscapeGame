@@ -42,7 +42,7 @@ public class CollisionItem extends WorldItem {
 		return false;
 	}
 	
-	public void moveAndCollide(int moveX, int moveY, ArrayList<CollisionItem> collisionItemLayer) {
+	public void moveAndCollide(float moveX, float moveY, ArrayList<CollisionItem> collisionItemLayer) {
 		x = x + moveX;
 		for(CollisionItem item : collisionItemLayer) {
 			while(collidingWith(item)) {

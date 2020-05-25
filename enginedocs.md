@@ -1,5 +1,5 @@
 
-# Escape Engine version 1.2b
+# Escape Engine version 1.2.1b
 --- This documentation is incomplete. See `Documentation Todo` for more information. ---
 
 ## Preamble
@@ -64,6 +64,16 @@ You can play music by passing an `AudioInputStream` to the `loopMusic` function.
 ### Displaying the crash screen
 If there's an error that your try/catch block gets, pass an error message and the `Exception` to the `crash` function. The game will display a crash screen until it's closed.
 
+### Getting the Delta time
+The Delta time is the time that has elapsed since the last frame, in seconds. To get the delta time, call `calculateDelta`.
+
+NOTE: Do NOT call `calculateDelta` and `calculateFPS` on the same frame. Things WILL break.
+
+### Getting the FPS
+The FPS is the amount of frames each second. To get the FPS, call `calculateFPS`.
+
+NOTE: Do NOT call `calculateDelta` and `calculateFPS` on the same frame. Things WILL break.
+
 ## The Keyboard Class
 The Keyboard class is intended to be modified to add and remove keybindings and key variable definitions. To add a keybinding, add a boolean value to the top-level of the Keyboard class in `Keyboard.java` as well as an integer value. The boolean value is used to tell whether or not a key is pressed, and the integer value stores the `KeyEvent` scan code. Once those variables have been added, add a line to the `keyPressed` and `keyReleased` functions in the Keyboard class enabling and disabling the key's boolean value when `keycode` is equal to the integer value.
 
@@ -98,10 +108,10 @@ The WorldItem's position in the world can be viewed or changed by accessing the 
 ## The CollisionItem Class
 The CollisionItem is an extension of `WorldItem` that provides collision functions. To check for a collision with another `CollisionItem`, pass the other CollisionItem to the `collidingWith` function. If you wish to move while avoiding collisions with other 	`CollisionItem`s, pass the X and Y movement (as Integers) and an `ArrayList` of the `CollisionItem`s to check against.
 
-## Common Issues
-The Escape Engine does not have a built-in way of telling the time since the last frame, so adding an FPS limiter is usually needed.
-
 ## Changelog
+##### Version 1.2.1b:
+- Added delta timer
+
 ##### Version 1.2b:
 - Added music
 - Refactor drawing system to include layering
