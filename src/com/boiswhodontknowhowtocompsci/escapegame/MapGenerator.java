@@ -19,6 +19,7 @@ import com.asuscomm.johnnystene.infinity.Window;
 
 public class MapGenerator {
 	public void loadMap(String path, Window window) {
+		System.out.println("Loading map from Github: " + path);
 		try {
 			// Download map file
 			URL url = new URL(GithubUtils.getFullPath(path));
@@ -32,6 +33,7 @@ public class MapGenerator {
 			int xOffset = 0;
 			int yOffset = 0;
 			
+			System.out.println("Reading header:");
 			while((inputline = in.readLine()) != null) {
 				if(inHeader) {
 					if(inputline.contains("END HEADER DATA")) {
@@ -40,9 +42,8 @@ public class MapGenerator {
 					} else {
 						// parse the line
 						String[] command = inputline.split(" ", 2);
-						if(command[0] == "xOffset") xOffset = Integer.parseInt(command[1]);
-						if(command[0] == "yOffset") yOffset = Integer.parseInt(command[1]);
-						else System.out.println("Malformed header data: " + inputline);
+						// Todo: Fix this shit
+						System.out.println("Malformed header data: " + inputline);
 					}
 				} else {
 					for(int x = 0; x < inputline.length(); x ++) {

@@ -21,6 +21,8 @@ import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 
+// TODO: fix the blinking issue
+
 public class Main {
 	public static void main(String[] args) {
 		Window window = new Window(1136, 640, "Escape The Robots And Oh Gosh They're Coming Run"); // Create the game window
