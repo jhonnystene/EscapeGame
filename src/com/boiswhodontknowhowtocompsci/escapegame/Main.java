@@ -95,12 +95,13 @@ public class Main {
 		window.collisionItemLayer.add(roboboi);
 		
 		window.drawLoadingScreen("Downloading and parsing map...");
-		mapgen.loadMap("map/mainMap.map", window);
+		mapgen.loadMap("map/maze.map", window);
 		
 		CollisionItem currentPlayer = player;
 		
 		// Start the game loop
 		boolean gameRunning = true;
+		boolean freecam = false;
 		while(gameRunning) {
 			try { 
 				float delta = window.calculateDelta();
@@ -126,9 +127,19 @@ public class Main {
 					else currentPlayer = player;
 				}
 				
+				if(window.keyListener.KEY_FREECAM) {
+					Thread.sleep(200);
+					freecam = !freecam;
+				}
+				
 				// Move currently controlled object
-				currentPlayer.moveAndCollide(moveX, moveY, window.collisionItemLayer);
-				window.centerCamera(currentPlayer);
+				if(freecam) {
+					window.cameraX += moveX;
+					window.cameraY += moveY;
+				} else {
+					currentPlayer.moveAndCollide(moveX, moveY, window.collisionItemLayer);
+					window.centerCamera(currentPlayer);
+				}
 				
 				// Draw all objects to the screen and update
 				window.drawLayers();
