@@ -4,6 +4,7 @@
  * 
  * Downloads and converts .map files from the Github to playable maps.
  * TODO: Make it able to load textures based on paths in the .map file
+ * TODO: Finish headers for connecting multiple maps together
  */
 
 package com.boiswhodontknowhowtocompsci.escapegame;
@@ -37,7 +38,7 @@ public class MapGenerator {
 			while((inputline = in.readLine()) != null) {
 				if(inHeader) {
 					if(inputline.contains("END HEADER DATA")) {
-						System.out.print("Exiting header.");
+						System.out.println("Exiting header.");
 						inHeader = false;
 					} else {
 						// parse the line

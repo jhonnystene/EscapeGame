@@ -65,14 +65,10 @@ You can play music by passing an `AudioInputStream` to the `loopMusic` function.
 If there's an error that your try/catch block gets, pass an error message and the `Exception` to the `crash` function. The game will display a crash screen until it's closed.
 
 ### Getting the Delta time
-The Delta time is the time that has elapsed since the last frame, in seconds. To get the delta time, call `calculateDelta`.
-
-NOTE: Do NOT call `calculateDelta` and `calculateFPS` on the same frame. Things WILL break.
+The Delta time is the time that has elapsed since the last frame, in seconds. The delta time is stored in a variable called `delta` and is updated every refresh.
 
 ### Getting the FPS
-The FPS is the amount of frames each second. To get the FPS, call `calculateFPS`.
-
-NOTE: Do NOT call `calculateDelta` and `calculateFPS` on the same frame. Things WILL break.
+The FPS is the amount of frames each second. The FPS is stored in a variable called `FPS` and is updated every refresh.
 
 ## The Keyboard Class
 The Keyboard class is intended to be modified to add and remove keybindings and key variable definitions. To add a keybinding, add a boolean value to the top-level of the Keyboard class in `Keyboard.java` as well as an integer value. The boolean value is used to tell whether or not a key is pressed, and the integer value stores the `KeyEvent` scan code. Once those variables have been added, add a line to the `keyPressed` and `keyReleased` functions in the Keyboard class enabling and disabling the key's boolean value when `keycode` is equal to the integer value.

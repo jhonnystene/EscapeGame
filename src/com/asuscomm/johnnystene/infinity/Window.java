@@ -50,6 +50,8 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public boolean enableCamera = true;
 	
 	public long lastFrameTime = 0; // Used for calculating FPS and delta time
+	public float delta = 0;
+	public float FPS = 0;
 	
 	public Window(int width, int height, String name) {
 		super(); // Create JFrame
@@ -91,27 +93,6 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		lastFrameTime = System.nanoTime(); // It was a bitch figuring out i needed nanos rather than millis
 	}
 	
-	public float calculateFPS() {
-		long currentTime = System.nanoTime();
-		
-		// This should actually never happen, because getting the current time likely takes more than a nanosecond
-		// Left over from when I was using milliseconds to calculate delta
-		if(currentTime == lastFrameTime) return 0; 
-		
-		// Divide 1000000000 (one second in nanoseconds) by the difference between last frame time and now
-		float FPS = 1000000000 / (currentTime - lastFrameTime);
-		lastFrameTime = currentTime; // Set last frame time properly
-		return FPS; // We have our FPS cap
-	}
-	
-	// Calculates time since last frame as a fraction of a second, i want to kill myself btw
-	// Turns out I got this right but the FPS wrong in the time I was trying to figure out this BULLSHIT
-	public float calculateDelta() {
-		float FPS = calculateFPS();
-		float delta = FPS / 1000;
-		return delta;
-	}
-	
 	public void paint(Graphics g) {
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
@@ -120,6 +101,12 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		graphics.setColor(Color.WHITE);
 		graphics.fillRect(0, 0, windowWidth, windowHeight);
 		graphics.dispose();
+		
+		// Calculate FPS and delta
+		long currentTime = System.nanoTime();
+		FPS = 1000000000 / (currentTime - lastFrameTime);
+		delta = FPS / 1000;
+		lastFrameTime = currentTime;
 	}
 	
 	/*

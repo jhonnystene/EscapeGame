@@ -24,14 +24,34 @@ import com.asuscomm.johnnystene.infinity.WorldItem;
 // TODO: fix the blinking issue
 
 public class Main {
+	
+	private static boolean DEBUG_BUILD = true;
+	private static int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
+	
+	private static void debug(String message) {
+		if(DEBUG_BUILD) System.out.println(message);
+	}
+	
 	public static void main(String[] args) {
+		debug("Escape The Robots And Oh Gosh They're Coming Run");
+		debug("Beta Version");
+		
+		debug("Initializing Window...");
 		Window window = new Window(1136, 640, "Escape The Robots And Oh Gosh They're Coming Run"); // Create the game window
+		
+		debug("Initializing MapGenerator...");
 		MapGenerator mapgen = new MapGenerator();
+
+		debug("Initializing CollisionLineGenerator...");
+		CollisionLineGenerator linegen = new CollisionLineGenerator();
 		
 		// Download and play the music
+		debug("Initializing AudioInputStream...");
 		AudioInputStream titleInputStream;
 		try {
+			debug("Downloading title screen music...");
 			titleInputStream = AudioSystem.getAudioInputStream(new URL(GithubUtils.getFullPath("msc/title.wav")));
+			debug("Starting playback of title screen music...");
 			window.loopMusic(titleInputStream);
 		} catch (UnsupportedAudioFileException | IOException e) {
 			window.crash("Couldn't load title screen music", e);
@@ -39,6 +59,7 @@ public class Main {
 		
 		// Title screen loop
 		boolean inTitleScreen = true;
+		debug("Starting title screen...");
 		while(inTitleScreen) {
 			try {
 				window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
@@ -63,6 +84,7 @@ public class Main {
 		}
 		
 		// Create the player object and preload the player sprite
+		debug("Downloading player sprites and initializing player...");
 		window.drawLoadingScreen("Downloading player sprites...");
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
 		player.x = 24 * 80;
@@ -70,12 +92,14 @@ public class Main {
 		window.collisionItemLayer.add(player);
 		
 		// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
+		debug("Initializing Roboboi...");
 		window.drawLoadingScreen("Downloading Roboboi sprites...");
 		CollisionItem roboboi = new CollisionItem(64, 64, Color.BLACK);
 		roboboi.x = 18 * 80;
 		roboboi.y = 30 * 80;
 		roboboi.isometricItem = true; // My lazy ass finally implemented this
 		
+		debug("Downloading isometric sprites for Roboboi...");
 		try {
 			// Download all sprites for Roboboi
 			roboboi.isometricSprites[WorldItem.SW] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_00.png")));
@@ -94,18 +118,24 @@ public class Main {
 		roboboi.sprite = roboboi.isometricSprites[WorldItem.E];
 		window.collisionItemLayer.add(roboboi);
 		
+		debug("Downloading and parsing map...");
 		window.drawLoadingScreen("Downloading and parsing map...");
-		mapgen.loadMap("map/maze.map", window);
+		//mapgen.loadMap("map/maze.map", window);
 		
 		CollisionItem currentPlayer = player;
 		
 		// Start the game loop
+		debug("Loading finished. Entering game loop...");
+		
+		linegen.createLine(0, 0, 100, 100, Color.BLACK, window);
+		linegen.createLine(200, 100, 300, 0, Color.BLACK, window);
+		linegen.createLine(0, -100, 100, -200, Color.BLACK, window);
+		linegen.createLine(200, -200, 300, 0, Color.BLACK, window);
+		
 		boolean gameRunning = true;
 		boolean freecam = false;
 		while(gameRunning) {
-			try { 
-				float delta = window.calculateDelta();
-				
+			try {
 				// Handle inputs
 				float moveX = 0;
 				float moveY = 0;
@@ -115,20 +145,22 @@ public class Main {
 				if(window.keyListener.KEY_UP) moveY -= 30;
 				if(window.keyListener.KEY_DOWN) moveY += 30; 
 				
-				moveX = moveX * delta;
-				moveY = moveY * delta;
+				moveX = moveX * window.delta;
+				moveY = moveY * window.delta;
 				
 				// Should we switch between player and roboboi?
 				if(window.keyListener.KEY_ACTION) {
 					Thread.sleep(200); // Debounce
 					
 					// Toggle currently controlled object
+					debug("Toggling player...");
 					if(currentPlayer == player) currentPlayer = roboboi;
 					else currentPlayer = player;
 				}
 				
 				if(window.keyListener.KEY_FREECAM) {
 					Thread.sleep(200);
+					debug("Toggling freecam...");
 					freecam = !freecam;
 				}
 				
@@ -140,6 +172,10 @@ public class Main {
 					currentPlayer.moveAndCollide(moveX, moveY, window.collisionItemLayer);
 					window.centerCamera(currentPlayer);
 				}
+				
+				if(DEBUG_BUILD && DEBUG_LEVEL == 0)
+					System.out.println("FPS: " + Integer.toString((int) window.FPS) + ", Delta: " + Float.toString(window.delta) + 
+							", X: " + Integer.toString((int) currentPlayer.x) + ", Y: " + Integer.toString((int) currentPlayer.y));
 				
 				// Draw all objects to the screen and update
 				window.drawLayers();
