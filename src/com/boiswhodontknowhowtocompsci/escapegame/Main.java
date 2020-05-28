@@ -22,6 +22,7 @@ import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 
 // TODO: fix the blinking issue
+// TODO: Make the background layer a BufferedImage to increase performance
 
 public class Main {
 	
