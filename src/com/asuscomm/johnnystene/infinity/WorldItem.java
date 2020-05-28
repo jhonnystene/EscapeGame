@@ -19,8 +19,20 @@ public class WorldItem {
 	public BufferedImage sprite;
 	public int height;
 	public int width;
-	public int x;
-	public int y;
+	public float x;
+	public float y;
+	public BufferedImage[] isometricSprites = new BufferedImage[8];
+	public boolean isometricItem = false;
+	
+	// Directions
+	public static int SW = 0;
+	public static int W = 1;
+	public static int NW = 2;
+	public static int N = 3;
+	public static int NE = 4;
+	public static int E = 5;
+	public static int SE = 6;
+	public static int S = 7;
 	
 	public WorldItem(int setWidth, int setHeight, Color color) { // Create sprite with just a color
 		sprite = new BufferedImage(setWidth, setHeight, BufferedImage.TYPE_INT_RGB);
@@ -31,12 +43,17 @@ public class WorldItem {
 		
 		width = sprite.getWidth();
 		height = sprite.getHeight();
+		
+		// Initialize isometric sprites
+		for(int i = 0; i < 8; i++) isometricSprites[i] = sprite;
 	}
 	
 	public WorldItem(BufferedImage setSprite) {
 		sprite = setSprite;
 		width = setSprite.getWidth();
 		height = setSprite.getHeight();
+		// Initialize isometric sprites
+		for(int i = 0; i < 8; i++) isometricSprites[i] = sprite;
 	}
 	
 	public WorldItem(String filename, boolean url) { // Load in a sprite
@@ -65,5 +82,18 @@ public class WorldItem {
 			width = 64;
 			height = 64;
 		}
+		
+		// Initialize isometric sprites
+		for(int i = 0; i < 8; i++) isometricSprites[i] = sprite;
+	}
+	
+	public void pointInDirection(int direction) {
+		if(isometricItem) {
+			if(direction < 8)
+				sprite = isometricSprites[direction];
+			else 
+				System.out.println("Warning: Tried to point an isometric sprite in a non-existant direction.");
+		} else
+			System.out.println("Warning: Tried to point a non-isometric sprite in a direction.");
 	}
 }

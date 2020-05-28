@@ -1,5 +1,6 @@
 
-# Escape Engine version 1.1.2b
+# Escape Engine version 1.2.1b
+--- This documentation is incomplete. See `Documentation Todo` for more information. ---
 
 ## Preamble
 The Escape Engine is a heavily modified and reworked version of the Infinity Engine, focusing primarily on static escape-the-room style games rather than infinite procedurally-generated worlds. The Escape Engine does not include some of the features of the Infinity Engine, such as: Tiles, Chunks, Batch Rendering, or Perlin Noise. It does, however, have features that are not yet present in the mainline version of the Infinity Engine such as UI Elements, constant mouse monitoring, and URL sprite loading.
@@ -26,13 +27,18 @@ The camera is enabled by default. If you wish to disable the camera, you may do 
 The X and Y position of the camera can be set directly by changing the `cameraX` and `cameraY` variables in the instance of Window you wish to set the Camera's position on.
 
 ##### Centering the Camera on a point
-If you wish to have a specific point in the center of the Camera's view, rather than at the top left, you can call the `centerCameraOn` function by passing an X position (as an integer) and a Y position (as an integer).
+If you wish to have a specific point in the center of the Camera's view, rather than at the top left, you can call the `centerCamera` function by passing an X position (as an integer) and a Y position (as an integer).
 
 ##### Centering the Camera on an object
-If you wish to have a specific object in the center of the Camera's view, rather than at the top left, you can call the `centerCameraOn` function by passing a `WorldItem`-derived object. This function will automatically factor in the size of the object, and put the center of the object in the center of the Camera's view. This function does not modify the object's position in the world.
+If you wish to have a specific object in the center of the Camera's view, rather than at the top left, you can call the `centerCamera` function by passing a `WorldItem`-derived object. This function will automatically factor in the size of the object, and put the center of the object in the center of the Camera's view. This function does not modify the object's position in the world.
 
-### Drawing Objects
-Objects can be drawn to the screen by calling `drawWorldItem` and passing a `WorldItem`-derived node. It will automatically be drawn to screen, factoring in the Camera's position if the Camera is enabled.
+### Render layers
+A render layer is an ArrayList that contains items that will be drawn to screen. There are three render layers, that will draw in this order:
+- `backgroundLayer` (primarily for `WorldItems`)
+- `collisionItemLayer` (all colliding objects should go here)
+- `effectLayer` (primarily for `WorldItems` used as effects, such as particles)
+
+Call the `drawLayers` function to render all layers to screen.
 
 ### Drawing Text
 Text can be drawn either centered on a position (using `drawTextCentered`), or using the position as the top-left anchor point (using `drawText`).  Both functions take the same arguments. To call either function, pass the X position (as an integer), the Y position (as an integer), the text to draw (as a String), the font size (as an integer), and the font color (as a `Color` object). Please note that these will not factor in the camera.
@@ -48,8 +54,21 @@ The window's graphics are stored in a `BufferedImage` object named `frameBuffer`
 
 ### Getting mouse information
 The variables `mouseX`, `mouseY`, and `mouseDown` will be constantly updated so long as the mouse is in the Window object you are referencing them from.
+
 ### Creating a loading screen
 You can create a loading screen by passing hint text in a `String` to the `drawLoadingScreen` function.
+
+### Playing music
+You can play music by passing an `AudioInputStream` to the `loopMusic` function.
+
+### Displaying the crash screen
+If there's an error that your try/catch block gets, pass an error message and the `Exception` to the `crash` function. The game will display a crash screen until it's closed.
+
+### Getting the Delta time
+The Delta time is the time that has elapsed since the last frame, in seconds. The delta time is stored in a variable called `delta` and is updated every refresh.
+
+### Getting the FPS
+The FPS is the amount of frames each second. The FPS is stored in a variable called `FPS` and is updated every refresh.
 
 ## The Keyboard Class
 The Keyboard class is intended to be modified to add and remove keybindings and key variable definitions. To add a keybinding, add a boolean value to the top-level of the Keyboard class in `Keyboard.java` as well as an integer value. The boolean value is used to tell whether or not a key is pressed, and the integer value stores the `KeyEvent` scan code. Once those variables have been added, add a line to the `keyPressed` and `keyReleased` functions in the Keyboard class enabling and disabling the key's boolean value when `keycode` is equal to the integer value.
@@ -66,33 +85,55 @@ When creating the WorldItem object, you can load a sprite from a URL by passing 
 ##### Generating a sprite of a solid color
 To create a sprite with a particular color, pass the desired width (as an integer), height (as an integer), and color (as a `Color` object). A BufferedImage of the given width and height will be automatically created and filled with the color.
 
+##### Isometric Sprites
+To make a sprite isometric (has 8 directions it can face) simply set the `isometricItem` variable to `true` and put all directions in the `isometricSprites` array. The order of sprites in the `isometricSprites` array should be: SW, W, NW, N, NE, E, SE, S.
+
+To make the sprite point in a direction, pass the direction to the `pointInDirection` function. Acceptable directions are:
+- `WorldItem.SW` (or 0)
+- `WorldItem.W` (or 1)
+- `WorldItem.NW` (or 2)
+- `WorldItem.N` (or 3)
+- `WorldItem.NE` (or 4)
+- `WorldItem.E` (or 5)
+- `WorldItem.SE` (or 6)
+- `WorldItem.S` (or 7)
+
 ##### X and Y position
 The WorldItem's position in the world can be viewed or changed by accessing the `x` and `y` variables of the instance.
 
 ## The CollisionItem Class
-The CollisionItem is an extension of WorldItem that provides collision functions. To check for a collision with another CollisionItem, pass the other CollisionItem to the `collidingWith` function. To move in a direction while preventing collisions with another CollisionItem, pass the desired movement and the other CollisionItem to `moveAndCollide`. If you wish to move and collide with a group of other CollisionItems (which will be most cases), pass the desired movement and an array with all of the CollisionItems to `moveAndCollide`.
-
-## Common Issues
-The Escape Engine does not have a built-in way of telling the time since the last frame, so adding an FPS limiter is usually needed.
+The CollisionItem is an extension of `WorldItem` that provides collision functions. To check for a collision with another `CollisionItem`, pass the other CollisionItem to the `collidingWith` function. If you wish to move while avoiding collisions with other 	`CollisionItem`s, pass the X and Y movement (as Integers) and an `ArrayList` of the `CollisionItem`s to check against.
 
 ## Changelog
-### Version 1.1.2b:
+##### Version 1.2.1b:
+- Added delta timer
+
+##### Version 1.2b:
+- Added music
+- Refactor drawing system to include layering
+- Change mass collision system to use ArrayLists rather than arrays
+- Added collision layering and masking
+- Removed moveAndCollide for single items
+- Added support for isometric sprites
+- Added proper crash handling
+
+##### Version 1.1.2b:
 - Bug fix
 - Added loading screen function
-### Version 1.1.1b:
-- Removed unused code and classes left in from v1.0b
-### Version 1.1b:
 
+##### Version 1.1.1b:
+- Removed unused code and classes left in from v1.0b
+
+##### Version 1.1b:
  - Added collision functions from Infinity Engine
 
-### Version 1.0b:
-
+##### Version 1.0b:
  - Added documentation
  - Game can now be prototyped
 
-## To-do
-
+## Todo
  - Animation System
  - Delta Timer
-
-
+ 
+## Documentation Todo
+- Collision layering and masking
