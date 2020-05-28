@@ -3,7 +3,6 @@
  * By Johnny
  * 
  * Makes individual CollisionItems for every pixel in a line.
- * Only works for 45 and 135 degree lines.
  */
 
 package com.boiswhodontknowhowtocompsci.escapegame;
