@@ -19,7 +19,7 @@ public class BigCircularRoom {
 	}
 	
 	public void createAt(int x, int y) {
-		Color color = Color.BLACK;
+		Color color = new Color(67, 67, 75);
 		
 		try {
 			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/BigCircularRoom.png"))));
