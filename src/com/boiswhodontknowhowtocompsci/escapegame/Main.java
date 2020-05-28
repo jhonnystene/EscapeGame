@@ -127,10 +127,8 @@ public class Main {
 		// Start the game loop
 		debug("Loading finished. Entering game loop...");
 		
-		linegen.createLine(0, 0, 100, 100, Color.BLACK, window);
-		linegen.createLine(200, 100, 300, 0, Color.BLACK, window);
-		linegen.createLine(0, -100, 100, -200, Color.BLACK, window);
-		linegen.createLine(200, -200, 300, 0, Color.BLACK, window);
+		linegen.createLine(0, 0, 100, 200, Color.BLACK, window);
+		
 		
 		boolean gameRunning = true;
 		boolean freecam = false;
