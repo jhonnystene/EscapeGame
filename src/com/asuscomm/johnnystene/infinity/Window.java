@@ -105,7 +105,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		// Calculate FPS and delta
 		long currentTime = System.nanoTime();
 		FPS = 1000000000 / (currentTime - lastFrameTime);
-		delta = FPS / 1000;
+		delta = ((currentTime - lastFrameTime) / 1000000) / 1000;
 		lastFrameTime = currentTime;
 	}
 	

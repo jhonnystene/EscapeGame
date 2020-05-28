@@ -138,13 +138,13 @@ public class Main {
 				float moveX = 0;
 				float moveY = 0;
 				
-				if(window.keyListener.KEY_LEFT) moveX -= 30;
-				if(window.keyListener.KEY_RIGHT) moveX += 30;
-				if(window.keyListener.KEY_UP) moveY -= 30;
-				if(window.keyListener.KEY_DOWN) moveY += 30; 
+				if(window.keyListener.KEY_LEFT) moveX -= 15;
+				if(window.keyListener.KEY_RIGHT) moveX += 15;
+				if(window.keyListener.KEY_UP) moveY -= 15;
+				if(window.keyListener.KEY_DOWN) moveY += 15; 
 				
-				moveX = moveX * window.delta;
-				moveY = moveY * window.delta;
+				//moveX = moveX * window.delta;
+				//moveY = moveY * window.delta;
 				
 				// Should we switch between player and roboboi?
 				if(window.keyListener.KEY_ACTION) {
@@ -179,7 +179,7 @@ public class Main {
 				window.drawLayers();
 				window.repaint();
 				
-				Thread.sleep(1000 / 144); // My code is too good for Java. It runs at tens of thousands of frames per second without this. Unfortunately, that breaks the delta timer
+				Thread.sleep(1000 / 60); // My code is too good for Java. It runs at tens of thousands of frames per second without this. Unfortunately, that breaks the delta timer
 			} catch(Exception e) {
 				window.crash("Unrecoverable error in main game loop", e);
 			}
