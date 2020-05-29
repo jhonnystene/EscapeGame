@@ -250,7 +250,10 @@ public class Main {
 				// Drawing Code
 				window.drawLayers();
 				window.repaint();
-				//Thread.sleep(1000 / 60);
+				
+				if(window.FPS > 75) {
+					Thread.sleep(1000 / 60);
+				}
 			} catch(Exception e) {
 				window.crash("Unrecoverable error in main game loop", e);
 			}
