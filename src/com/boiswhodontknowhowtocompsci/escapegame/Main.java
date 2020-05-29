@@ -202,6 +202,7 @@ public class Main {
 						
 						Graphics2D graphics = window.frameBuffer.createGraphics();
 						graphics.drawImage(terminalSprite.sprite, 0, 0, window);
+						graphics.dispose();
 						
 						if(window.drawMenuButton(25, window.windowHeight - 125, 25, 50, "", Color.WHITE, new Color(0, 0, 0), new Color(5, 5, 5))) {
 							terminalSolved = true;
