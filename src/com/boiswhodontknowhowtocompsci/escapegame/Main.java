@@ -95,24 +95,6 @@ public class Main {
 		player.y = 1800;//30 * 80;
 		window.collisionItemLayer.add(player);
 		
-		window.drawLoadingScreen("Downloading laser sprites...");
-		CollisionItem laser = new CollisionItem(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png"), true);
-		laser.x = 300;
-		laser.y = 300;
-		laser.isometricItem = true;
-		try {
-			laser.isometricSprites[WorldItem.SW]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png")));
-			laser.isometricSprites[WorldItem.S]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FStatic.png")));
-			laser.isometricSprites[WorldItem.SE]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FRStatic.png")));
-			laser.isometricSprites[WorldItem.W]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/LStatic.png")));
-			laser.isometricSprites[WorldItem.E]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/RStatic.png")));
-			laser.isometricSprites[WorldItem.NW]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BLStatic.png")));
-			laser.isometricSprites[WorldItem.N]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BStatic.png")));
-			laser.isometricSprites[WorldItem.NE]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BRStatic.png")));
-		} catch(Exception e) {
-			window.crash("Failed to download laser sprites", e);
-		}
-		
 		/*w// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
 		debug("Initializing Roboboi...");
 		window.drawLoadingScreen("Downloading Roboboi sprites...");
@@ -203,6 +185,33 @@ public class Main {
 		hallwayLoadingZone.x = 1094;
 		hallwayLoadingZone.y = 947;
 		
+		boolean controllingLaser = false;//418 848 y256
+		CollisionItem laserControlPanel = new CollisionItem(430, 64, Color.BLACK);
+		laserControlPanel.x = 418;
+		laserControlPanel.y = 256;
+		
+		window.drawLoadingScreen("Downloading laser sprites...");
+		CollisionItem laser = new CollisionItem(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png"), true);
+		laser.x = 527;
+		laser.y = 518;
+		//210 215
+		laser.isometricItem = true;
+		try {
+			laser.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FRStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/LStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/RStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BLStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BStatic.png"))), 210, 215);
+			laser.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BRStatic.png"))), 210, 215);
+		} catch(Exception e) {
+			window.crash("Failed to download laser sprites", e);
+		}
+		
+		laser.pointInDirection(WorldItem.S);
+		laser.refreshDimensions();
+		
 		// Start the game loop
 		debug("Loading finished. Entering game loop...");
 		
@@ -212,6 +221,34 @@ public class Main {
 		while(gameRunning) {
 			try {
 				window.clear();
+				
+				// Movement Code
+				float moveX = 0;
+				float moveY = 0;
+				
+				if(window.keyListener.KEY_LEFT) moveX -= 15;
+				if(window.keyListener.KEY_RIGHT) moveX += 15;
+				if(window.keyListener.KEY_UP) moveY -= 15;
+				if(window.keyListener.KEY_DOWN) moveY += 15; 
+				
+				moveX = moveX * window.delta;
+				moveY = moveY * window.delta;
+				
+				if(window.keyListener.KEY_FREECAM) {
+					Thread.sleep(200);
+					debug("Toggling freecam...");
+					freecam = !freecam;
+				}
+				
+				if(freecam) {
+					window.cameraX += moveX;
+					window.cameraY += moveY;
+				} else {
+					if(!controllingLaser) {
+						player.moveAndCollide(moveX, moveY, window.collisionItemLayer);
+						window.centerCamera(player);
+					}
+				}
 				
 				// Level-specific code
 				if(currentLevel == 0) {
@@ -319,12 +356,18 @@ public class Main {
 						}
 					}
 				} else if(currentLevel == 2) {
+					if(controllingLaser) {
+						laser.lookTowards((int) moveX, (int) moveY);
+						window.centerCamera(laser);
+					}
+					if(window.keyListener.KEY_ACTION && !controllingLaser && player.collidingWith(laserControlPanel)) controllingLaser = true;
 					
+					window.drawWorldItem(laserControlPanel);
 				}
 				
 				// Pause menu
 				if(window.keyListener.KEY_MENU) {
-					while(1==1) {
+					while(true) {
 						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
 						
 						if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 400, menuButtonWidth, menuButtonHeight, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
@@ -344,32 +387,6 @@ public class Main {
 				if(DEBUG_BUILD && DEBUG_LEVEL == 0)
 					System.out.println("FPS: " + Integer.toString((int) window.FPS) + ", Delta: " + Float.toString(window.delta) + 
 							", X: " + Integer.toString((int) player.x) + ", Y: " + Integer.toString((int) player.y));
-				
-				// Movement Code
-				float moveX = 0;
-				float moveY = 0;
-				
-				if(window.keyListener.KEY_LEFT) moveX -= 15;
-				if(window.keyListener.KEY_RIGHT) moveX += 15;
-				if(window.keyListener.KEY_UP) moveY -= 15;
-				if(window.keyListener.KEY_DOWN) moveY += 15; 
-				
-				moveX = moveX * window.delta;
-				moveY = moveY * window.delta;
-				
-				if(window.keyListener.KEY_FREECAM) {
-					Thread.sleep(200);
-					debug("Toggling freecam...");
-					freecam = !freecam;
-				}
-				
-				if(freecam) {
-					window.cameraX += moveX;
-					window.cameraY += moveY;
-				} else {
-					player.moveAndCollide(moveX, moveY, window.collisionItemLayer);
-					window.centerCamera(player);
-				}
 				
 				// Drawing Code
 				window.drawLayers();

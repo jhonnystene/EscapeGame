@@ -101,4 +101,27 @@ public class WorldItem {
 		width = sprite.getWidth();
 		height = sprite.getHeight();
 	}
+	
+	public void lookTowards(int moveX, int moveY) {
+		if(moveX > 0) {
+			if(moveY > 0)
+				pointInDirection(WorldItem.SE);
+			else if(moveY < 0)
+				pointInDirection(WorldItem.NE);
+			else
+				pointInDirection(WorldItem.E);
+		} else if(moveX < 0) {
+			if(moveY > 0)
+				pointInDirection(WorldItem.SW);
+			else if(moveY < 0)
+				pointInDirection(WorldItem.NW);
+			else
+				pointInDirection(WorldItem.W);
+		} else {
+			if(moveY > 0)
+				pointInDirection(WorldItem.S);
+			else if(moveY < 0)
+				pointInDirection(WorldItem.N);
+		}
+	}
 }
