@@ -17,6 +17,7 @@ public class Keyboard extends KeyAdapter {
 	public boolean KEY_LEFT = false;
 	public boolean KEY_RIGHT = false;
 	public boolean KEY_ACTION = false;
+	public boolean KEY_MENU = false;
 	public boolean KEY_FREECAM = false;
 	
 	public int KEYBIND_UP = KeyEvent.VK_W;
@@ -24,6 +25,7 @@ public class Keyboard extends KeyAdapter {
 	public int KEYBIND_LEFT = KeyEvent.VK_A;
 	public int KEYBIND_RIGHT = KeyEvent.VK_D;
 	public int KEYBIND_ACTION = KeyEvent.VK_SPACE;
+	public int KEYBIND_MENU = KeyEvent.VK_ESCAPE;
 	public int KEYBIND_FREECAM = KeyEvent.VK_U;
 	
 	public void keyPressed(KeyEvent event) {
@@ -33,6 +35,7 @@ public class Keyboard extends KeyAdapter {
 		if(keycode == KEYBIND_LEFT) KEY_LEFT = true;
 		if(keycode == KEYBIND_RIGHT) KEY_RIGHT = true;
 		if(keycode == KEYBIND_ACTION) KEY_ACTION = true;
+		if(keycode == KEYBIND_MENU) KEY_MENU = true;
 		if(keycode == KEYBIND_FREECAM) KEY_FREECAM = true;
 	}
 	
@@ -43,6 +46,7 @@ public class Keyboard extends KeyAdapter {
 		if(keycode == KEYBIND_LEFT) KEY_LEFT = false;
 		if(keycode == KEYBIND_RIGHT) KEY_RIGHT = false;
 		if(keycode == KEYBIND_ACTION) KEY_ACTION = false;
+		if(keycode == KEYBIND_MENU) KEY_MENU = false;
 		if(keycode == KEYBIND_FREECAM) KEY_FREECAM = false;
 	}
 }

@@ -194,6 +194,22 @@ public class Main {
 					window.centerCamera(currentPlayer);
 				}
 				
+				//Game Pause Menu
+				if(window.keyListener.KEY_MENU) {
+					while(1==1) {
+						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+						
+						if(window.drawMenuButton(25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+							break;
+						
+						if(window.drawMenuButton((window.windowWidth / 2) + 25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+							System.exit(0);
+						
+						window.repaint();
+						Thread.sleep(1000 / 60); 
+					}
+				}
+				
 				//Terminal code (First level)
 				if(player.collidingWith(terminal) && !terminalSolved && window.keyListener.KEY_ACTION) {
 					//Look at that it even gets its own loop
