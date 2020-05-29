@@ -1,6 +1,6 @@
 /*
  * Main.java
- * By Johnny, Ethan S, (Add your names here when you fuckers finally decide to do work)
+ * By Johnny, Ethan S, Caleb M (Add your names here when you fuckers finally decide to do work)
  * 
  * Main game class for Escape The Robots And Oh Gosh They're Coming Run
  */
@@ -59,6 +59,10 @@ public class Main {
 			window.crash("Couldn't load title screen music", e);
 		}
 		
+		//Menu Button sizes
+		int menuButtonWidth = (window.windowWidth / 2) - 50;
+		int menuButtonHeight = 100;
+		
 		// Title screen loop
 		boolean inTitleScreen = true;
 		debug("Starting title screen...");
@@ -71,11 +75,11 @@ public class Main {
 				window.drawTextCentered(window.windowWidth / 2, window.windowHeight / 2, "Oh Gosh They're Coming Run", 40, Color.WHITE);
 				
 				// PLAY button (duh)
-				if(window.drawMenuButton(25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+				if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 300, menuButtonWidth, menuButtonHeight, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
 					inTitleScreen = false;
 				
 				// QUIT button (duh)
-				if(window.drawMenuButton((window.windowWidth / 2) + 25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+				if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 180, menuButtonWidth, menuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
 					System.exit(0);
 				
 				window.repaint();
@@ -199,12 +203,14 @@ public class Main {
 					while(1==1) {
 						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
 						
-						if(window.drawMenuButton(25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+						if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 400, menuButtonWidth, menuButtonHeight, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 							break;
-						
-						if(window.drawMenuButton((window.windowWidth / 2) + 25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+						}
+							
+						if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 280, menuButtonWidth, menuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 							System.exit(0);
-						
+						}
+							
 						window.repaint();
 						Thread.sleep(1000 / 60); 
 					}
