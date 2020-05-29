@@ -81,7 +81,7 @@ public class Main {
 					System.exit(0);
 				
 				window.repaint();
-				Thread.sleep(1000 / 60); // FPS cap needed in menus too
+				Thread.sleep(1000 / 10); // FPS cap needed in menus too
 			} catch(Exception e) {
 				window.crash("Error while drawing title screen", e);
 			}
@@ -190,7 +190,7 @@ public class Main {
 									break;
 								}
 								window.repaint();
-								Thread.sleep(1000 / 60); 
+								Thread.sleep(1000 / 15); 
 							}
 						}
 					}
