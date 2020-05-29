@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -112,11 +113,6 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	
 	public void paint(Graphics g) {
-		/*try {
-			Thread.sleep(1000 / 60);
-		} catch (Exception e) {
-			this.crash("Shit!", e);
-		}*/
 		t.sync();
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
@@ -166,6 +162,21 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 			if(item != null)
 				drawWorldItem(item);
 		}
+	}
+	
+	/*
+	 * RESIZE FUNCTION
+	 */
+	
+	public BufferedImage resizeImage(BufferedImage img, int width, int height) {
+		Image scaledImage = img.getScaledInstance(width, height, Image.SCALE_FAST);
+		BufferedImage finalImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		
+		Graphics2D graphics = finalImage.createGraphics();
+		graphics.drawImage(scaledImage, 0, 0, null);
+		graphics.dispose();
+		
+		return finalImage;
 	}
 	
 	/*

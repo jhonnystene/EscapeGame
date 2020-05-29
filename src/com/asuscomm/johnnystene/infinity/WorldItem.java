@@ -96,4 +96,9 @@ public class WorldItem {
 		} else
 			System.out.println("Warning: Tried to point a non-isometric sprite in a direction.");
 	}
+	
+	public void refreshDimensions() {
+		width = sprite.getWidth();
+		height = sprite.getHeight();
+	}
 }
