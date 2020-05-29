@@ -143,7 +143,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		graphics.fillRect(0, 0, 10240, 10240);
 		
 		for(WorldItem item : backgroundLayer) {
-			graphics.drawImage(item.sprite, (int) item.x + 500, (int) item.y + 500, this);
+			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, this);
 		}
 		graphics.dispose();
 	}
