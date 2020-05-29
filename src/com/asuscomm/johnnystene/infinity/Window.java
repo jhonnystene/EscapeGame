@@ -105,7 +105,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		// Calculate FPS and delta
 		long currentTime = System.nanoTime();
 		FPS = 1000000000 / (currentTime - lastFrameTime);
-		delta = ((currentTime - lastFrameTime) / 1000000) / 1000;
+		delta = FPS / 100;
 		lastFrameTime = currentTime;
 	}
 	
@@ -131,15 +131,18 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		// fucking java and its inconsistent-ass syntax
 		// why can i have a one-liner if but not a one-liner for?
 		for(WorldItem item : backgroundLayer) {
-			drawWorldItem(item);
+			if(item != null)
+				drawWorldItem(item);
 		}
 		
 		for(WorldItem item : collisionItemLayer) {
-			drawWorldItem(item);
+			if(item != null)
+				drawWorldItem(item);
 		}
 		
 		for(WorldItem item : effectLayer) {
-			drawWorldItem(item);
+			if(item != null)
+				drawWorldItem(item);
 		}
 	}
 	

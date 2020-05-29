@@ -20,7 +20,7 @@ public class Outside {
 	}
 	
 	public void createAt(int x, int y) {
-		Color color = new Color(67, 67, 75);
+		Color color = Color.WHITE;
 		
 		try {
 			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/Outside.png"))));
@@ -41,10 +41,5 @@ public class Outside {
 		linegen.createLine(309, 1528, 336, 1528, color, window);
 		linegen.createLine(336, 1528, 336, 1485, color, window);
 		linegen.createLine(110, 1485, 336, 1485, color, window);
-		
-		
-
-
 	}
-	
 }
