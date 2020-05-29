@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -58,6 +59,8 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public float delta = 0;
 	public float FPS = 0;
 	
+	private Toolkit t;
+	
 	public Window(int width, int height, String name) {
 		super(); // Create JFrame
 		
@@ -98,10 +101,18 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		collisionItemLayer = new ArrayList<CollisionItem>();
 		effectLayer = new ArrayList<WorldItem>();
 		
+		t = Toolkit.getDefaultToolkit();
+		
 		lastFrameTime = System.nanoTime(); // It was a bitch figuring out i needed nanos rather than millis
 	}
 	
 	public void paint(Graphics g) {
+		/*try {
+			Thread.sleep(1000 / 60);
+		} catch (Exception e) {
+			this.crash("Shit!", e);
+		}*/
+		t.sync();
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
 		Raster newFB = renderedBackground.getData(new Rectangle(cameraX, cameraY, windowWidth, windowHeight)).createTranslatedChild(0, 0);
@@ -110,7 +121,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		// Calculate FPS and delta
 		long currentTime = System.nanoTime();
 		FPS = 1000000000 / (currentTime - lastFrameTime);
-		delta = FPS / 100;
+		delta = FPS / 1000;
 		lastFrameTime = currentTime;
 	}
 	

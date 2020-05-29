@@ -8,6 +8,7 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.net.URL;
@@ -247,7 +248,7 @@ public class Main {
 				// Drawing Code
 				window.drawLayers();
 				window.repaint();
-				Thread.sleep(1000 / 60);
+				//Thread.sleep(1000 / 60);
 			} catch(Exception e) {
 				window.crash("Unrecoverable error in main game loop", e);
 			}
