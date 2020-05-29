@@ -137,6 +137,8 @@ public class Main {
 		outsideDoor.x = 400;
 		outsideDoor.y = 1600;
 		
+		window.renderBackground();
+		
 		WorldItem terminalSprite = null;
 		try {
 			terminalSprite = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/terminal.png"))));
@@ -169,6 +171,7 @@ public class Main {
 							// Load in next level
 							Hallway hallway = new Hallway(window, linegen);
 							hallway.create();
+							window.renderBackground();
 							currentLevel = 1;
 						}
 						

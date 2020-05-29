@@ -32,6 +32,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public ArrayList<CollisionItem> collisionItemLayer;
 	public ArrayList<WorldItem> effectLayer;
 	
+	public BufferedImage renderedBackground; // Used to improve performance
 	public BufferedImage frameBuffer; // Screen is drawn here
 	public Keyboard keyListener; // Listens for keyboard inputs
 	
@@ -71,6 +72,9 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		
 		// Initialize framebuffer
 		frameBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // Create image for framebuffer
+		
+		// Initialize pre-render of background
+		renderedBackground = new BufferedImage(10240, 10240, BufferedImage.TYPE_INT_RGB);
 		
 		// Setup JFrame stuff
 		setTitle(name); // Set window title
@@ -127,13 +131,27 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		}
 	}
 	
-	public void drawLayers() {
-		// fucking java and its inconsistent-ass syntax
-		// why can i have a one-liner if but not a one-liner for?
+	public void renderBackground() {
+		Graphics2D graphics = renderedBackground.createGraphics();
+		graphics.setColor(Color.WHITE);
+		graphics.fillRect(0, 0, 10240, 10240);
+		
 		for(WorldItem item : backgroundLayer) {
-			if(item != null)
-				drawWorldItem(item);
+			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, this);
 		}
+		graphics.dispose();
+	}
+	
+	public void drawLayers() {
+		// Background layer should be pre-rendered
+		Graphics2D graphics = frameBuffer.createGraphics();
+		
+		if(enableCamera)
+			graphics.drawImage(renderedBackground, 0 - cameraX, 0 - cameraY, this);
+		else
+			graphics.drawImage(renderedBackground, 0, 0, this);
+		
+		graphics.dispose();
 		
 		for(WorldItem item : collisionItemLayer) {
 			if(item != null)
