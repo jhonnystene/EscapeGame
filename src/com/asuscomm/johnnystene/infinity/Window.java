@@ -11,11 +11,15 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
@@ -100,17 +104,8 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public void paint(Graphics g) {
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
-		frameBuffer = renderedBackground.getSubimage(cameraX, cameraY, windowWidth, windowHeight);
-		
-		// Draw a white rectangle where graphics don't exist
-		/*g.setColor(Color.WHITE);
-		if(cameraX < 0) {
-			g.fillRect(0, 0, Math.abs(cameraX), windowHeight);
-		}
-		
-		if(cameraY < 0) {
-			g.fillRect(0, 0, windowWidth, Math.abs(cameraY));
-		}*/
+		Raster newFB = renderedBackground.getData(new Rectangle(cameraX, cameraY, windowWidth, windowHeight)).createTranslatedChild(0, 0);
+		frameBuffer.setData(newFB);
 		
 		// Calculate FPS and delta
 		long currentTime = System.nanoTime();
@@ -149,16 +144,6 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	
 	public void drawLayers() {
-		// Background layer should be pre-rendered
-		Graphics2D graphics = frameBuffer.createGraphics();
-		
-		if(enableCamera)
-			graphics.drawImage(renderedBackground, 0 - cameraX, 0 - cameraY, this);
-		else
-			graphics.drawImage(renderedBackground, 0, 0, this);
-		
-		graphics.dispose();
-		
 		for(WorldItem item : collisionItemLayer) {
 			if(item != null)
 				drawWorldItem(item);
@@ -176,6 +161,11 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public void centerCamera(WorldItem item) {
 		cameraX = (int) item.x - ((windowWidth / 2) - (item.width / 2));
 		cameraY = (int) item.y - ((windowHeight / 2) - (item.height / 2));
+		
+		if(cameraX < 0) cameraX = 0;
+		if(cameraY < 0) cameraY = 0;
+		if(cameraX > 10240 - windowWidth) cameraX = 10240 - windowWidth;
+		if(cameraY > 10240 - windowHeight) cameraY = 10240 - windowHeight;
 	}
 	
 	/*
