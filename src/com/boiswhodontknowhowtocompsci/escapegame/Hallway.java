@@ -11,16 +11,16 @@ import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 
-public class Buutoon {
+public class Hallway {
 	Window window;
 	CollisionLineGenerator linegen;
 	
-	public Buutoon(Window w, CollisionLineGenerator l) {
+	public Hallway(Window w, CollisionLineGenerator l) {
 		window = w;
 		linegen = l;
 	}
 	
-	public void createAt(int x, int y) {
+	public void create() {
 		Color color = new Color(67, 67, 75);
 		
 		try {

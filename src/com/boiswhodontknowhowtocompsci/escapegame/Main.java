@@ -124,7 +124,7 @@ public class Main {
 		
 		// Load in first level
 		Outside outside = new Outside(window, linegen);
-		outside.createAt(0, 0);
+		outside.create();
 		
 		// Terminal Hitbox
 		CollisionItem terminal = new CollisionItem(64,64, Color.RED);
@@ -162,12 +162,13 @@ public class Main {
 							window.effectLayer.clear(); // TODO: Fade in/out
 							window.collisionItemLayer.add(player); // Re-add player
 							
-							// Update me
-							player.x = 0;
-							player.y = 0;
+							// Put player where they need to go
+							player.x = 415;
+							player.y = 1569;
 							
-							// Load in next level (buutoon.java, someone uses a butterfly keyboard lol)
-							
+							// Load in next level
+							Hallway hallway = new Hallway(window, linegen);
+							hallway.create();
 							currentLevel = 1;
 						}
 						

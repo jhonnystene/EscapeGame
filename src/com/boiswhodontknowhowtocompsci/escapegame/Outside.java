@@ -5,7 +5,6 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.CollisionItem;
 import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
@@ -19,7 +18,7 @@ public class Outside {
 		linegen = l;
 	}
 	
-	public void createAt(int x, int y) {
+	public void create() {
 		Color color = Color.WHITE;
 		
 		try {
