@@ -290,8 +290,8 @@ public class Main {
 							window.collisionItemLayer.add(player); // Re-add player
 							
 							// Put player where they need to go
-							player.x = 1253;
-							player.y = 600;
+							player.x = 600;
+							player.y = 1100;
 							
 							// Load in next level
 							BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
