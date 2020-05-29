@@ -134,7 +134,7 @@ public class Main {
 		boolean terminalSolved = false;
 		
 		// Door Loading Zone
-		CollisionItem outsideDoor = new CollisionItem(100,32, Color.RED);
+		CollisionItem outsideDoor = new CollisionItem(100, 50, Color.RED);
 		outsideDoor.x = 400;
 		outsideDoor.y = 1600;
 		
@@ -143,10 +143,48 @@ public class Main {
 		WorldItem terminalSprite = null;
 		try {
 			terminalSprite = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/terminal.png"))));
+			terminalSprite.sprite = window.resizeImage(terminalSprite.sprite, 1136, 640);
 		} catch(Exception e) {
 			window.crash("Failed to load terminal background sprite.", e);
 		}
 			
+		// Hallway buttons
+		boolean hallwayButton0Pushed = false;
+		CollisionItem hallwayButton0 = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton0.x = 1044;
+		hallwayButton0.y = 991;
+		
+		boolean hallwayButton1Pushed = false;
+		CollisionItem hallwayButton1 = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton1.x = 1044;
+		hallwayButton1.y = 1048;
+		
+		boolean hallwayButton2Pushed = false;
+		CollisionItem hallwayButton2 = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton2.x = 1044;
+		hallwayButton2.y = 1105;
+		
+		boolean hallwayButton3Pushed = false;
+		CollisionItem hallwayButton3 = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton3.x = 1256;
+		hallwayButton3.y = 991;
+		
+		boolean hallwayButton4Pushed = false;
+		CollisionItem hallwayButton4 = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton4.x = 1256;
+		hallwayButton4.y = 1048;
+		
+		boolean hallwayButton5Pushed = false;
+		CollisionItem hallwayButton5 = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton5.x = 1256;
+		hallwayButton5.y = 1105;
+		
+		boolean hallwayComplete = false;
+		
+		CollisionItem hallwayLoadingZone = new CollisionItem(153, 64, Color.BLACK);
+		hallwayLoadingZone.x = 1094;
+		hallwayLoadingZone.y = 947;
+		
 		// Start the game loop
 		debug("Loading finished. Entering game loop...");
 		
@@ -194,6 +232,72 @@ public class Main {
 								window.repaint();
 								Thread.sleep(1000 / 15); 
 							}
+						}
+					}
+				} else if(currentLevel == 1) {
+					if(hallwayButton0Pushed) window.drawWorldItem(hallwayButton0);
+					if(hallwayButton1Pushed) window.drawWorldItem(hallwayButton1);
+					if(hallwayButton2Pushed) window.drawWorldItem(hallwayButton2);
+					if(hallwayButton3Pushed) window.drawWorldItem(hallwayButton3);
+					if(hallwayButton4Pushed) window.drawWorldItem(hallwayButton4);
+					if(hallwayButton5Pushed) window.drawWorldItem(hallwayButton5);
+					
+					if(!hallwayComplete) {
+						if(player.collidingWith(hallwayButton0)) hallwayButton0Pushed = true;
+						if(player.collidingWith(hallwayButton1)) {
+							hallwayButton0Pushed = false;
+							hallwayButton1Pushed = false;
+							hallwayButton2Pushed = false;
+							hallwayButton3Pushed = false;
+							hallwayButton4Pushed = false;
+							hallwayButton5Pushed = false;
+						}
+						if(player.collidingWith(hallwayButton2)) hallwayButton2Pushed = true;
+						if(player.collidingWith(hallwayButton3)) {
+							hallwayButton0Pushed = false;
+							hallwayButton1Pushed = false;
+							hallwayButton2Pushed = false;
+							hallwayButton3Pushed = false;
+							hallwayButton4Pushed = false;
+							hallwayButton5Pushed = false;
+						}
+						if(player.collidingWith(hallwayButton4)) hallwayButton4Pushed = true;
+						if(player.collidingWith(hallwayButton5)) {
+							hallwayButton0Pushed = false;
+							hallwayButton1Pushed = false;
+							hallwayButton2Pushed = false;
+							hallwayButton3Pushed = false;
+							hallwayButton4Pushed = false;
+							hallwayButton5Pushed = false;
+						}
+						
+						
+						if(hallwayButton0Pushed && hallwayButton2Pushed && hallwayButton4Pushed) hallwayComplete = true;
+					} else {
+						hallwayButton0Pushed = true;
+						hallwayButton1Pushed = true;
+						hallwayButton2Pushed = true;
+						hallwayButton3Pushed = true;
+						hallwayButton4Pushed = true;
+						hallwayButton5Pushed = true;
+						
+						if(player.collidingWith(hallwayLoadingZone) && window.keyListener.KEY_ACTION) {
+							// Next level
+							window.drawLoadingScreen("");
+							window.collisionItemLayer.clear(); // Remove all collision items
+							window.backgroundLayer.clear();
+							window.effectLayer.clear(); // TODO: Fade in/out
+							window.collisionItemLayer.add(player); // Re-add player
+							
+							// Put player where they need to go
+							player.x = 1253;
+							player.y = 600;
+							
+							// Load in next level
+							BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
+							bigCircularRoom.createAt(0, 0);
+							window.renderBackground();
+							currentLevel = 2;
 						}
 					}
 				}
