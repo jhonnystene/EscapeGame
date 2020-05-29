@@ -188,9 +188,12 @@ public class Main {
 				
 				//Terminal code (First level)
 				if(player.collidingWith(terminal) && !terminalSolved && window.keyListener.KEY_ACTION) {
+					//Look at that it even gets its own loop
 					while(!terminalSolved) {
 						debug("terminal is open");
 						
+						window.repaint();
+						Thread.sleep(1000 / 60);
 					}
 				}
 					
@@ -210,7 +213,7 @@ public class Main {
 				window.drawWorldItem(outsideDoor);
 				window.repaint();
 				
-				//Thread.sleep(1000 / 60); // My code is too good for Java. It runs at tens of thousands of frames per second without this. Unfortunately, that breaks the delta timer
+				Thread.sleep(1000 / 60); // My code is too good for Java. It runs at tens of thousands of frames per second without this. Unfortunately, that breaks the delta timer
 			} catch(Exception e) {
 				window.crash("Unrecoverable error in main game loop", e);
 			}
