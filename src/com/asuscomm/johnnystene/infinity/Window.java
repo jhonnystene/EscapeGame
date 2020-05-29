@@ -106,6 +106,11 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		lastFrameTime = System.nanoTime(); // It was a bitch figuring out i needed nanos rather than millis
 	}
 	
+	public void clear() {
+		Raster newFB = renderedBackground.getData(new Rectangle(cameraX, cameraY, windowWidth, windowHeight)).createTranslatedChild(0, 0);
+		frameBuffer.setData(newFB);
+	}
+	
 	public void paint(Graphics g) {
 		/*try {
 			Thread.sleep(1000 / 60);
@@ -115,13 +120,10 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		t.sync();
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
-		Raster newFB = renderedBackground.getData(new Rectangle(cameraX, cameraY, windowWidth, windowHeight)).createTranslatedChild(0, 0);
-		frameBuffer.setData(newFB);
-		
 		// Calculate FPS and delta
 		long currentTime = System.nanoTime();
 		FPS = 1000000000 / (currentTime - lastFrameTime);
-		delta = FPS / 1000;
+		delta = FPS / 100;
 		lastFrameTime = currentTime;
 	}
 	

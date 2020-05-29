@@ -155,6 +155,8 @@ public class Main {
 		boolean freecam = false;
 		while(gameRunning) {
 			try {
+				window.clear();
+				
 				// Level-specific code
 				if(currentLevel == 0) {
 					if(window.keyListener.KEY_ACTION) {
@@ -223,10 +225,10 @@ public class Main {
 				float moveX = 0;
 				float moveY = 0;
 				
-				if(window.keyListener.KEY_LEFT) moveX -= 5;
-				if(window.keyListener.KEY_RIGHT) moveX += 5;
-				if(window.keyListener.KEY_UP) moveY -= 5;
-				if(window.keyListener.KEY_DOWN) moveY += 5; 
+				if(window.keyListener.KEY_LEFT) moveX -= 15;
+				if(window.keyListener.KEY_RIGHT) moveX += 15;
+				if(window.keyListener.KEY_UP) moveY -= 15;
+				if(window.keyListener.KEY_DOWN) moveY += 15; 
 				
 				moveX = moveX * window.delta;
 				moveY = moveY * window.delta;
