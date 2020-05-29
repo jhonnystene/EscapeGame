@@ -190,10 +190,14 @@ public class Main {
 				if(player.collidingWith(terminal) && !terminalSolved && window.keyListener.KEY_ACTION) {
 					//Look at that it even gets its own loop
 					while(!terminalSolved) {
-						debug("terminal is open");
+						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 						
+						if(window.drawMenuButton(25, window.windowHeight - 125, 25, 50, "", Color.WHITE, new Color(0, 0, 0), new Color(5, 5, 5))) {
+							terminalSolved = true;
+							break;
+						}
 						window.repaint();
-						Thread.sleep(1000 / 60);
+						Thread.sleep(1000 / 60); 
 					}
 				}
 					
