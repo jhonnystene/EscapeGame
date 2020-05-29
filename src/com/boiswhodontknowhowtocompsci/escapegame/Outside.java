@@ -22,7 +22,7 @@ public class Outside {
 		Color color = Color.WHITE;
 		
 		try {
-			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/Outside.png"))));
+			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/Outside-TestFix.png"))));
 			window.backgroundLayer.add(background);
 		} catch(Exception e) {
 			window.crash("Failed to download map background", e);

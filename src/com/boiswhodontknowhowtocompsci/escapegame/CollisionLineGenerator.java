@@ -13,6 +13,9 @@ import com.asuscomm.johnnystene.infinity.Window;
 
 public class CollisionLineGenerator {
 	public void createLine(int startX, int startY, int endX, int endY, Color color, Window window) {
+		startX += 500;
+		startY += 500;
+		
 		// DDA Line Drawing Algorithm
 		int dx = endX - startX;
 		int dy = endY - startY;

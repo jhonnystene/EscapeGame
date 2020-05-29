@@ -90,8 +90,8 @@ public class Main {
 		debug("Downloading player sprites and initializing player...");
 		window.drawLoadingScreen("Downloading player sprites...");
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
-		player.x = 360;//24 * 80;
-		player.y = 1800;//30 * 80;
+		player.x = 860;//24 * 80;
+		player.y = 2300;//30 * 80;
 		window.collisionItemLayer.add(player);
 		
 		/*w// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)

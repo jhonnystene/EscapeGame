@@ -100,11 +100,17 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	public void paint(Graphics g) {
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
-		// Reset the framebuffer
-		Graphics2D graphics = frameBuffer.createGraphics();
-		graphics.setColor(Color.WHITE);
-		graphics.fillRect(0, 0, windowWidth, windowHeight);
-		graphics.dispose();
+		frameBuffer = renderedBackground.getSubimage(cameraX, cameraY, windowWidth, windowHeight);
+		
+		// Draw a white rectangle where graphics don't exist
+		/*g.setColor(Color.WHITE);
+		if(cameraX < 0) {
+			g.fillRect(0, 0, Math.abs(cameraX), windowHeight);
+		}
+		
+		if(cameraY < 0) {
+			g.fillRect(0, 0, windowWidth, Math.abs(cameraY));
+		}*/
 		
 		// Calculate FPS and delta
 		long currentTime = System.nanoTime();
@@ -137,7 +143,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		graphics.fillRect(0, 0, 10240, 10240);
 		
 		for(WorldItem item : backgroundLayer) {
-			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, this);
+			graphics.drawImage(item.sprite, (int) item.x + 500, (int) item.y + 500, this);
 		}
 		graphics.dispose();
 	}
