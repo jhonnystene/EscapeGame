@@ -7,63 +7,87 @@
 package com.asuscomm.johnnystene.infinity;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class CollisionItem extends WorldItem {
-	public Line[] collisionShape; // Sets itself to be a box around the whole image by default
+	public boolean[] collisionLayer = {true, true, true, true, true};
+	public boolean[] collisionMask = {true, true, true, true, true};
 	
 	public CollisionItem(int width, int height, Color color) {
 		super(width, height, color);
-		Line[] tempCollisionShape = {new Line(0, 0, width, 0), new Line(0, 0, 0, height), new Line(width, 0, 0, height), new Line(0, height, width, 0)};
-		collisionShape = tempCollisionShape;
 	}
 	
-	public CollisionItem(String filename) {
-		super(filename);
-		Line[] tempCollisionShape = {new Line(0, 0, width, 0), new Line(0, 0, 0, height), new Line(width, 0, 0, height), new Line(0, height, width, 0)};
-		collisionShape = tempCollisionShape;
+	public CollisionItem(String filename, boolean url) {
+		super(filename, url);
+	}
+	
+	public CollisionItem(BufferedImage setSprite) {
+		super(setSprite);
 	}
 	
 	public boolean collidingWith(CollisionItem item) {
 		if(item == null) return false;
+		if(item == this) return false;
 		
-		for(Line line : item.collisionShape) {
-			if(collidingWith(line)) {
-				return true;
-			}
-		}
-		
-		return false;
-		
-		/* Old, sad box collision detection
-			if(x < item.x + item.width && x + width > item.x && y < item.y + item.width && y + height > item.y)
-				return true;
-			return false;
-		*/
-	}
-	
-	public boolean collidingWith(Line line) {
-		// TODO: Check vertical/horizontal line collision
-		
-		for(Line myline : collisionShape) {
-			// Are the lines parallel?
-			if(myline.slope == line.slope)
-				return false;
-			
-			// Do we have a vertical or horizontal line?
-			if(myline.slope != 0 && line.slope != 0 && myline.slope != 25565 && line.slope != 25565) {
-				// Get where the lines would intercept.
-				double interceptX = (line.yIntercept - myline.yIntercept) / (myline.slope - line.slope);
-				double interceptY = myline.slope * interceptX + myline.yIntercept;
-				
-				// Check if it's a real point on both lines
-				if(interceptY == myline.slope * interceptX + myline.yIntercept && interceptY == line.slope * interceptX + line.yIntercept) {
+		for(int currentLayer = 0; currentLayer < 4; currentLayer ++) {
+			if(item.collisionLayer[currentLayer] && collisionMask[currentLayer]) {
+				if(x < item.x + item.width && x + width > item.x && 
+						y < item.y + item.height&& y + height > item.y) {
 					return true;
 				}
-			} else {
-				// We do.
-				//TODO: this shit
 			}
 		}
+		
 		return false;
+	}
+	
+	public void moveAndCollide(float moveX, float moveY, ArrayList<CollisionItem> collisionItemLayer) {
+		x = x + moveX;
+		for(CollisionItem item : collisionItemLayer) {
+			while(collidingWith(item)) {
+				if(moveX > 0) {
+					x = x - 1;
+				} else {
+					x = x + 1;
+				}
+			}
+		}
+		
+		y = y + moveY;
+		for(CollisionItem item : collisionItemLayer) {
+			while(collidingWith(item)) {
+				while(collidingWith(item)) {
+					if(moveY > 0) {
+						y = y- 1;
+					} else {
+						y = y + 1;
+					}
+				}
+			}
+		}
+		
+		if(isometricItem) {
+			if(moveX > 0) {
+				if(moveY > 0)
+					pointInDirection(WorldItem.SE);
+				else if(moveY < 0)
+					pointInDirection(WorldItem.NE);
+				else
+					pointInDirection(WorldItem.E);
+			} else if(moveX < 0) {
+				if(moveY > 0)
+					pointInDirection(WorldItem.SW);
+				else if(moveY < 0)
+					pointInDirection(WorldItem.NW);
+				else
+					pointInDirection(WorldItem.W);
+			} else {
+				if(moveY > 0)
+					pointInDirection(WorldItem.S);
+				else if(moveY < 0)
+					pointInDirection(WorldItem.N);
+			}
+		}
 	}
 }
