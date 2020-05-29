@@ -88,8 +88,8 @@ public class Main {
 		debug("Downloading player sprites and initializing player...");
 		window.drawLoadingScreen("Downloading player sprites...");
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
-		player.x = 0;//24 * 80;
-		player.y = 0;//30 * 80;
+		player.x = 825;//24 * 80;
+		player.y = 1845;//30 * 80;
 		window.collisionItemLayer.add(player);
 		
 		// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
@@ -123,8 +123,12 @@ public class Main {
 		window.drawLoadingScreen("Downloading and parsing map...");
 		//mapgen.loadMap("map/maze.map", window);
 		//linegen.createLine(0, 0, 100, 200, color, window);
-		BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
-		bigCircularRoom.createAt(0, 0);
+		//BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
+		//bigCircularRoom.createAt(0, 0);
+		
+		Buutoon Buutoon = new Buutoon(window, linegen);
+		Buutoon.createAt(0,0);
+		
 		
 		CollisionItem currentPlayer = player;
 		
