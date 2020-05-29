@@ -8,6 +8,7 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.net.URL;
 
@@ -141,6 +142,13 @@ public class Main {
 		outsideDoor.x = 400;
 		outsideDoor.y = 1600;
 		
+		WorldItem terminalSprite = null;
+		try {
+			terminalSprite = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/terminal.png"))));
+		} catch(Exception e) {
+			window.crash("Ah shit", e);
+		}
+			
 		// Start the game loop
 		debug("Loading finished. Entering game loop...");
 		
@@ -191,6 +199,9 @@ public class Main {
 					//Look at that it even gets its own loop
 					while(!terminalSolved) {
 						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
+						
+						Graphics2D graphics = window.frameBuffer.createGraphics();
+						graphics.drawImage(terminalSprite.sprite, 0, 0, window);
 						
 						if(window.drawMenuButton(25, window.windowHeight - 125, 25, 50, "", Color.WHITE, new Color(0, 0, 0), new Color(5, 5, 5))) {
 							terminalSolved = true;
