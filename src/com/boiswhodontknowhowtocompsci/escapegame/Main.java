@@ -1,6 +1,6 @@
 /*
  * Main.java
- * By Johnny, (Add your names here when you fuckers finally decide to do work)
+ * By Johnny, Ethan S, (Add your names here when you fuckers finally decide to do work)
  * 
  * Main game class for Escape The Robots And Oh Gosh They're Coming Run
  */
@@ -8,6 +8,7 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.net.URL;
 
@@ -88,8 +89,8 @@ public class Main {
 		debug("Downloading player sprites and initializing player...");
 		window.drawLoadingScreen("Downloading player sprites...");
 		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
-		player.x = 825;//24 * 80;
-		player.y = 1845;//30 * 80;
+		player.x = 360;//24 * 80;
+		player.y = 1800;//30 * 80;
 		window.collisionItemLayer.add(player);
 		
 		// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
@@ -117,7 +118,7 @@ public class Main {
 		
 		// Set the sprite to the proper one
 		roboboi.sprite = roboboi.isometricSprites[WorldItem.E];
-		window.collisionItemLayer.add(roboboi);
+		//window.collisionItemLayer.add(roboboi);
 		
 		debug("Downloading and parsing map...");
 		window.drawLoadingScreen("Downloading and parsing map...");
@@ -125,13 +126,29 @@ public class Main {
 		//linegen.createLine(0, 0, 100, 200, color, window);
 		//BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
 		//bigCircularRoom.createAt(0, 0);
-		
-		Buutoon Buutoon = new Buutoon(window, linegen);
-		Buutoon.createAt(0,0);
-		
+		Outside outside = new Outside(window, linegen);
+		outside.createAt(0, 0);
 		
 		CollisionItem currentPlayer = player;
 		
+		//Creates terminal hitbox for first level
+		CollisionItem terminal = new CollisionItem(64,64, Color.RED);
+		terminal.x = 560;
+		terminal.y = 1645;
+		boolean terminalSolved = false;
+		
+		//Creates door hitbox for the first level
+		CollisionItem outsideDoor = new CollisionItem(100,32, Color.RED);
+		outsideDoor.x = 400;
+		outsideDoor.y = 1600;
+		
+		WorldItem terminalSprite = null;
+		try {
+			terminalSprite = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/terminal.png"))));
+		} catch(Exception e) {
+			window.crash("Ah shit", e);
+		}
+			
 		// Start the game loop
 		debug("Loading finished. Entering game loop...");
 		
@@ -152,7 +169,7 @@ public class Main {
 				//moveY = moveY * window.delta;
 				
 				// Should we switch between player and roboboi?
-				if(window.keyListener.KEY_ACTION) {
+				/*if(window.keyListener.KEY_ACTION) {
 					Thread.sleep(200); // Debounce
 					
 					// Toggle currently controlled object
@@ -160,6 +177,7 @@ public class Main {
 					if(currentPlayer == player) currentPlayer = roboboi;
 					else currentPlayer = player;
 				}
+				*/
 				
 				if(window.keyListener.KEY_FREECAM) {
 					Thread.sleep(200);
@@ -176,12 +194,55 @@ public class Main {
 					window.centerCamera(currentPlayer);
 				}
 				
+				//Game Pause Menu
+				if(window.keyListener.KEY_MENU) {
+					while(1==1) {
+						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+						
+						if(window.drawMenuButton(25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+							break;
+						
+						if(window.drawMenuButton((window.windowWidth / 2) + 25, window.windowHeight - 125, (window.windowWidth / 2) - 50, 100, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+							System.exit(0);
+						
+						window.repaint();
+						Thread.sleep(1000 / 60); 
+					}
+				}
+				
+				//Terminal code (First level)
+				if(player.collidingWith(terminal) && !terminalSolved && window.keyListener.KEY_ACTION) {
+					//Look at that it even gets its own loop
+					while(!terminalSolved) {
+						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
+						
+						Graphics2D graphics = window.frameBuffer.createGraphics();
+						graphics.drawImage(terminalSprite.sprite, 0, 0, window);
+						graphics.dispose();
+						
+						if(window.drawMenuButton(25, window.windowHeight - 125, 25, 50, "", Color.WHITE, new Color(0, 0, 0), new Color(5, 5, 5))) {
+							terminalSolved = true;
+							break;
+						}
+						window.repaint();
+						Thread.sleep(1000 / 60); 
+					}
+				}
+					
+				
+				//door code (First level)
+				if(player.collidingWith(outsideDoor) && terminalSolved) {
+					debug("ur in boi");
+				}
+				
 				if(DEBUG_BUILD && DEBUG_LEVEL == 0)
 					System.out.println("FPS: " + Integer.toString((int) window.FPS) + ", Delta: " + Float.toString(window.delta) + 
 							", X: " + Integer.toString((int) currentPlayer.x) + ", Y: " + Integer.toString((int) currentPlayer.y));
 				
 				// Draw all objects to the screen and update
 				window.drawLayers();
+				window.drawWorldItem(terminal);
+				window.drawWorldItem(outsideDoor);
 				window.repaint();
 				
 				Thread.sleep(1000 / 60); // My code is too good for Java. It runs at tens of thousands of frames per second without this. Unfortunately, that breaks the delta timer
