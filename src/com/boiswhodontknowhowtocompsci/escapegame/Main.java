@@ -95,6 +95,24 @@ public class Main {
 		player.y = 1800;//30 * 80;
 		window.collisionItemLayer.add(player);
 		
+		window.drawLoadingScreen("Downloading laser sprites...");
+		CollisionItem laser = new CollisionItem(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png"), true);
+		laser.x = 300;
+		laser.y = 300;
+		laser.isometricItem = true;
+		try {
+			laser.isometricSprites[WorldItem.SW]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png")));
+			laser.isometricSprites[WorldItem.S]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FStatic.png")));
+			laser.isometricSprites[WorldItem.SE]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FRStatic.png")));
+			laser.isometricSprites[WorldItem.W]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/LStatic.png")));
+			laser.isometricSprites[WorldItem.E]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/RStatic.png")));
+			laser.isometricSprites[WorldItem.NW]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BLStatic.png")));
+			laser.isometricSprites[WorldItem.N]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BStatic.png")));
+			laser.isometricSprites[WorldItem.NE]= ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BRStatic.png")));
+		} catch(Exception e) {
+			window.crash("Failed to download laser sprites", e);
+		}
+		
 		/*w// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
 		debug("Initializing Roboboi...");
 		window.drawLoadingScreen("Downloading Roboboi sprites...");
@@ -296,9 +314,12 @@ public class Main {
 							BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
 							bigCircularRoom.createAt(0, 0);
 							window.renderBackground();
+							window.collisionItemLayer.add(laser);
 							currentLevel = 2;
 						}
 					}
+				} else if(currentLevel == 2) {
+					
 				}
 				
 				// Pause menu
