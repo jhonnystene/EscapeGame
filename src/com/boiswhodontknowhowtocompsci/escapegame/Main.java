@@ -31,6 +31,8 @@ public class Main {
 	private static boolean DEBUG_BUILD = true;
 	private static int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
+	private static boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
+	
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);
 	}
@@ -69,14 +71,16 @@ public class Main {
 		int menuButtonTextSize = 16;
 		int menuButtonSpacing = 10;
 		
-		debug("Loading title screen video...");
 		ArrayList<BufferedImage> titleVideo = new ArrayList<BufferedImage>();
-		for(int i = 1; i < 101; i++) {
-			//      ^       ^
-			// ffmpeg named the files starting at one so i gotta do this shit
-			// it hurts
-			
-			titleVideo.add(window.resizeImage(ImageIO.read(fileLoader.load("/res/title/out" + Integer.toString(i) + ".png")), window.windowWidth, window.windowHeight));
+		if(ENABLE_TITLE_SCREEN_ANIMATION) {
+			debug("Loading title screen video...");
+			for(int i = 1; i < 101; i++) {
+				//      ^       ^
+				// ffmpeg named the files starting at one so i gotta do this shit
+				// it hurts
+				
+				titleVideo.add(window.resizeImage(ImageIO.read(fileLoader.load("/res/title/out" + Integer.toString(i) + ".png")), window.windowWidth, window.windowHeight));
+			}
 		}
 		
 		// Title screen loop
@@ -90,13 +94,17 @@ public class Main {
 			try {
 				//window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 				
-				Raster newFB = titleVideo.get(frame).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
-				window.frameBuffer.setData(newFB);
-				if(System.nanoTime() >= nextFrameTime) {
-					frame ++;
-					nextFrameTime = System.nanoTime() + frameLength;
+				if(ENABLE_TITLE_SCREEN_ANIMATION) {
+					Raster newFB = titleVideo.get(frame).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
+					window.frameBuffer.setData(newFB);
+					if(System.nanoTime() >= nextFrameTime) {
+						frame ++;
+						nextFrameTime = System.nanoTime() + frameLength;
+					}
+					if(frame == 100) frame = 0;
+				} else {
+					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 				}
-				if(frame == 100) frame = 0;
 				
 				// Title Text
 				window.drawText(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 6), "Escape The Robots And", 20, Color.WHITE);
@@ -231,21 +239,29 @@ public class Main {
 		boolean gameRunning = true;
 		int currentLevel = 0;
 		boolean freecam = false;
+		
+		nextFrameTime = System.nanoTime();
+		frameLength = 16700000;
+		
 		while(gameRunning) {
 			try {
+				// Frame limiter
+				while(System.nanoTime() < nextFrameTime) {}
+				nextFrameTime = System.nanoTime() + frameLength;
+				
 				window.clear();
 				
 				// Movement Code
 				float moveX = 0;
 				float moveY = 0;
 				
-				if(window.keyListener.KEY_LEFT) moveX -= 15;
-				if(window.keyListener.KEY_RIGHT) moveX += 15;
-				if(window.keyListener.KEY_UP) moveY -= 15;
-				if(window.keyListener.KEY_DOWN) moveY += 15; 
+				if(window.keyListener.KEY_LEFT) moveX -= 5;
+				if(window.keyListener.KEY_RIGHT) moveX += 5;
+				if(window.keyListener.KEY_UP) moveY -= 5;
+				if(window.keyListener.KEY_DOWN) moveY += 5; 
 				
-				moveX = moveX * window.delta;
-				moveY = moveY * window.delta;
+				//moveX = moveX * window.delta;
+				//moveY = moveY * window.delta;
 				
 				if(window.keyListener.KEY_FREECAM) {
 					Thread.sleep(200);
@@ -407,10 +423,6 @@ public class Main {
 				// Drawing Code
 				window.drawLayers();
 				window.repaint();
-				
-				if(window.FPS > 75) {
-					Thread.sleep(1000 / 60);
-				}
 			} catch(Exception e) {
 				window.crash("Unrecoverable error in main game loop", e);
 			}
