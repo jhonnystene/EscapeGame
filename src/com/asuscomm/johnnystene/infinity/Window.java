@@ -258,6 +258,26 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		return false;
 	}
 	
+	public boolean drawClearMenuButton(int x, int y, int width, int height, String text, Color textColor, Color textColorHover) {
+		Font font = new Font("Sans Serif", Font.BOLD, 35);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		if(mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
+			graphics.setColor(textColorHover);
+			if(mouseDown) return true;
+		} else
+			graphics.setColor(textColor);
+		
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		int textX = x + (width - metrics.stringWidth(text)) / 2;
+		int textY = y + ((height - metrics.getHeight()) / 2) + metrics.getAscent();
+		graphics.setFont(font);
+		graphics.drawString(text, textX, textY);
+		graphics.dispose();
+		
+		return false;
+	}
+	
 	public void drawRectangle(int x, int y, int width, int height, Color color) {
 		Graphics2D graphics = frameBuffer.createGraphics();
 		graphics.setColor(color);
