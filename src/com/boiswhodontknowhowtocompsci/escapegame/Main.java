@@ -98,20 +98,21 @@ public class Main {
 		
 		// Create the player object and preload the player sprite
 		debug("Loading player...");
-		CollisionItem player = new CollisionItem(window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 100, 100));
+		CollisionItem player = new CollisionItem(window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 64, 64));
 		player.x = 360;
 		player.y = 1800;
 		player.isometricItem = true;
 		window.collisionItemLayer.add(player);
 		
-		player.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FLStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FRStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/RStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BRStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BLStatic.png")), 100, 100);
-		player.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/LStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FLStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FRStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/RStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BRStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BLStatic.png")), 64, 64);
+		player.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/LStatic.png")), 64, 64);
+		
 		// Load in first level
 		debug("Loading first level contents...");
 		Outside outside = new Outside(window, linegen, fileLoader);
