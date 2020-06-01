@@ -58,8 +58,10 @@ public class Main {
 		}
 		
 		//Menu Button sizes
-		int menuButtonWidth = (window.windowWidth / 2) - 50;
-		int menuButtonHeight = 100;
+		int menuButtonWidth = 100;
+		int menuButtonHeight = 20;
+		int menuButtonTextSize = 16;
+		int menuButtonSpacing = 10;
 		
 		// Title screen loop
 		boolean inTitleScreen = true;
@@ -69,15 +71,20 @@ public class Main {
 				window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 				
 				// Title Text
-				window.drawTextCentered(window.windowWidth / 2, (window.windowHeight / 2) - 50, "Escape The Robots And", 40, Color.WHITE);
-				window.drawTextCentered(window.windowWidth / 2, window.windowHeight / 2, "Oh Gosh They're Coming Run", 40, Color.WHITE);
+				window.drawText(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 6), "Escape The Robots And", 20, Color.WHITE);
+				window.drawText(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 5), "Oh Gosh They're Coming Run", 20, Color.WHITE);
 				
-				// PLAY button (duh)
-				if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 300, menuButtonWidth, menuButtonHeight, "PLAY", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+				// NEW GAME button (duh)
+				if(window.drawClearMenuButton(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 4), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "NEW GAME", Color.WHITE, Color.LIGHT_GRAY))
 					inTitleScreen = false;
 				
+				// LOAD GAME button (duh)
+				window.drawClearMenuButton(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 3), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "LOAD GAME", Color.DARK_GRAY, Color.DARK_GRAY);
+				
+				window.drawClearMenuButton(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 2), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "OPTIONS", Color.DARK_GRAY, Color.DARK_GRAY);
+				
 				// QUIT button (duh)
-				if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 180, menuButtonWidth, menuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
+				if(window.drawClearMenuButton(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 1), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "QUIT GAME", Color.WHITE, Color.LIGHT_GRAY))
 					System.exit(0);
 				
 				window.repaint();
