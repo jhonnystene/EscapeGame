@@ -36,6 +36,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	// Render layers
 	public ArrayList<WorldItem> backgroundLayer;
 	public ArrayList<CollisionItem> collisionItemLayer;
+	public ArrayList<CollisionItem> hiddenCollisionItemLayer;
 	public ArrayList<WorldItem> effectLayer;
 	
 	public BufferedImage renderedBackground; // Used to improve performance
@@ -100,6 +101,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		// Initialize layers
 		backgroundLayer = new ArrayList<WorldItem>();
 		collisionItemLayer = new ArrayList<CollisionItem>();
+		hiddenCollisionItemLayer = new ArrayList<CollisionItem>();
 		effectLayer = new ArrayList<WorldItem>();
 		
 		t = Toolkit.getDefaultToolkit();

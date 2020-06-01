@@ -10,6 +10,7 @@ package com.boiswhodontknowhowtocompsci.escapegame;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -232,7 +233,10 @@ public class Main {
 					window.cameraY += moveY;
 				} else {
 					if(!controllingLaser) {
-						player.moveAndCollide(moveX, moveY, window.collisionItemLayer);
+						ArrayList<CollisionItem> tempList = new ArrayList<CollisionItem>();
+						tempList.addAll(window.collisionItemLayer);
+						tempList.addAll(window.hiddenCollisionItemLayer);
+						player.moveAndCollide(moveX, moveY, tempList);
 						window.centerCamera(player);
 					}
 				}
