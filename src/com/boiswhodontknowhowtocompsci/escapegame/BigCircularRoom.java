@@ -1,9 +1,7 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
+import java.io.IOException;
 
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
@@ -21,15 +19,11 @@ public class BigCircularRoom {
 		fileLoader = f;
 	}
 	
-	public void createAt(int x, int y) {
+	public void createAt(int x, int y) throws IOException {
 		Color color = new Color(67, 67, 75);
 		
-		try {
-			WorldItem background = new WorldItem(fileLoader.load("/res/maps/Upstairs-Basic.png"));
-			window.backgroundLayer.add(background);
-		} catch(Exception e) {
-			window.crash("Failed to download map background", e);
-		}
+		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Upstairs-Basic.png"));
+		window.backgroundLayer.add(background);
 			
 		//0, 574 to 78, 462
 		linegen.createLine(0, 574, 78, 462, color, window);

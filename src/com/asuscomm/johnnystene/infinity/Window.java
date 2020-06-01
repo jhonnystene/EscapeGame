@@ -19,14 +19,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
@@ -63,7 +63,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	
 	private Toolkit t;
 	
-	public Window(int width, int height, String name) {
+	public Window(int width, int height, String name) throws LineUnavailableException {
 		super(); // Create JFrame
 		
 		// Set window size
@@ -92,11 +92,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		setVisible(true); // Make window visible
 		
 		// Initialize music system
-		try {
-			musicPlayer = AudioSystem.getClip();
-		} catch (Exception e) {
-			crash("Couldn't init sound system!", e);
-		}
+		musicPlayer = AudioSystem.getClip();
 		
 		// Initialize layers
 		backgroundLayer = new ArrayList<WorldItem>();
@@ -115,7 +111,11 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	
 	public void paint(Graphics g) {
-		t.sync();
+		try {
+			t.sync();
+		} catch(NullPointerException e) {
+			// Do nothing -this line fails when the game is first initializing and it's quite annoying
+		}
 		g.drawImage(frameBuffer, 0, 0, this); // Draw the framebuffer on the screen
 		
 		// Calculate FPS and delta
@@ -261,7 +261,7 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	}
 	
 	public boolean drawClearMenuButton(int x, int y, int width, int height, int fontSize, String text, Color textColor, Color textColorHover) {
-		Font font = new Font("Sans Serif", Font.PLAIN, fontSize);
+		Font font = new Font("Monospace", Font.BOLD, fontSize);
 		Graphics2D graphics = frameBuffer.createGraphics();
 		if(mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
 			graphics.setColor(textColorHover);
@@ -297,28 +297,9 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 	/*
 	 * METHODS FOR MUSIC AND SFX
 	 */
-	public void loopMusic(AudioInputStream input) {
-		try {
-			musicPlayer.stop();
-			musicPlayer.open(input);
-		} catch (Exception e) {
-			crash("Couldn't play sound!", e);
-		}
+	public void loopMusic(AudioInputStream input) throws LineUnavailableException, IOException {
+		musicPlayer.stop();
+		musicPlayer.open(input);
 		musicPlayer.loop(Clip.LOOP_CONTINUOUSLY);
-	}
-	
-	/*
-	 * METHOD FOR CRASHES
-	 */
-	public void crash(String message, Exception e) { 
-		System.out.println("shit dick the game crashed again (" + e.getMessage() + ":" + e.getCause() + ")");
-		drawRectangle(0, 0, windowWidth, windowHeight, new Color(0, 0, 0));
-		drawTextCentered(windowWidth / 2, windowHeight / 2, "The game crashed!", 40, Color.WHITE);
-		drawTextCentered(windowWidth / 2, (windowHeight / 2) + 40, message + " (" + e.getMessage() + ")", 30, Color.WHITE);
-		repaint();
-		e.printStackTrace();
-		try {
-			while(true) {Thread.sleep(500);}
-		} catch(Exception e2) {System.exit(1);}; // if the crash screen crashed fuck it just exit
 	}
 }

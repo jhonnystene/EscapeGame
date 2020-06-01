@@ -1,6 +1,7 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -20,15 +21,11 @@ public class Outside {
 		fileLoader = f;
 	}
 	
-	public void create() {
+	public void create() throws IOException {
 		Color color = Color.WHITE;
 		
-		try {
-			WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Basic.png")));
-			window.backgroundLayer.add(background);
-		} catch(Exception e) {
-			window.crash("Failed to download map background", e);
-		}
+		WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Basic.png")));
+		window.backgroundLayer.add(background);
 		
 		linegen.createLine(0, 1594, 110, 1485, color, window);
 		linegen.createLine(0, 2047, 660, 2047, color, window);
