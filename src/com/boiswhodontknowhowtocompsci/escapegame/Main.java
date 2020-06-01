@@ -9,6 +9,9 @@ package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -66,12 +69,28 @@ public class Main {
 		int menuButtonTextSize = 16;
 		int menuButtonSpacing = 10;
 		
+		debug("Loading title screen video...");
+		ArrayList<BufferedImage> titleVideo = new ArrayList<BufferedImage>();
+		for(int i = 1; i < 101; i++) {
+			//      ^       ^
+			// ffmpeg named the files starting at one so i gotta do this shit
+			// it hurts
+			
+			titleVideo.add(window.resizeImage(ImageIO.read(fileLoader.load("/res/title/out" + Integer.toString(i) + ".png")), window.windowWidth, window.windowHeight));
+		}
+		
 		// Title screen loop
 		boolean inTitleScreen = true;
 		debug("Starting title screen...");
+		int frame = 0;
 		while(inTitleScreen) {
 			try {
-				window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
+				//window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
+				
+				Raster newFB = titleVideo.get(frame).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
+				window.frameBuffer.setData(newFB);
+				frame ++;
+				if(frame == 100) frame = 0;
 				
 				// Title Text
 				window.drawText(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 6), "Escape The Robots And", 20, Color.WHITE);
