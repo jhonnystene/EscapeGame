@@ -87,10 +87,12 @@ public class Main {
 			try {
 				//window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 				
-				Raster newFB = titleVideo.get(frame).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
-				window.frameBuffer.setData(newFB);
+				if(frame % 2 == 0) {
+					Raster newFB = titleVideo.get(frame / 2).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
+					window.frameBuffer.setData(newFB);
+				}
 				frame ++;
-				if(frame == 100) frame = 0;
+				if(frame == 200) frame = 0;
 				
 				// Title Text
 				window.drawText(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 6), "Escape The Robots And", 20, Color.WHITE);
