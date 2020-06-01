@@ -9,20 +9,24 @@ import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 
+import res.FileLoader;
+
 public class Outside {
 	Window window;
 	CollisionLineGenerator linegen;
+	FileLoader fileLoader;
 	
-	public Outside(Window w, CollisionLineGenerator l) {
+	public Outside(Window w, CollisionLineGenerator l, FileLoader f) {
 		window = w;
 		linegen = l;
+		fileLoader = f;
 	}
 	
 	public void create() {
 		Color color = Color.WHITE;
 		
 		try {
-			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/Outside.png"))));
+			WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Basic.png")));
 			window.backgroundLayer.add(background);
 		} catch(Exception e) {
 			window.crash("Failed to download map background", e);

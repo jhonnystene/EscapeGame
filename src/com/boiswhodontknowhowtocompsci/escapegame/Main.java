@@ -23,6 +23,8 @@ import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 
+import res.FileLoader;
+
 public class Main {
 	
 	private static boolean DEBUG_BUILD = true;
@@ -44,6 +46,9 @@ public class Main {
 
 		debug("Initializing CollisionLineGenerator...");
 		CollisionLineGenerator linegen = new CollisionLineGenerator();
+		
+		debug("Initializing FileLoader...");
+		FileLoader fileLoader = new FileLoader();
 		
 		// Download and play the music
 		debug("Initializing AudioInputStream...");
@@ -131,7 +136,7 @@ public class Main {
 		*/
 		
 		// Load in first level
-		Outside outside = new Outside(window, linegen);
+		Outside outside = new Outside(window, linegen, fileLoader);
 		outside.create();
 		
 		// Terminal Hitbox
