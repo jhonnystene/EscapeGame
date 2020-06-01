@@ -83,16 +83,20 @@ public class Main {
 		boolean inTitleScreen = true;
 		debug("Starting title screen...");
 		int frame = 0;
+		double frameLength = 83333333.33;
+		double nextFrameTime = System.nanoTime() + frameLength;
+		
 		while(inTitleScreen) {
 			try {
 				//window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
 				
-				if(frame % 2 == 0) {
-					Raster newFB = titleVideo.get(frame / 2).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
-					window.frameBuffer.setData(newFB);
+				Raster newFB = titleVideo.get(frame).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
+				window.frameBuffer.setData(newFB);
+				if(System.nanoTime() >= nextFrameTime) {
+					frame ++;
+					nextFrameTime = System.nanoTime() + frameLength;
 				}
-				frame ++;
-				if(frame == 200) frame = 0;
+				if(frame == 100) frame = 0;
 				
 				// Title Text
 				window.drawText(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 6), "Escape The Robots And", 20, Color.WHITE);
@@ -112,7 +116,7 @@ public class Main {
 					System.exit(0);
 				
 				window.repaint();
-				Thread.sleep(1000 / 10); // FPS cap needed in menus too
+				Thread.sleep(1000 / 30); // FPS cap needed in menus too
 			} catch(Exception e) {
 				window.crash("Error while drawing title screen", e);
 			}
