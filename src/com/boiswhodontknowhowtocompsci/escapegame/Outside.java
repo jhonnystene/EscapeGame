@@ -1,11 +1,9 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 

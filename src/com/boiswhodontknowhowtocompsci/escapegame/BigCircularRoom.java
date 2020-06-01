@@ -5,30 +5,31 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
+
+import res.FileLoader;
 
 public class BigCircularRoom {
 	Window window;
 	CollisionLineGenerator linegen;
+	FileLoader fileLoader;
 	
-	public BigCircularRoom(Window w, CollisionLineGenerator l) {
+	public BigCircularRoom(Window w, CollisionLineGenerator l, FileLoader f) {
 		window = w;
 		linegen = l;
+		fileLoader = f;
 	}
 	
 	public void createAt(int x, int y) {
 		Color color = new Color(67, 67, 75);
 		
 		try {
-			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/BigCircularRoom.png"))));
+			WorldItem background = new WorldItem(fileLoader.load("/res/maps/Upstairs-Basic.png"));
 			window.backgroundLayer.add(background);
 		} catch(Exception e) {
 			window.crash("Failed to download map background", e);
 		}
-		
-		
 			
 		//0, 574 to 78, 462
 		linegen.createLine(0, 574, 78, 462, color, window);

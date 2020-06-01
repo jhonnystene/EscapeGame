@@ -8,6 +8,8 @@ package com.asuscomm.johnnystene.infinity;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class CollisionItem extends WorldItem {
@@ -18,8 +20,8 @@ public class CollisionItem extends WorldItem {
 		super(width, height, color);
 	}
 	
-	public CollisionItem(String filename, boolean url) {
-		super(filename, url);
+	public CollisionItem(InputStream setSprite) throws IOException {
+		super(setSprite);
 	}
 	
 	public CollisionItem(BufferedImage setSprite) {

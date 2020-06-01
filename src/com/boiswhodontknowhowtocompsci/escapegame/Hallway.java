@@ -7,24 +7,27 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
+
+import res.FileLoader;
 
 public class Hallway {
 	Window window;
 	CollisionLineGenerator linegen;
+	FileLoader fileLoader;
 	
-	public Hallway(Window w, CollisionLineGenerator l) {
+	public Hallway(Window w, CollisionLineGenerator l, FileLoader f) {
 		window = w;
 		linegen = l;
+		fileLoader = f;
 	}
 	
 	public void create() {
 		Color color = new Color(67, 67, 75);
 		
 		try {
-			WorldItem background = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/maps/Hallway.png"))));
+			WorldItem background = new WorldItem(fileLoader.load("/res/maps/Hallway-Basic.png"));
 			window.backgroundLayer.add(background);
 		} catch(Exception e) {
 			window.crash("Failed to download map background", e);

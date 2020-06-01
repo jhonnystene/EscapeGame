@@ -8,10 +8,8 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
-import java.awt.Toolkit;
 import java.awt.Graphics2D;
 import java.io.IOException;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -19,7 +17,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.asuscomm.johnnystene.infinity.CollisionItem;
-import com.asuscomm.johnnystene.infinity.GithubUtils;
 import com.asuscomm.johnnystene.infinity.Window;
 import com.asuscomm.johnnystene.infinity.WorldItem;
 
@@ -34,7 +31,7 @@ public class Main {
 		if(DEBUG_BUILD) System.out.println(message);
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		debug("Escape The Robots And Oh Gosh They're Coming Run");
 		debug("Beta Version");
 		
@@ -55,7 +52,7 @@ public class Main {
 		AudioInputStream titleInputStream;
 		try {
 			debug("Downloading title screen music...");
-			titleInputStream = AudioSystem.getAudioInputStream(new URL(GithubUtils.getFullPath("msc/title.wav")));
+			titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));
 			debug("Starting playback of title screen music...");
 			window.loopMusic(titleInputStream);
 		} catch (UnsupportedAudioFileException | IOException e) {
@@ -100,42 +97,23 @@ public class Main {
 		}
 		
 		// Create the player object and preload the player sprite
-		debug("Downloading player sprites and initializing player...");
-		window.drawLoadingScreen("Downloading player sprites...");
-		CollisionItem player = new CollisionItem(GithubUtils.getFullPath("img/player/test_player.png"), true);
-		player.x = 360;//24 * 80;
-		player.y = 1800;//30 * 80;
+		debug("Loading player...");
+		CollisionItem player = new CollisionItem(window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 100, 100));
+		player.x = 360;
+		player.y = 1800;
+		player.isometricItem = true;
 		window.collisionItemLayer.add(player);
 		
-		/*w// Do the same for Roboboi (commented all the sprites out to improve loading times while i get isometric support baked in)
-		debug("Initializing Roboboi...");
-		window.drawLoadingScreen("Downloading Roboboi sprites...");
-		CollisionItem roboboi = new CollisionItem(64, 64, Color.BLACK);
-		roboboi.x = 18 * 80;
-		roboboi.y = 30 * 80;
-		roboboi.isometricItem = true; // My lazy ass finally implemented this
-		
-		debug("Downloading isometric sprites for Roboboi...");
-		try {
-			// Download all sprites for Roboboi
-			roboboi.isometricSprites[WorldItem.SW] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_00.png")));
-			roboboi.isometricSprites[WorldItem.W] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_01.png")));
-			roboboi.isometricSprites[WorldItem.NW] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_02.png")));
-			roboboi.isometricSprites[WorldItem.N] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_03.png")));
-			roboboi.isometricSprites[WorldItem.NE] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_04.png")));
-			roboboi.isometricSprites[WorldItem.E] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_05.png")));
-			roboboi.isometricSprites[WorldItem.SE] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_06.png")));
-			roboboi.isometricSprites[WorldItem.S] = ImageIO.read(new URL(GithubUtils.getFullPath("img/roboboi/tile_07.png")));
-		} catch(Exception e) {
-			window.crash("Failed downloading Roboboi sprites.", e);
-		}
-		
-		// Set the sprite to the proper one
-		roboboi.sprite = roboboi.isometricSprites[WorldItem.E];
-		//window.collisionItemLayer.add(roboboi);
-		*/
-		
+		player.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FLStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FRStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/RStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BRStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BLStatic.png")), 100, 100);
+		player.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/LStatic.png")), 100, 100);
 		// Load in first level
+		debug("Loading first level contents...");
 		Outside outside = new Outside(window, linegen, fileLoader);
 		outside.create();
 		
@@ -154,7 +132,7 @@ public class Main {
 		
 		WorldItem terminalSprite = null;
 		try {
-			terminalSprite = new WorldItem(ImageIO.read(new URL(GithubUtils.getFullPath("img/terminal.png"))));
+			terminalSprite = new WorldItem(fileLoader.load("/res/ui/terminal.png"));
 			terminalSprite.sprite = window.resizeImage(terminalSprite.sprite, 1136, 640);
 		} catch(Exception e) {
 			window.crash("Failed to load terminal background sprite.", e);
@@ -203,24 +181,20 @@ public class Main {
 		laserControlPanel.y = 256;
 		
 		window.drawLoadingScreen("Downloading laser sprites...");
-		CollisionItem laser = new CollisionItem(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png"), true);
+		CollisionItem laser = new CollisionItem(fileLoader.load("/res/laser/FLStatic.png"));
 		laser.x = 527;
 		laser.y = 518;
 		//210 215
 		laser.isometricItem = true;
-		try {
-			laser.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FLStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/FRStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/LStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/RStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BLStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BStatic.png"))), 210, 215);
-			laser.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(new URL(GithubUtils.getFullPath("img/Assets/Laser/BRStatic.png"))), 210, 215);
-		} catch(Exception e) {
-			window.crash("Failed to download laser sprites", e);
-		}
-		
+		laser.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/FLStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/FStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/FRStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/RStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/BRStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/BStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/BLStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/LStatic.png")), 210, 215);
+	
 		laser.pointInDirection(WorldItem.S);
 		laser.refreshDimensions();
 		
@@ -274,10 +248,10 @@ public class Main {
 							
 							// Put player where they need to go
 							player.x = 415;
-							player.y = 1569;
+							player.y = 1450;
 							
 							// Load in next level
-							Hallway hallway = new Hallway(window, linegen);
+							Hallway hallway = new Hallway(window, linegen, fileLoader);
 							hallway.create();
 							window.renderBackground();
 							currentLevel = 1;
@@ -360,7 +334,7 @@ public class Main {
 							player.y = 1100;
 							
 							// Load in next level
-							BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen);
+							BigCircularRoom bigCircularRoom = new BigCircularRoom(window, linegen, fileLoader);
 							bigCircularRoom.createAt(0, 0);
 							window.renderBackground();
 							window.collisionItemLayer.add(laser);
