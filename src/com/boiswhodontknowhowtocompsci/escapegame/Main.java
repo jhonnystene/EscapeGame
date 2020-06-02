@@ -40,7 +40,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException, InterruptedException, LineUnavailableException, UnsupportedAudioFileException {
 		debug("Escape The Robots And Oh Gosh They're Coming Run");
-		debug("Beta Version");
+		debug("DEBUG BUILD");
 		
 		debug("Initializing Window...");
 		Window window = new Window(1136, 640, "Escape The Robots And Oh Gosh They're Coming Run"); // Create the game window
@@ -68,7 +68,7 @@ public class Main {
 		int menuButtonTextSize = 16;
 		int menuButtonSpacing = 10;
 		
-		window.drawLoadingScreen("");
+		window.drawLoadingScreen("Rendering intro animation...");
 		ArrayList<BufferedImage> titleVideo = new ArrayList<BufferedImage>();
 		if(ENABLE_TITLE_SCREEN_ANIMATION) {
 			debug("Loading title screen video...");
