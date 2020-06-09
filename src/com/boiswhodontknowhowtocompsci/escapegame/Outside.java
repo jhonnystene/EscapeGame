@@ -1,6 +1,7 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -24,8 +25,9 @@ public class Outside {
 	public void create() throws IOException {
 		Color color = Color.WHITE;
 		
-		WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Basic.png")));
+		WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Final.png")));
 		window.backgroundLayer.add(background);
+		window.renderBackground();
 		
 		linegen.createLine(0, 1594, 110, 1485, color, window);
 		linegen.createLine(0, 2047, 660, 2047, color, window);

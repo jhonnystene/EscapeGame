@@ -32,7 +32,7 @@ public class Main {
 	private static boolean DEBUG_BUILD = true;
 	private static int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
-	private static boolean ENABLE_TITLE_SCREEN_ANIMATION = true; // Makes loading take longer. Enable for release/demo builds.
+	private static boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
 	
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);

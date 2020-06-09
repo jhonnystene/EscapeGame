@@ -27,7 +27,7 @@ public class Hallway {
 	public void create() throws IOException {
 		Color color = new Color(67, 67, 75);
 		
-		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Hallway-Basic.png"));
+		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Hallway-Final.png"));
 		window.backgroundLayer.add(background);
 	
 	
