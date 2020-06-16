@@ -1,6 +1,6 @@
 /*
  * Main.java
- * By Johnny, Ethan S, Caleb M (Add your names here when you fuckers finally decide to do work)
+ * By Johnny, Ethan S, Caleb M, Aiden S, Ethan M
  * 
  * Main game class for Escape The Robots And Oh Gosh They're Coming Run
  */
@@ -203,20 +203,26 @@ public class Main {
 		laserControlPanel.x = 418;
 		laserControlPanel.y = 256;
 		
+		// Core Button Hitbox
+		CollisionItem core = new CollisionItem(88,10, Color.RED);
+		core.x = 980;
+		core.y = 714;
+		boolean coreButtonPressed = false;
+		
 		window.drawLoadingScreen("Downloading laser sprites...");
-		CollisionItem laser = new CollisionItem(fileLoader.load("/res/laser/FLStatic.png"));
+		CollisionItem laser = new CollisionItem(fileLoader.load("/res/laser/Static/0001.png"));
 		laser.x = 527;
 		laser.y = 518;
 		//210 215
 		laser.isometricItem = true;
-		laser.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/FLStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/FStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/FRStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/RStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/BRStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/BStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/BLStatic.png")), 210, 215);
-		laser.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/LStatic.png")), 210, 215);
+		laser.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0008.png")), 210, 215);
+		laser.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0001.png")), 210, 215);
+		laser.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0002.png")), 210, 215);
+		laser.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0003.png")), 210, 215);
+		laser.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0004.png")), 210, 215);
+		laser.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0005.png")), 210, 215);
+		laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0006.png")), 210, 215);
+		laser.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0007.png")), 210, 215);
 	
 		laser.pointInDirection(WorldItem.S);
 		laser.refreshDimensions();
@@ -382,6 +388,14 @@ public class Main {
 				if(window.keyListener.KEY_ACTION && !controllingLaser && player.collidingWith(laserControlPanel)) controllingLaser = true;
 				
 				window.drawWorldItem(laserControlPanel);
+				
+			} else if(currentLevel == 4) {
+				if(window.keyListener.KEY_ACTION) {
+					if(!coreButtonPressed && player.collidingWith(core)) {
+						// Core level
+						coreButtonPressed = true;
+					}
+				}
 			}
 			
 			// Pause menu
