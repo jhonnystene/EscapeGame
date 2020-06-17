@@ -43,7 +43,23 @@ public class Main {
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);
 	}
-	
+
+	private static void drawHackyThing(Window window, String message) throws InterruptedException{
+		int hackyframes = 0;
+
+		while(hackyframes < 125) {
+			window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK);
+			window.drawRectangle((window.windowWidth / 2) - 150, (window.windowHeight / 2) - 50, 300, 100, Color.DARK_GRAY);
+			window.drawOtherRectangle((window.windowWidth / 2) - 155, (window.windowHeight / 2) - 55, 310, 110, Color.LIGHT_GRAY);
+			window.drawTextCentered(window.windowWidth / 2, (window.windowHeight / 2), message, 25, Color.WHITE);
+			window.drawRectangle((window.windowWidth / 2) - 125, (window.windowHeight / 2), hackyframes * 2, 25, Color.WHITE);
+
+			window.repaint();
+			hackyframes ++;
+			Thread.sleep(1000 / 30);
+		}
+	}
+
 	public static void main(String[] args) throws IOException, InterruptedException, LineUnavailableException, UnsupportedAudioFileException {
 		debug("Escape The Robots And Oh Gosh They're Coming Run");
 		debug("DEBUG BUILD");
@@ -311,20 +327,8 @@ public class Main {
 					}
 					
 					if(!terminalSolved && player.collidingWith(terminal)) {
-						// Terminal level
-						while(!terminalSolved) {
-							window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, Color.BLACK); // Black background
-							
-							Graphics2D graphics = window.frameBuffer.createGraphics();
-							graphics.drawImage(terminalSprite.sprite, 0, 0, window);
-							graphics.dispose();
-							if(window.drawMenuButton(501, 300, 50, 15, "", Color.WHITE, new Color(0, 0, 0), new Color(5, 5, 5))) {
-								terminalSolved = true;
-								break;
-							}
-							window.repaint();
-							Thread.sleep(1000 / 15); 
-						}
+						drawHackyThing(window, "Hacking Door...");
+						terminalSolved = true;
 					}
 				}
 			} else if(currentLevel == 1) {
