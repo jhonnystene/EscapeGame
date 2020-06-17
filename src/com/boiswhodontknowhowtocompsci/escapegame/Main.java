@@ -4,7 +4,7 @@
  * ######################################################
  * # COPYRIGHT 2020 BOIS WHO DON'T KNOW HOW TO COMP SCI #
  * #                                                    #
- * # LEAD DEVELOPER, ENGINE                JOHNNY STENE #
+ * # LEAD DEVELOPER, ENGINE, UI            JOHNNY STENE #
  * # LEVEL SCRIPTING                    ETHAN STEVENSON #
  * # ART, LEVEL DESIGN                      ETHAN MEIER #
  * #              NOBODY ELSE DID FUCK ALL              #
@@ -13,32 +13,29 @@
 
 package com.boiswhodontknowhowtocompsci.escapegame;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
-import java.io.IOException;
-import java.util.ArrayList;
+import com.asuscomm.johnnystene.infinity.CollisionItem;
+import com.asuscomm.johnnystene.infinity.Window;
+import com.asuscomm.johnnystene.infinity.WorldItem;
+import res.FileLoader;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
-import com.asuscomm.johnnystene.infinity.CollisionItem;
-import com.asuscomm.johnnystene.infinity.Window;
-import com.asuscomm.johnnystene.infinity.WorldItem;
-
-import res.FileLoader;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Rectangle;
 
 public class Main {
-	private static boolean DEBUG_BUILD = true;
-	private static int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
+	private static final boolean DEBUG_BUILD = true;
+	private static final int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
-	private static boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
-	private static boolean ENABLE_ANNOYING_ASS_MUSIC = false; // Makes me want to shoot myself. Enable for release/demo builds.
+	private static final boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
+	private static final boolean ENABLE_ANNOYING_ASS_MUSIC = false; // Makes me want to shoot myself. Enable for release/demo builds.
 
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);
@@ -92,7 +89,7 @@ public class Main {
 		int menuButtonSpacing = 10;
 		
 		window.drawLoadingScreen("Rendering intro animation...");
-		ArrayList<BufferedImage> titleVideo = new ArrayList<BufferedImage>();
+		ArrayList<BufferedImage> titleVideo = new ArrayList<>();
 		if(ENABLE_TITLE_SCREEN_ANIMATION) {
 			debug("Loading title screen video...");
 			for(int i = 1; i < 101; i++) {
@@ -100,7 +97,7 @@ public class Main {
 				// ffmpeg named the files starting at one so i gotta do this shit
 				// it hurts
 				
-				titleVideo.add(window.resizeImage(ImageIO.read(fileLoader.load("/res/title/out" + Integer.toString(i) + ".png")), window.windowWidth, window.windowHeight));
+				titleVideo.add(window.resizeImage(ImageIO.read(fileLoader.load("/res/title/out" + i + ".png")), window.windowWidth, window.windowHeight));
 			}
 		}
 		
@@ -131,12 +128,7 @@ public class Main {
 			// NEW GAME button (duh)
 			if(window.drawClearMenuButton(20, window.windowHeight - 20 - ((menuButtonHeight + menuButtonSpacing) * 4), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "NEW GAME", Color.WHITE, Color.LIGHT_GRAY))
 				inTitleScreen = false;
-			
-			// LOAD GAME button (duh)
-			//window.drawClearMenuButton(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 3), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "LOAD GAME", Color.DARK_GRAY, Color.DARK_GRAY);
-			
-			//window.drawClearMenuButton(20, window.windowHeight - 15 - ((menuButtonHeight + menuButtonSpacing) * 2), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "OPTIONS", Color.DARK_GRAY, Color.DARK_GRAY);
-			
+
 			// QUIT button (duh)
 			if(window.drawClearMenuButton(20, window.windowHeight - 20 - ((menuButtonHeight + menuButtonSpacing) * 3), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "QUIT GAME", Color.WHITE, Color.LIGHT_GRAY))
 				System.exit(0);
@@ -184,7 +176,7 @@ public class Main {
 		
 		window.renderBackground();
 		
-		WorldItem terminalSprite = null;
+		WorldItem terminalSprite;
 		terminalSprite = new WorldItem(fileLoader.load("/res/ui/terminal.png"));
 		terminalSprite.sprite = window.resizeImage(terminalSprite.sprite, 1136, 640);
 			
@@ -266,7 +258,7 @@ public class Main {
 		
 		while(gameRunning) {
 			// Frame limiter
-			while(System.nanoTime() < nextFrameTime) {}
+			do {} while (System.nanoTime() < nextFrameTime); // I get compiler warnings with just a while() loop
 			nextFrameTime = System.nanoTime() + frameLength;
 			
 			window.clear();
@@ -296,7 +288,7 @@ public class Main {
 				window.cameraY += moveY;
 			} else {
 				if(!controllingLaser) {
-					ArrayList<CollisionItem> tempList = new ArrayList<CollisionItem>();
+					ArrayList<CollisionItem> tempList = new ArrayList<>();
 					tempList.addAll(window.collisionItemLayer);
 					tempList.addAll(window.hiddenCollisionItemLayer);
 					player.moveAndCollide(moveX, moveY, tempList);
@@ -427,7 +419,7 @@ public class Main {
 					}
 						
 					if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 280, menuButtonWidth, menuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
-						System.exit(0);
+						gameRunning = false;
 					}
 						
 					window.repaint();
@@ -437,8 +429,8 @@ public class Main {
 			
 			// Print debug information
 			if(DEBUG_BUILD && DEBUG_LEVEL == 0)
-				System.out.println("FPS: " + Integer.toString((int) window.FPS) + ", Delta: " + Float.toString(window.delta) + 
-						", X: " + Integer.toString((int) player.x) + ", Y: " + Integer.toString((int) player.y));
+				System.out.println("FPS: " + (int) window.FPS + ", Delta: " + window.delta +
+						", X: " + (int) player.x + ", Y: " + (int) player.y);
 			
 			// Drawing Code
 			playerSprite.x = player.x - 41;

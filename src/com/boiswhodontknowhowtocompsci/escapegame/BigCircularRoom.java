@@ -24,7 +24,8 @@ public class BigCircularRoom {
 		
 		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Upstairs.png"));
 		window.backgroundLayer.add(background);
-			
+
+		/*
 		//0, 574 to 78, 462
 		linegen.createLine(0, 574, 78, 462, color, window);
 		//78, 462 to 202, 345
@@ -60,7 +61,28 @@ public class BigCircularRoom {
 		//72, 828 to 0, 722
 		linegen.createLine(72, 828, 0, 722, color, window);
 		//0, 722 to 0, 574
-		linegen.createLine(0, 722, 0, 574, color, window);
+		linegen.createLine(0, 722, 0, 574, color, window);*/
+		linegen.createLine(824, 1484, 824, 1269, color, window);
+		linegen.createLine(824, 1269, 606, 1179, color, window);
+		linegen.createLine(606, 1179, 482, 1063, color, window);
+		linegen.createLine(482, 1063, 408, 955, color, window);
+		linegen.createLine(408, 955, 408, 804, color, window);
+		linegen.createLine(408, 804, 486, 696, color, window);
+		linegen.createLine(486, 696, 611, 579, color, window);
+		linegen.createLine(611, 579, 836, 485, color, window);
+		linegen.createLine(836, 485, 866, 508, color, window);
+		linegen.createLine(866, 508, 1217, 508, color, window);
+		linegen.createLine(1217, 508, 1247, 485, color, window);
+		linegen.createLine(1247, 485, 1473, 580, color, window);
+		linegen.createLine(1473, 580, 1593, 693, color, window);
+		linegen.createLine(1593, 693, 1671, 805, color, window);
+		linegen.createLine(1671, 805, 1671, 954, color, window);
+		linegen.createLine(1671, 954, 1591, 1061, color, window);
+		linegen.createLine(1591, 1061, 1467, 1180, color, window);
+		linegen.createLine(1467, 1180, 1254, 1268, color, window);
+		linegen.createLine(1254, 1268, 1254, 1484, color, window);
+		linegen.createLine(1254, 1484, 824, 1484, color, window);
+
 	}
 	
 }
