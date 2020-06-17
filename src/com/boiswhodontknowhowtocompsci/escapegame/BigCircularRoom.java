@@ -22,7 +22,7 @@ public class BigCircularRoom {
 	public void createAt(int x, int y) throws IOException {
 		Color color = new Color(67, 67, 75);
 		
-		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Upstairs-Basic.png"));
+		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Upstairs.png"));
 		window.backgroundLayer.add(background);
 			
 		//0, 574 to 78, 462

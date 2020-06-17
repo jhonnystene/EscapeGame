@@ -1,8 +1,14 @@
 /*
- * Main.java
- * By Johnny, Ethan S, Caleb M, Aiden S, Ethan M
- * 
- * Main game class for Escape The Robots And Oh Gosh They're Coming Run
+ * ######################################################
+ * #  ESCAPE THE ROBOTS AND OH GOSH THEY'RE COMING RUN  #
+ * ######################################################
+ * # COPYRIGHT 2020 BOIS WHO DON'T KNOW HOW TO COMP SCI #
+ * #                                                    #
+ * # LEAD DEVELOPER, ENGINE                JOHNNY STENE #
+ * # LEVEL SCRIPTING                    ETHAN STEVENSON #
+ * # ART, LEVEL DESIGN                      ETHAN MEIER #
+ * #              NOBODY ELSE DID FUCK ALL              #
+ * ######################################################
  */
 
 package com.boiswhodontknowhowtocompsci.escapegame;
@@ -28,12 +34,11 @@ import com.asuscomm.johnnystene.infinity.WorldItem;
 import res.FileLoader;
 
 public class Main {
-	
 	private static boolean DEBUG_BUILD = true;
 	private static int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
 	private static boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
-	private static boolean ENABLE_ANNOYING_ASS_MUSIC = false;
+	private static boolean ENABLE_ANNOYING_ASS_MUSIC = false; // Makes me want to shoot myself. Enable for release/demo builds.
 
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);
