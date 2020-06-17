@@ -33,7 +33,8 @@ public class Main {
 	private static int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
 	private static boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
-	
+	private static boolean ENABLE_ANNOYING_ASS_MUSIC = false;
+
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);
 	}
@@ -60,7 +61,8 @@ public class Main {
 		debug("Loading title screen music...");
 		titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));
 		debug("Starting playback of title screen music...");
-		window.loopMusic(titleInputStream);
+		if(ENABLE_ANNOYING_ASS_MUSIC)
+			window.loopMusic(titleInputStream);
 		
 		//Menu Button sizes
 		int menuButtonWidth = 100;
@@ -124,21 +126,25 @@ public class Main {
 		
 		// Create the player object and preload the player sprite
 		debug("Loading player...");
-		CollisionItem player = new CollisionItem(window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 118, 118));
-		player.x = 360;
-		player.y = 1800;
-		player.isometricItem = true;
-		window.collisionItemLayer.add(player);
+		WorldItem playerSprite = new CollisionItem(window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 118, 118));
+		playerSprite.x = 360;
+		playerSprite.y = 1800;
+		playerSprite.isometricItem = true;
+		window.effectLayer.add(playerSprite);
 		
-		player.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FLStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FRStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/RStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BRStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BLStatic.png")), 118, 118);
-		player.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/LStatic.png")), 118, 118);
-		
+		playerSprite.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FLStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/FRStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/RStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BRStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/BLStatic.png")), 118, 118);
+		playerSprite.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/player/static/LStatic.png")), 118, 118);
+
+		CollisionItem player = new CollisionItem(30, 20, Color.BLACK);
+		player.x = 401;
+		player.y = 1875;
+
 		// Load in first level
 		debug("Loading first level contents...");
 		Outside outside = new Outside(window, linegen, fileLoader);
@@ -251,7 +257,9 @@ public class Main {
 			if(window.keyListener.KEY_LEFT) moveX -= 5;
 			if(window.keyListener.KEY_RIGHT) moveX += 5;
 			if(window.keyListener.KEY_UP) moveY -= 5;
-			if(window.keyListener.KEY_DOWN) moveY += 5; 
+			if(window.keyListener.KEY_DOWN) moveY += 5;
+
+			playerSprite.lookTowards((int) moveX, (int) moveY);
 			
 			//moveX = moveX * window.delta;
 			//moveY = moveY * window.delta;
@@ -271,7 +279,7 @@ public class Main {
 					tempList.addAll(window.collisionItemLayer);
 					tempList.addAll(window.hiddenCollisionItemLayer);
 					player.moveAndCollide(moveX, moveY, tempList);
-					window.centerCamera(player);
+					window.centerCamera(playerSprite);
 				}
 			}
 			
@@ -283,7 +291,8 @@ public class Main {
 						window.collisionItemLayer.clear(); // Remove all collision items
 						window.backgroundLayer.clear();
 						window.effectLayer.clear(); // TODO: Fade in/out
-						window.collisionItemLayer.add(player); // Re-add player
+						window.effectLayer.add(playerSprite);
+						//window.collisionItemLayer.add(player); // Re-add player
 						
 						// Put player where they need to go
 						player.x = 415;
@@ -366,7 +375,8 @@ public class Main {
 						window.collisionItemLayer.clear(); // Remove all collision items
 						window.backgroundLayer.clear();
 						window.effectLayer.clear(); // TODO: Fade in/out
-						window.collisionItemLayer.add(player); // Re-add player
+						window.effectLayer.add(playerSprite);
+						//window.collisionItemLayer.add(player); // Re-add player
 						
 						// Put player where they need to go
 						player.x = 600;
@@ -422,6 +432,8 @@ public class Main {
 						", X: " + Integer.toString((int) player.x) + ", Y: " + Integer.toString((int) player.y));
 			
 			// Drawing Code
+			playerSprite.x = player.x - 41;
+			playerSprite.y = player.y - 71;
 			window.drawLayers();
 			window.repaint();
 		}
