@@ -85,6 +85,8 @@ public class Main {
 		//Menu Button sizes
 		int menuButtonWidth = 100;
 		int menuButtonHeight = 20;
+		int pauseMenuButtonWidth = 250;
+		int pauseMenuButtonHeight = 100;
 		int menuButtonTextSize = 16;
 		int menuButtonSpacing = 10;
 		
@@ -221,6 +223,12 @@ public class Main {
 		CollisionItem laserControlPanel = new CollisionItem(430, 64, Color.BLACK);
 		laserControlPanel.x = 418;
 		laserControlPanel.y = 256;
+		
+		//maze button
+		boolean mazeButtonPushed= false;
+		CollisionItem mazeButton = new CollisionItem(32, 17, Color.GREEN); 
+		hallwayButton5.x = 1256;
+		hallwayButton5.y = 1105;
 		
 		// Core Button Hitbox
 		CollisionItem core = new CollisionItem(88,10, Color.RED);
@@ -400,6 +408,15 @@ public class Main {
 				
 				window.drawWorldItem(laserControlPanel);
 				
+			} else if(currentLevel == 3) {
+				if(player.collidingWith(mazeButton)) mazeButtonPushed = true;
+				
+				//load next level
+				Core coreLevel = new Core(window, linegen, fileLoader);
+				coreLevel.create();
+				window.renderBackground();
+				currentLevel = 4;
+				
 			} else if(currentLevel == 4) {
 				if(window.keyListener.KEY_ACTION) {
 					if(!coreButtonPressed && player.collidingWith(core)) {
@@ -407,19 +424,20 @@ public class Main {
 						coreButtonPressed = true;
 					}
 				}
-			}
+			} 
 			
 			// Pause menu
 			if(window.keyListener.KEY_MENU) {
 				while(true) {
 					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
 					
-					if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 400, menuButtonWidth, menuButtonHeight, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+					if(window.drawMenuButton((window.windowWidth / 2) - (pauseMenuButtonWidth / 2), window.windowHeight - 400, pauseMenuButtonWidth, pauseMenuButtonHeight, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 						break;
 					}
 						
-					if(window.drawMenuButton((window.windowWidth / 2) - (menuButtonWidth / 2), window.windowHeight - 280, menuButtonWidth, menuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+					if(window.drawMenuButton((window.windowWidth / 2) - (pauseMenuButtonWidth / 2), window.windowHeight - 280, pauseMenuButtonWidth, pauseMenuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 						gameRunning = false;
+						System.exit(0);
 					}
 						
 					window.repaint();
