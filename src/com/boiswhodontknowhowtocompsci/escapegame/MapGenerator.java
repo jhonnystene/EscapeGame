@@ -49,9 +49,9 @@ public class MapGenerator {
 				for(int x = 0; x < inputline.length(); x ++) {
 					if(inputline.charAt(x) == '#') {
 						// Put a CollisionItem at the proper coords
-						CollisionItem item = new CollisionItem(80, 80, Color.BLACK);
-						item.x = (x * 80) + xOffset;
-						item.y = (y * 80) + yOffset;
+						CollisionItem item = new CollisionItem(128, 128, Color.BLACK);
+						item.x = (x * 128) + xOffset;
+						item.y = (y * 128) + yOffset;
 						window.collisionItemLayer.add(item);
 					}
 					// TODO add more shit you can put in

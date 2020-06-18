@@ -30,11 +30,11 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 public class Main {
-	private static final boolean DEBUG_BUILD = true;
+	private static final boolean DEBUG_BUILD = false;
 	private static final int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
-	private static final boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
-	private static final boolean ENABLE_ANNOYING_ASS_MUSIC = false; // Makes me want to shoot myself. Enable for release/demo builds.
+	private static final boolean ENABLE_TITLE_SCREEN_ANIMATION = true; // Makes loading take longer. Enable for release/demo builds.
+	private static final boolean ENABLE_ANNOYING_ASS_MUSIC = true; // Makes me want to shoot myself. Enable for release/demo builds.
 
 	private static void debug(String message) {
 		if(DEBUG_BUILD) System.out.println(message);
@@ -89,6 +89,7 @@ public class Main {
 			AudioInputStream sfxBeep1;
 			AudioInputStream sfxBeep2;
 			AudioInputStream sfxBeep3;
+			AudioInputStream explode;
 			Clip clip = AudioSystem.getClip();
 			try {
 				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/Nebulae_Wind.wav"));
@@ -96,6 +97,7 @@ public class Main {
 				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
 				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
 				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
+				explode = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/explode0.wav"));
 			} catch(Exception e) {
 				goodToGo = false;
 				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
@@ -103,6 +105,7 @@ public class Main {
 				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
 				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
 				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
+				explode = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
 			}
 
 			debug("Starting playback of title screen music...");
@@ -261,10 +264,18 @@ public class Main {
 			hallwayButton5.y = 1105;
 
 			// Core Button Hitbox
-			CollisionItem core = new CollisionItem(88, 10, Color.BLACK);
-			core.x = 980;
-			core.y = 714;
+			CollisionItem core = new CollisionItem(200, 32, Color.BLACK);
+			core.x = 1036;
+			core.y = 745;
 			boolean coreButtonPressed = false;
+
+			CollisionItem laserRoomVent = new CollisionItem(60, 48, Color.BLACK);
+			laserRoomVent.x = 532;
+			laserRoomVent.y = 592;
+
+			CollisionItem ventCollision = new CollisionItem(128, 128, Color.BLACK);
+			ventCollision.x = 1152;
+			ventCollision.y = 768;
 
 			window.drawLoadingScreen("Downloading laser sprites...");
 			CollisionItem laser = new CollisionItem(fileLoader.load("/res/laser/Static/0001.png"));
@@ -467,7 +478,7 @@ public class Main {
 					if(!laserFinished && player.collidingWith(laserControlPanel)) {
 						drawHint = true;
 						hintText = "(E) Hack";
-					} else if(false) {
+					} else if(laserFinished && player.collidingWith(laserRoomVent)) {
 						drawHint = true;
 						hintText = "(E) Enter vent";
 					} else {
@@ -483,16 +494,64 @@ public class Main {
 						window.renderBackground();
 					}
 
-				} else if (currentLevel == 3) {
-					if (player.collidingWith(mazeButton)) mazeButtonPushed = true;
+					if(laserFinished && window.keyListener.KEY_ACTION && player.collidingWith(laserRoomVent)) {
+						window.drawLoadingScreen("");
+						window.collisionItemLayer.clear(); // Remove all collision items
+						window.hiddenCollisionItemLayer.clear();
+						window.backgroundLayer.clear();
+						window.effectLayer.clear(); // TODO: Fade in/out
+						window.effectLayer.add(playerSprite);
+						window.renderBackground();
 
-					//load next level
-					Core coreLevel = new Core(window, linegen, fileLoader);
-					coreLevel.create();
-					window.renderBackground();
-					currentLevel = 4;
+						// Put player where they need to go
+						player.x = 4000;
+						player.y = 1152;
+
+						WorldItem vent = new WorldItem(fileLoader.load("/res/maps/vent.png"));
+						vent.x = 1152;
+						vent.y = 768;
+						window.backgroundLayer.add(vent);
+						window.renderBackground();
+
+						// Load in next level
+						mapgen.loadMap(fileLoader.load("/res/maps/maze.map"), window);
+						currentLevel = 3;
+					}
+
+
+				} else if (currentLevel == 3) {
+					if(player.collidingWith(ventCollision)) {
+						hintText = "(E) Enter vent";
+						drawHint = true;
+
+						if(window.keyListener.KEY_ACTION) {
+							//load next level
+							window.drawLoadingScreen("");
+							window.collisionItemLayer.clear(); // Remove all collision items
+							window.hiddenCollisionItemLayer.clear();
+							window.backgroundLayer.clear();
+							window.effectLayer.clear(); // TODO: Fade in/out
+							window.effectLayer.add(playerSprite);
+
+							WorldItem background = new WorldItem(fileLoader.load("/res/maps/Core.png"));
+
+							window.backgroundLayer.add(background);
+							window.renderBackground();
+							player.x = 1046;
+							player.y = 818;
+
+							Core coreLevel = new Core(window, linegen, fileLoader);
+							coreLevel.create();
+							window.renderBackground();
+							currentLevel = 4;
+						}
+					}
 
 				} else if (currentLevel == 4) {
+					if (!coreButtonPressed && player.collidingWith(core)) {
+						hintText = "(E) Push Button";
+						drawHint = true;
+					}
 					if (window.keyListener.KEY_ACTION) {
 						if (!coreButtonPressed && player.collidingWith(core)) {
 							// Core level
@@ -529,9 +588,26 @@ public class Main {
 					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
 					window.repaint();
 					Thread.sleep(100);
+
+					playSound(clip, explode);
+					int width = 1136;
+					int height = 640;
 					for( int i = 1; i < 70; i++) {
 						window.drawText(40, i * 10, "CONSOLE ERROR", 20, Color.RED);
 						window.repaint();
+
+						if(i % 5 == 0) {
+							width -= 7;
+							height -= 5;
+						} else if(i % 2 == 0) {
+							width += 10;
+							height += 4;
+						} else if(i % 3 == 0) {
+							width = 1136;
+							height = 640;
+						}
+
+						window.setSize(width, height);
 						Thread.sleep(40);
 					}
 
