@@ -6,6 +6,7 @@
  * #                                                    #
  * # LEAD DEVELOPER, ENGINE, UI            JOHNNY STENE #
  * # LEVEL SCRIPTING                    ETHAN STEVENSON #
+ * #								   CALEB McCANDLESS #
  * #									 AIDEN SCHLEGEL #
  * # ART, LEVEL DESIGN                      ETHAN MEIER #
  * # MUSIC								  ISAAC MEETSMA #
