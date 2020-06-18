@@ -57,6 +57,7 @@ public class Main {
 	}
 
 	public static void playSound(Clip clip, AudioInputStream sound) throws IOException, LineUnavailableException {
+		debug("Playing sound!");
 		clip.close();
 		clip.open(sound);
 		clip.start();
@@ -91,20 +92,10 @@ public class Main {
 			Clip clip = AudioSystem.getClip();
 			try {
 				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/Nebulae_Wind.wav"));
-				clip.open(titleInputStream);
-				clip.close();
 				sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep0.wav"));
-				clip.open(sfxBeep0);
-				clip.close();
 				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
-				clip.open(sfxBeep1);
-				clip.close();
 				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
-				clip.open(sfxBeep2);
-				clip.close();
 				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
-				clip.open(sfxBeep3);
-				clip.close();
 			} catch(Exception e) {
 				goodToGo = false;
 				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
