@@ -82,7 +82,7 @@ public class Main {
 		
 		// Download and play the music
 		debug("Init sound system");
-		AudioInputStream titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));;
+		AudioInputStream titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/Nebulae_Wind.wav"));;
 		AudioInputStream sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep0.wav"));;
 		AudioInputStream sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
 		AudioInputStream sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
