@@ -6,8 +6,9 @@
  * #                                                    #
  * # LEAD DEVELOPER, ENGINE, UI            JOHNNY STENE #
  * # LEVEL SCRIPTING                    ETHAN STEVENSON #
+ * #									 AIDEN SCHLEGEL #
  * # ART, LEVEL DESIGN                      ETHAN MEIER #
- * #              NOBODY ELSE DID FUCK ALL              #
+ * # MUSIC								  ISAAC MEETSMA #
  * ######################################################
  */
 
