@@ -24,7 +24,7 @@ public class Keyboard extends KeyAdapter {
 	public int KEYBIND_DOWN = KeyEvent.VK_S;
 	public int KEYBIND_LEFT = KeyEvent.VK_A;
 	public int KEYBIND_RIGHT = KeyEvent.VK_D;
-	public int KEYBIND_ACTION = KeyEvent.VK_SPACE;
+	public int KEYBIND_ACTION = KeyEvent.VK_E;
 	public int KEYBIND_MENU = KeyEvent.VK_ESCAPE;
 	public int KEYBIND_FREECAM = KeyEvent.VK_U;
 	
