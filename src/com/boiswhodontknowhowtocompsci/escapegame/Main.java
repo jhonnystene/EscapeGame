@@ -56,8 +56,8 @@ public class Main {
 			hackyframes ++;
 			Thread.sleep(1000 / 30);
 		}
-	}
-
+	}   
+	
 	public static void main(String[] args) throws IOException, InterruptedException, LineUnavailableException, UnsupportedAudioFileException {
 		debug("Escape The Robots And Oh Gosh They're Coming Run");
 		debug("DEBUG BUILD");
@@ -85,7 +85,7 @@ public class Main {
 		titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));
 		//Download sound fx
 		debug("Loading sound fx");
-		Clip clip; 
+		Clip clip;
 		terminalBeep = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beboop.wav"));
 		Beep = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beep.wav"));
 		Boop = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/boop.wav"));
@@ -348,26 +348,16 @@ public class Main {
 				}
 			} else if(currentLevel == 1) {
 				if(hallwayButton0Pushed) window.drawWorldItem(hallwayButton0);
-					clip.open(Beep);
-					clip.start();
 				if(hallwayButton1Pushed) window.drawWorldItem(hallwayButton1);
-					clip.open(Boop);
-					clip.start();
 				if(hallwayButton2Pushed) window.drawWorldItem(hallwayButton2);
-					clip.open(Bup);
-					clip.start();
 				if(hallwayButton3Pushed) window.drawWorldItem(hallwayButton3);
-					clip.open(Boop);
-					clip.start();
 				if(hallwayButton4Pushed) window.drawWorldItem(hallwayButton4);
-					clip.open(Beep);
-					clip.start();
 				if(hallwayButton5Pushed) window.drawWorldItem(hallwayButton5);
-					clip.open(Bup);
-					clip.start();
 				
 				if(!hallwayComplete) {
-					if(player.collidingWith(hallwayButton0)) hallwayButton0Pushed = true;
+					if(player.collidingWith(hallwayButton0)) { 
+						hallwayButton0Pushed = true;
+					}
 					if(player.collidingWith(hallwayButton1)) {
 						hallwayButton0Pushed = false;
 						hallwayButton1Pushed = false;
@@ -375,6 +365,7 @@ public class Main {
 						hallwayButton3Pushed = false;
 						hallwayButton4Pushed = false;
 						hallwayButton5Pushed = false;
+					
 					}
 					if(player.collidingWith(hallwayButton2)) hallwayButton2Pushed = true;
 					if(player.collidingWith(hallwayButton3)) {
@@ -485,3 +476,5 @@ public class Main {
 		System.exit(0);
 	}
 }
+
+	
