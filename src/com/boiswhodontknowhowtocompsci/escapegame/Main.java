@@ -303,6 +303,9 @@ public class Main {
 			boolean playSoundOnPuzzleFinish = true;
 			boolean laserFinished = false;
 
+			boolean drawHint = false;
+			String hintText = "Test";
+
 			nextFrameTime = System.nanoTime();
 			frameLength = 16700000;
 
@@ -349,6 +352,15 @@ public class Main {
 
 				// Level-specific code
 				if (currentLevel == 0) {
+					if(!terminalSolved && player.collidingWith(terminal)) {
+						drawHint = true;
+						hintText = "(E) Hack";
+					} else if(terminalSolved && player.collidingWith(outsideDoor)) {
+						drawHint = true;
+						hintText = "(E) Enter";
+					} else {
+						drawHint = false;
+					}
 					if (window.keyListener.KEY_ACTION) {
 						if (terminalSolved && player.collidingWith(outsideDoor)) {
 							window.drawLoadingScreen("");
@@ -378,6 +390,12 @@ public class Main {
 						}
 					}
 				} else if (currentLevel == 1) {
+					if(hallwayComplete && player.collidingWith(hallwayLoadingZone)) {
+						drawHint = true;
+						hintText = "(E) Enter Elevator";
+					} else {
+						drawHint = false;
+					}
 					if (hallwayButton0Pushed) window.drawWorldItem(hallwayButton0);
 					if (hallwayButton1Pushed) window.drawWorldItem(hallwayButton1);
 					if (hallwayButton2Pushed) window.drawWorldItem(hallwayButton2);
@@ -455,11 +473,23 @@ public class Main {
 						}
 					}
 				} else if (currentLevel == 2) {
+					if(!laserFinished && player.collidingWith(laserControlPanel)) {
+						drawHint = true;
+						hintText = "(E) Hack";
+					} else if(false) {
+						drawHint = true;
+						hintText = "(E) Enter vent";
+					} else {
+						drawHint = false;
+					}
 					if (window.keyListener.KEY_ACTION && !laserFinished && player.collidingWith(laserControlPanel)) {
 						drawHackyThing(window, "Moving laser...");
 						laserFinished = true;
 						laser.lookTowards(-1, -1);
-						// Todo: Point laser at vent
+						window.backgroundLayer.clear();
+						WorldItem newBG = new WorldItem(fileLoader.load("/res/maps/Upstairs-Melted.png"));
+						window.backgroundLayer.add(newBG);
+						window.renderBackground();
 					}
 
 				} else if (currentLevel == 3) {
@@ -544,6 +574,10 @@ public class Main {
 				// Drawing Code
 				playerSprite.x = player.x - 41;
 				playerSprite.y = player.y - 71;
+
+				if(drawHint)
+					window.drawTextCentered((int) (player.x + 15) - window.cameraX, (int) playerSprite.y - window.cameraY, hintText, 16, Color.WHITE);
+
 				window.drawLayers();
 				window.repaint();
 			}
