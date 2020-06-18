@@ -220,9 +220,9 @@ public class Main {
 		hallwayLoadingZone.y = 947;
 		
 		boolean controllingLaser = false;//418 848 y256
-		CollisionItem laserControlPanel = new CollisionItem(430, 64, Color.BLACK);
-		laserControlPanel.x = 418;
-		laserControlPanel.y = 256;
+		CollisionItem laserControlPanel = new CollisionItem(430, 64, Color.RED);
+		laserControlPanel.x = 825;
+		laserControlPanel.y = 500;
 		
 		//maze button
 		boolean mazeButtonPushed= false;
@@ -231,7 +231,7 @@ public class Main {
 		hallwayButton5.y = 1105;
 		
 		// Core Button Hitbox
-		CollisionItem core = new CollisionItem(88,10, Color.RED);
+		CollisionItem core = new CollisionItem(88,10, Color.BLACK);
 		core.x = 980;
 		core.y = 714;
 		boolean coreButtonPressed = false;
@@ -405,8 +405,6 @@ public class Main {
 					window.centerCamera(laser);
 				}
 				if(window.keyListener.KEY_ACTION && !controllingLaser && player.collidingWith(laserControlPanel)) controllingLaser = true;
-				
-				window.drawWorldItem(laserControlPanel);
 				
 			} else if(currentLevel == 3) {
 				if(player.collidingWith(mazeButton)) mazeButtonPushed = true;

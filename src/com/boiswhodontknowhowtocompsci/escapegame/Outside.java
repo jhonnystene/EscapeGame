@@ -23,7 +23,7 @@ public class Outside {
 	}
 	
 	public void create() throws IOException {
-		Color color = Color.WHITE;
+		Color color = Color.BLACK;
 		
 		WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Final.png")));
 		window.backgroundLayer.add(background);
