@@ -79,14 +79,30 @@ public class Main {
 			debug("Initializing FileLoader...");
 			FileLoader fileLoader = new FileLoader();
 
+			boolean goodToGo = true;
+
 			// Download and play the music
 			debug("Init sound system");
-			AudioInputStream titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/Nebulae_Wind.wav"));
-			AudioInputStream sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep0.wav"));
-			AudioInputStream sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
-			AudioInputStream sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
-			AudioInputStream sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
+			AudioInputStream titleInputStream;
+			AudioInputStream sfxBeep0;
+			AudioInputStream sfxBeep1;
+			AudioInputStream sfxBeep2;
+			AudioInputStream sfxBeep3;
 			Clip clip = AudioSystem.getClip();
+			try {
+				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/Nebulae_Wind.wav"));
+				sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep0.wav"));
+				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
+				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
+				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
+			} catch(Exception e) {
+				goodToGo = false;
+				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
+				sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
+				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
+				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
+				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
+			}
 
 			debug("Starting playback of title screen music...");
 			if (ENABLE_ANNOYING_ASS_MUSIC)
@@ -143,6 +159,10 @@ public class Main {
 				// QUIT button (duh)
 				if (window.drawClearMenuButton(20, window.windowHeight - 20 - ((menuButtonHeight + menuButtonSpacing) * 3), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "QUIT GAME", Color.WHITE, Color.LIGHT_GRAY))
 					System.exit(0);
+
+				if(!goodToGo) {
+					window.drawClearMenuButton(20, window.windowHeight - 20 - ((menuButtonHeight + menuButtonSpacing) * 2), menuButtonWidth, menuButtonHeight, menuButtonTextSize, "YOUR COMPUTER DOES NOT MEET THE MINIMUM REQUIREMENTS", Color.WHITE, Color.LIGHT_GRAY);
+				}
 
 				window.repaint();
 				Thread.sleep(1000 / 30); // FPS cap needed in menus too
