@@ -21,6 +21,7 @@ import res.FileLoader;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip; 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
@@ -34,7 +35,7 @@ public class Main {
 	private static final boolean DEBUG_BUILD = true;
 	private static final int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
 	
-	private static final boolean ENABLE_TITLE_SCREEN_ANIMATION = false; // Makes loading take longer. Enable for release/demo builds.
+	private static final boolean ENABLE_TITLE_SCREEN_ANIMATION = true; // Makes loading take longer. Enable for release/demo builds.
 	private static final boolean ENABLE_ANNOYING_ASS_MUSIC = false; // Makes me want to shoot myself. Enable for release/demo builds.
 
 	private static void debug(String message) {
@@ -76,12 +77,15 @@ public class Main {
 		// Download and play the music
 		debug("Initializing AudioInputStream...");
 		AudioInputStream titleInputStream;
+		AudioInputStream terminalAudioStream;
 		debug("Loading title screen music...");
 		titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));
+		Clip clip; 
+		terminalAudioStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beboop.m4a"));
+		clip = AudioSystem.getClip();
 		debug("Starting playback of title screen music...");
 		if(ENABLE_ANNOYING_ASS_MUSIC)
 			window.loopMusic(titleInputStream);
-		
 		//Menu Button sizes
 		int menuButtonWidth = 100;
 		int menuButtonHeight = 20;
@@ -329,6 +333,8 @@ public class Main {
 					
 					if(!terminalSolved && player.collidingWith(terminal)) {
 						drawHackyThing(window, "Hacking Door...");
+						clip.open(terminalAudioStream);
+						clip.start();
 						terminalSolved = true;
 					}
 				}
