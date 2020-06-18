@@ -75,22 +75,14 @@ public class Main {
 		FileLoader fileLoader = new FileLoader();
 		
 		// Download and play the music
-		debug("Initializing AudioInputStream...");
-		AudioInputStream titleInputStream;
-		AudioInputStream terminalBeep;
-		AudioInputStream Beep;
-		AudioInputStream Boop;
-		AudioInputStream Bup;
-		debug("Loading title screen music...");
-		titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));
-		//Download sound fx
-		debug("Loading sound fx");
-		Clip clip;
-		terminalBeep = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beboop.wav"));
-		Beep = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beep.wav"));
-		Boop = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/boop.wav"));
-		Bup = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/bup.wav"));
-		clip = AudioSystem.getClip();
+		debug("Init sound system");
+		AudioInputStream titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));;
+		AudioInputStream sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep0.wav"));;
+		AudioInputStream sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
+		AudioInputStream sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
+		AudioInputStream sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
+		Clip clip = AudioSystem.getClip();
+		
 		debug("Starting playback of title screen music...");
 		if(ENABLE_ANNOYING_ASS_MUSIC)
 			window.loopMusic(titleInputStream);
