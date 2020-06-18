@@ -56,7 +56,13 @@ public class Main {
 			hackyframes ++;
 			Thread.sleep(1000 / 30);
 		}
-	}   
+	}
+
+	public static void playSound(Clip clip, AudioInputStream sound) throws IOException, LineUnavailableException {
+		clip.close();
+		clip.open(sound);
+		clip.start();
+	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException, LineUnavailableException, UnsupportedAudioFileException {
 		debug("Escape The Robots And Oh Gosh They're Coming Run");
@@ -82,7 +88,7 @@ public class Main {
 		AudioInputStream sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
 		AudioInputStream sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
 		Clip clip = AudioSystem.getClip();
-		
+
 		debug("Starting playback of title screen music...");
 		if(ENABLE_ANNOYING_ASS_MUSIC)
 			window.loopMusic(titleInputStream);
@@ -242,17 +248,17 @@ public class Main {
 		
 		window.drawLoadingScreen("Downloading laser sprites...");
 		CollisionItem laser = new CollisionItem(fileLoader.load("/res/laser/Static/0001.png"));
-		laser.x = 527;
-		laser.y = 518;
+		laser.x = 935;
+		laser.y = 629;
 		//210 215
-		laser.isometricItem = true;
+		laser.isometricItem = true;//26
 		laser.isometricSprites[WorldItem.SW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0008.png")), 210, 215);
 		laser.isometricSprites[WorldItem.S]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0001.png")), 210, 215);
 		laser.isometricSprites[WorldItem.SE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0002.png")), 210, 215);
 		laser.isometricSprites[WorldItem.E]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0003.png")), 210, 215);
 		laser.isometricSprites[WorldItem.NE]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0004.png")), 210, 215);
 		laser.isometricSprites[WorldItem.N]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0005.png")), 210, 215);
-		laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0006.png")), 210, 215);
+		laser.isometricSprites[WorldItem.NW]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Rotate/Counter-Clockwise/0026.png")), 210, 215);
 		laser.isometricSprites[WorldItem.W]= window.resizeImage(ImageIO.read(fileLoader.load("/res/laser/Static/0007.png")), 210, 215);
 	
 		laser.pointInDirection(WorldItem.S);
@@ -264,6 +270,9 @@ public class Main {
 		boolean gameRunning = true;
 		int currentLevel = 0;
 		boolean freecam = false;
+
+		boolean playSoundOnPuzzleFinish = true;
+		boolean laserFinished = false;
 		
 		nextFrameTime = System.nanoTime();
 		frameLength = 16700000;
@@ -332,9 +341,9 @@ public class Main {
 					}
 					
 					if(!terminalSolved && player.collidingWith(terminal)) {
-						clip.open(terminalBeep);
-						clip.start();
+						playSound(clip, sfxBeep0);
 						drawHackyThing(window, "Hacking Door...");
+						playSound(clip, sfxBeep1);
 						terminalSolved = true;
 					}
 				}
@@ -347,7 +356,7 @@ public class Main {
 				if(hallwayButton5Pushed) window.drawWorldItem(hallwayButton5);
 				
 				if(!hallwayComplete) {
-					if(player.collidingWith(hallwayButton0)) { 
+					if(player.collidingWith(hallwayButton0)) {
 						hallwayButton0Pushed = true;
 					}
 					if(player.collidingWith(hallwayButton1)) {
@@ -381,6 +390,10 @@ public class Main {
 					
 					if(hallwayButton0Pushed && hallwayButton2Pushed && hallwayButton4Pushed) hallwayComplete = true;
 				} else {
+					if(playSoundOnPuzzleFinish) { //935, 629
+						playSound(clip, sfxBeep1);
+						playSoundOnPuzzleFinish = false;
+					}
 					hallwayButton0Pushed = true;
 					hallwayButton1Pushed = true;
 					hallwayButton2Pushed = true;
@@ -411,11 +424,12 @@ public class Main {
 					}
 				}
 			} else if(currentLevel == 2) {
-				if(controllingLaser) {
-					laser.lookTowards((int) moveX, (int) moveY);
-					window.centerCamera(laser);
+				if(window.keyListener.KEY_ACTION && !laserFinished && player.collidingWith(laserControlPanel)) {
+					drawHackyThing(window, "Moving laser...");
+					laserFinished = true;
+					laser.lookTowards(-1, -1);
+					// Todo: Point laser at vent
 				}
-				if(window.keyListener.KEY_ACTION && !controllingLaser && player.collidingWith(laserControlPanel)) controllingLaser = true;
 				
 			} else if(currentLevel == 3) {
 				if(player.collidingWith(mazeButton)) mazeButtonPushed = true;
