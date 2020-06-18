@@ -479,6 +479,43 @@ public class Main {
 						}
 					}
 				}
+				
+				if(coreButtonPressed) {
+					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+					window.repaint();
+					Thread.sleep(2000);
+					window.drawText((window.windowWidth / 2) - 50, window.windowHeight - 300, "Congrats.", 20, Color.WHITE);
+					window.repaint();
+					Thread.sleep(3000);
+					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+					window.repaint();
+					Thread.sleep(1000);
+					window.drawText((window.windowWidth / 2) - 100, window.windowHeight - 300, "You saved the world.", 20, Color.WHITE);
+					window.repaint();
+					Thread.sleep(3000);
+					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+					window.repaint();
+					Thread.sleep(1000);
+					window.drawText((window.windowWidth / 2) - 150, window.windowHeight - 300, "However, it was at a great cost.", 20, Color.WHITE);
+					window.repaint();
+					Thread.sleep(3000);
+					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+					window.repaint();
+					Thread.sleep(1000);
+					window.drawText((window.windowWidth / 2) - 150, window.windowHeight - 300, "Your sacrifice wont be forgotten.", 20, Color.WHITE);
+					window.repaint();
+					Thread.sleep(3000);
+					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
+					window.repaint();
+					Thread.sleep(100);
+					for( int i = 1; i < 70; i++) {
+						window.drawText(40, i * 10, "CONSOLE ERROR", 20, Color.RED);
+						window.repaint();
+						Thread.sleep(40);
+					}
+
+					System.exit(0);
+				}
 
 				// Pause menu
 				if (window.keyListener.KEY_MENU) {
