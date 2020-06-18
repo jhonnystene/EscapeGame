@@ -81,7 +81,7 @@ public class Main {
 		debug("Loading title screen music...");
 		titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/title.wav"));
 		Clip clip; 
-		terminalAudioStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beboop.m4a"));
+		terminalAudioStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/soundFX/beboop.wav"));
 		clip = AudioSystem.getClip();
 		debug("Starting playback of title screen music...");
 		if(ENABLE_ANNOYING_ASS_MUSIC)
