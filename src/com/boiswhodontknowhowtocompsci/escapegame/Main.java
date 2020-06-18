@@ -310,6 +310,7 @@ public class Main {
 					if(terminalSolved && player.collidingWith(outsideDoor)) {
 						window.drawLoadingScreen("");
 						window.collisionItemLayer.clear(); // Remove all collision items
+						window.hiddenCollisionItemLayer.clear();
 						window.backgroundLayer.clear();
 						window.effectLayer.clear(); // TODO: Fade in/out
 						window.effectLayer.add(playerSprite);
@@ -382,6 +383,7 @@ public class Main {
 						// Next level
 						window.drawLoadingScreen("");
 						window.collisionItemLayer.clear(); // Remove all collision items
+						window.hiddenCollisionItemLayer.clear();
 						window.backgroundLayer.clear();
 						window.effectLayer.clear(); // TODO: Fade in/out
 						window.effectLayer.add(playerSprite);
