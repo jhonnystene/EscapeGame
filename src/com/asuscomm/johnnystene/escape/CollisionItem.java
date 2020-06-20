@@ -4,7 +4,7 @@
  * Adds collision functions to WorldItem.
  */
 
-package com.asuscomm.johnnystene.infinity;
+package com.asuscomm.johnnystene.escape;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

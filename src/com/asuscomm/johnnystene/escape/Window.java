@@ -1,10 +1,11 @@
 /*
  * Window.java
  * 
- * Handles creating and drawing to the window. Also handles the camera.
+ * This handles most of the actual game logic.
+ * TODO: Fix that.
  */
 
-package com.asuscomm.johnnystene.infinity;
+package com.asuscomm.johnnystene.escape;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -124,7 +125,16 @@ public class Window extends JFrame implements MouseListener, MouseMotionListener
 		delta = FPS / 100;
 		lastFrameTime = currentTime;
 	}
-	
+
+	public void fill(Color color) {
+		drawRectangle(0, 0, windowWidth, windowHeight, color);
+	}
+
+	public void repaintAndWait(int millis) throws InterruptedException {
+		repaint();
+		Thread.sleep(millis);
+	}
+
 	/*
 	 * METHODS FOR DRAWING ITEMS
 	 */

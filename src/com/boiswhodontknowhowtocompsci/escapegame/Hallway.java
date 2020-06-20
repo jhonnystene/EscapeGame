@@ -4,66 +4,87 @@ package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.net.URL;
 
-import javax.imageio.ImageIO;
-
-import com.asuscomm.johnnystene.infinity.Window;
-import com.asuscomm.johnnystene.infinity.WorldItem;
+import com.asuscomm.johnnystene.escape.CollisionItem;
+import com.asuscomm.johnnystene.escape.Window;
+import com.asuscomm.johnnystene.escape.WorldItem;
 
 import res.FileLoader;
 
 public class Hallway {
 	Window window;
-	CollisionLineGenerator linegen;
+	MapGenerator mapGen;
 	FileLoader fileLoader;
-	
-	public Hallway(Window w, CollisionLineGenerator l, FileLoader f) {
+
+	boolean button0Pushed = false;
+	boolean button1Pushed = false;
+	boolean button2Pushed = false;
+	boolean button3Pushed = false;
+	boolean button4Pushed = false;
+	boolean button5Pushed = false;
+	boolean complete = false;
+
+	CollisionItem button0;
+	CollisionItem button1;
+	CollisionItem button2;
+	CollisionItem button3;
+	CollisionItem button4;
+	CollisionItem button5;
+
+	CollisionItem loadingZone;
+
+	public Hallway(Window w, MapGenerator m, FileLoader f) {
 		window = w;
-		linegen = l;
+		mapGen = m;
 		fileLoader = f;
+
+		button0 = new CollisionItem(32, 17, Color.GREEN);
+		button1 = new CollisionItem(32, 17, Color.GREEN);
+		button2 = new CollisionItem(32, 17, Color.GREEN);
+		button3 = new CollisionItem(32, 17, Color.GREEN);
+		button4 = new CollisionItem(32, 17, Color.GREEN);
+		button5 = new CollisionItem(32, 17, Color.GREEN);
+
+		loadingZone = new CollisionItem(153, 64, Color.BLACK);
 	}
 	
 	public void create() throws IOException {
 		Color color = new Color(67, 67, 75);
-		
+
 		WorldItem background = new WorldItem(fileLoader.load("/res/maps/Hallway-Final.png"));
 		window.backgroundLayer.add(background);
-	
-	
-		//Spawn: x = 415, 7 = 1569
-			
-		//Barrier lines, this takes too long	
-		linegen.createLine(661, 1969, 661, 1680, color, window);
-		linegen.createLine(661, 1680, 751, 1680, color, window);
-		linegen.createLine(751, 1680, 751, 1510, color, window);
-		linegen.createLine(661, 1969, 1130, 1969, color, window);
-		linegen.createLine(1130, 1969, 1130, 1680, color, window);
-		linegen.createLine(1130, 1680, 871, 1680, color, window);
-		linegen.createLine(871, 1510, 871, 1680, color, window);
-		linegen.createLine(871, 1510, 1680, 1510, color, window);
-		linegen.createLine(1680, 1510, 1680, 1554, color, window);
-		linegen.createLine(1680, 1554, 1982, 1554, color, window);
-		linegen.createLine(1982, 1554, 1982, 1329, color, window);
-		linegen.createLine(1982, 1329, 1678, 1329, color, window);
-		linegen.createLine(1678, 1329, 1678, 1359, color, window);
-		linegen.createLine(1678, 1359, 1232, 1359, color, window);
-		linegen.createLine(1232, 1359, 1232, 1167, color, window);
-		linegen.createLine(1232, 1170, 1322, 1170, color, window);
-		linegen.createLine(1322, 1170, 1322, 945, color, window);
-		linegen.createLine(1322, 945, 1232, 945, color, window);
-		//DOORWAY FRONTyes
-		linegen.createLine(1232, 945, 1082, 945, color, window);
-		
-		linegen.createLine(1082, 945, 1011, 945, color, window);
-		linegen.createLine(1011, 945, 1011, 1170, color, window);
-		linegen.createLine(1011, 1170, 1110, 1170, color, window);
-		linegen.createLine(1110, 1170, 1110, 1360, color, window);
-		linegen.createLine(1110, 1360, 333, 1360, color, window);
-		linegen.createLine(333, 1360, 333, 1600, color, window);
-		linegen.createLine(333, 1600, 570, 1600, color, window);
-		linegen.createLine(570, 1600, 570, 1510, color, window);
-		linegen.createLine(570, 1510, 750, 1510, color, window);
-		
+
+		// Hallway buttons
+		button0.x = 1044;
+		button0.y = 991;
+
+		button1.x = 1044;
+		button1.y = 1048;
+
+		button2.x = 1044;
+		button2.y = 1105;
+
+		button3.x = 1256;
+		button3.y = 991;
+
+		button4.x = 1256;
+		button4.y = 1048;
+
+		button5.x = 1256;
+		button5.y = 1105;
+
+		loadingZone.x = 1094;
+		loadingZone.y = 947;
+
+		mapGen.loadMap(fileLoader.load("/res/maps/collision/hallway.map"));
+	}
+
+	public void setAll(boolean value) {
+		button0Pushed = value;
+		button1Pushed = value;
+		button2Pushed = value;
+		button3Pushed = value;
+		button4Pushed = value;
+		button5Pushed = value;
 	}
 }

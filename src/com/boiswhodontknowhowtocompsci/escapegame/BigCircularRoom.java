@@ -3,8 +3,8 @@ package com.boiswhodontknowhowtocompsci.escapegame;
 import java.awt.Color;
 import java.io.IOException;
 
-import com.asuscomm.johnnystene.infinity.Window;
-import com.asuscomm.johnnystene.infinity.WorldItem;
+import com.asuscomm.johnnystene.escape.Window;
+import com.asuscomm.johnnystene.escape.WorldItem;
 
 import res.FileLoader;
 

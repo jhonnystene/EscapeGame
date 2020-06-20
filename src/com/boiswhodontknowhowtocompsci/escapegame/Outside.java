@@ -1,45 +1,55 @@
+/*
+ * Outside the building
+ * To complete, the player needs to "hack" the terminal.
+ * This feels like a useless start to the game, and needs to be reworked
+ * to be more fun and challenging.
+ */
+
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.Window;
-import com.asuscomm.johnnystene.infinity.WorldItem;
+import com.asuscomm.johnnystene.escape.CollisionItem;
+import com.asuscomm.johnnystene.escape.Window;
+import com.asuscomm.johnnystene.escape.WorldItem;
 
 import res.FileLoader;
 
 public class Outside {
 	Window window;
-	CollisionLineGenerator linegen;
+	MapGenerator mapGen;
 	FileLoader fileLoader;
+
+	CollisionItem door;
+	CollisionItem terminal;
+
+	boolean terminalSolved;
 	
-	public Outside(Window w, CollisionLineGenerator l, FileLoader f) {
+	public Outside(Window w, MapGenerator m, FileLoader f) {
 		window = w;
-		linegen = l;
+		mapGen = m;
 		fileLoader = f;
 	}
 	
 	public void create() throws IOException {
-		Color color = Color.BLACK;
-		
 		WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Outside-Final.png")));
 		window.backgroundLayer.add(background);
 		window.renderBackground();
-		
-		linegen.createLine(0, 1594, 110, 1485, color, window);
-		linegen.createLine(0, 2047, 660, 2047, color, window);
-		linegen.createLine(0, 2047, 0, 1594, color, window);
-		linegen.createLine(660, 2047, 660, 1710, color, window);
-		linegen.createLine(622, 1710, 660, 1710, color, window);
-		linegen.createLine(622, 1710, 622, 1645, color, window);
-		linegen.createLine(309, 1600, 568, 1600, color, window);
-		linegen.createLine(568, 1600, 622, 1645, color, window);
-		linegen.createLine(309, 1600, 309, 1528, color, window);
-		linegen.createLine(309, 1528, 336, 1528, color, window);
-		linegen.createLine(336, 1528, 336, 1485, color, window);
-		linegen.createLine(110, 1485, 336, 1485, color, window);
+
+		// Terminal Hitbox
+		terminal = new CollisionItem(64, 64, Color.RED);
+		terminal.x = 560;
+		terminal.y = 1645;
+		terminalSolved = false;
+
+		// Door Loading Zone
+		door = new CollisionItem(100, 50, Color.RED);
+		door.x = 400;
+		door.y = 1600;
+
+		mapGen.loadMap(fileLoader.load("/res/maps/collision/outside.map"));
 	}
 }

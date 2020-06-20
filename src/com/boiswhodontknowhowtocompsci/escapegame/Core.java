@@ -5,8 +5,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.asuscomm.johnnystene.infinity.Window;
-import com.asuscomm.johnnystene.infinity.WorldItem;
+import com.asuscomm.johnnystene.escape.CollisionItem;
+import com.asuscomm.johnnystene.escape.Window;
+import com.asuscomm.johnnystene.escape.WorldItem;
 
 import res.FileLoader;
 
@@ -14,13 +15,15 @@ public class Core {
 	Window window;
 	CollisionLineGenerator linegen;
 	FileLoader fileLoader;
-	
-	// Spawn X: 1030, Y: 915
+
+	CollisionItem buttonHitbox;
 	
 	public Core(Window w, CollisionLineGenerator l, FileLoader f) {
 		window = w;
 		linegen = l;
 		fileLoader = f;
+
+		buttonHitbox = new CollisionItem(200, 32, Color.BLACK);
 	}
 	
 public void create() throws IOException {
@@ -28,6 +31,10 @@ public void create() throws IOException {
 	
 	WorldItem background = new WorldItem(ImageIO.read(fileLoader.load("/res/maps/Core.png")));
 	window.backgroundLayer.add(background);
+
+	buttonHitbox.x = 1036;
+	buttonHitbox.y = 745;
+	boolean coreButtonPressed = false;
 
 	linegen.createLine(1001, 746, 1126, 746, color, window);
 	linegen.createLine(1126, 746, 1191, 772, color, window);

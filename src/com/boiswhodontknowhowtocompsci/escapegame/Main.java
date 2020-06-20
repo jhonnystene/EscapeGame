@@ -15,9 +15,9 @@
 
 package com.boiswhodontknowhowtocompsci.escapegame;
 
-import com.asuscomm.johnnystene.infinity.CollisionItem;
-import com.asuscomm.johnnystene.infinity.Window;
-import com.asuscomm.johnnystene.infinity.WorldItem;
+import com.asuscomm.johnnystene.escape.CollisionItem;
+import com.asuscomm.johnnystene.escape.Window;
+import com.asuscomm.johnnystene.escape.WorldItem;
 import res.FileLoader;
 
 import javax.imageio.ImageIO;
@@ -30,14 +30,10 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 public class Main {
-	private static final boolean DEBUG_BUILD = false;
-	private static final int DEBUG_LEVEL = 0; // 0 - Don't include frame-by-frame debug information, 1 - Include all information
-	
-	private static final boolean ENABLE_TITLE_SCREEN_ANIMATION = true; // Makes loading take longer. Enable for release/demo builds.
-	private static final boolean ENABLE_ANNOYING_ASS_MUSIC = true; // Makes me want to shoot myself. Enable for release/demo builds.
+	private static final boolean RELEASE_BUILD = false;
 
 	private static void debug(String message) {
-		if(DEBUG_BUILD) System.out.println(message);
+		if(!RELEASE_BUILD) System.out.println(message);
 	}
 
 	private static void drawHackyThing(Window window, String message) throws InterruptedException {
@@ -63,8 +59,9 @@ public class Main {
 		clip.start();
 	}
 	
-	public static void main(String[] args) throws LineUnavailableException {
-		debug("Escape The Robots And Oh Gosh They're Coming Run");
+	public static void main(String[] args) throws LineUnavailableException, InterruptedException {
+		System.out.println("Escape The Robots And Oh Gosh They're Coming Run");
+		System.out.println("Version 1.1b");
 		debug("DEBUG BUILD");
 
 		debug("Initializing Window...");
@@ -72,7 +69,7 @@ public class Main {
 
 		try {
 			debug("Initializing MapGenerator...");
-			MapGenerator mapgen = new MapGenerator();
+			MapGenerator mapgen = new MapGenerator(window, false);
 
 			debug("Initializing CollisionLineGenerator...");
 			CollisionLineGenerator linegen = new CollisionLineGenerator();
@@ -84,33 +81,16 @@ public class Main {
 
 			// Download and play the music
 			debug("Init sound system");
-			AudioInputStream titleInputStream;
-			AudioInputStream sfxBeep0;
-			AudioInputStream sfxBeep1;
-			AudioInputStream sfxBeep2;
-			AudioInputStream sfxBeep3;
-			AudioInputStream explode;
 			Clip clip = AudioSystem.getClip();
-			try {
-				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/music/Nebulae_Wind.wav"));
-				sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep0.wav"));
-				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep1.wav"));
-				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep2.wav"));
-				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/beep3.wav"));
-				explode = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/explode0.wav"));
-			} catch(Exception e) {
-				goodToGo = false;
-				titleInputStream = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
-				sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
-				sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
-				sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
-				sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
-				explode = AudioSystem.getAudioInputStream(fileLoader.load("/res/snd/missingCodec.wav"));
-			}
 
-			debug("Starting playback of title screen music...");
-			if (ENABLE_ANNOYING_ASS_MUSIC)
-				window.loopMusic(titleInputStream);
+			debug("Load sound files");
+			AudioInputStream titleMusic = AudioSystem.getAudioInputStream(fileLoader.loadBuffered("/res/music/Nebulae_Wind.wav"));
+			AudioInputStream sfxBeep0 = AudioSystem.getAudioInputStream(fileLoader.loadBuffered("/res/snd/beep0.wav"));
+			AudioInputStream sfxBeep1 = AudioSystem.getAudioInputStream(fileLoader.loadBuffered("/res/snd/beep1.wav"));
+			AudioInputStream sfxBeep2 = AudioSystem.getAudioInputStream(fileLoader.loadBuffered("/res/snd/beep2.wav"));
+			AudioInputStream sfxBeep3 = AudioSystem.getAudioInputStream(fileLoader.loadBuffered("/res/snd/beep3.wav"));
+			AudioInputStream explode = AudioSystem.getAudioInputStream(fileLoader.loadBuffered("/res/snd/explode0.wav"));
+
 			//Menu Button sizes
 			int menuButtonWidth = 100;
 			int menuButtonHeight = 20;
@@ -121,7 +101,7 @@ public class Main {
 
 			window.drawLoadingScreen("Rendering intro animation...");
 			ArrayList<BufferedImage> titleVideo = new ArrayList<>();
-			if (ENABLE_TITLE_SCREEN_ANIMATION) {
+			if (RELEASE_BUILD) {
 				debug("Loading title screen video...");
 				for (int i = 1; i < 101; i++) {
 					//      ^       ^
@@ -139,8 +119,11 @@ public class Main {
 			double frameLength = 83333333.33;
 			double nextFrameTime = System.nanoTime() + frameLength;
 
+			if(RELEASE_BUILD)
+				window.loopMusic(titleMusic);
+
 			while (inTitleScreen) {
-				if (ENABLE_TITLE_SCREEN_ANIMATION) {
+				if (RELEASE_BUILD) {
 					Raster newFB = titleVideo.get(frame).getData(new Rectangle(0, 0, window.windowWidth, window.windowHeight));
 					window.frameBuffer.setData(newFB);
 					if (System.nanoTime() >= nextFrameTime) {
@@ -194,63 +177,18 @@ public class Main {
 			player.y = 1875;
 
 			// Load in first level
-			debug("Loading first level contents...");
-			Outside outside = new Outside(window, linegen, fileLoader);
+			debug("Loading levels...");
+			Outside outside = new Outside(window, mapgen, fileLoader);
 			outside.create();
 
-			// Terminal Hitbox
-			CollisionItem terminal = new CollisionItem(64, 64, Color.RED);
-			terminal.x = 560;
-			terminal.y = 1645;
-			boolean terminalSolved = false;
-
-			// Door Loading Zone
-			CollisionItem outsideDoor = new CollisionItem(100, 50, Color.RED);
-			outsideDoor.x = 400;
-			outsideDoor.y = 1600;
-
-			window.renderBackground();
+			Hallway hallway = new Hallway(window, mapgen, fileLoader);
+			BigCircularRoom upstairs = new BigCircularRoom(window, linegen, fileLoader);
+			// TODO: Add maze here
+			Core core = new Core(window, linegen, fileLoader);
 
 			WorldItem terminalSprite;
 			terminalSprite = new WorldItem(fileLoader.load("/res/ui/terminal.png"));
 			terminalSprite.sprite = window.resizeImage(terminalSprite.sprite, 1136, 640);
-
-			// Hallway buttons
-			boolean hallwayButton0Pushed = false;
-			CollisionItem hallwayButton0 = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton0.x = 1044;
-			hallwayButton0.y = 991;
-
-			boolean hallwayButton1Pushed = false;
-			CollisionItem hallwayButton1 = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton1.x = 1044;
-			hallwayButton1.y = 1048;
-
-			boolean hallwayButton2Pushed = false;
-			CollisionItem hallwayButton2 = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton2.x = 1044;
-			hallwayButton2.y = 1105;
-
-			boolean hallwayButton3Pushed = false;
-			CollisionItem hallwayButton3 = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton3.x = 1256;
-			hallwayButton3.y = 991;
-
-			boolean hallwayButton4Pushed = false;
-			CollisionItem hallwayButton4 = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton4.x = 1256;
-			hallwayButton4.y = 1048;
-
-			boolean hallwayButton5Pushed = false;
-			CollisionItem hallwayButton5 = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton5.x = 1256;
-			hallwayButton5.y = 1105;
-
-			boolean hallwayComplete = false;
-
-			CollisionItem hallwayLoadingZone = new CollisionItem(153, 64, Color.BLACK);
-			hallwayLoadingZone.x = 1094;
-			hallwayLoadingZone.y = 947;
 
 			boolean controllingLaser = false;//418 848 y256
 			CollisionItem laserControlPanel = new CollisionItem(430, 64, Color.RED);
@@ -260,14 +198,6 @@ public class Main {
 			//maze button
 			boolean mazeButtonPushed = false;
 			CollisionItem mazeButton = new CollisionItem(32, 17, Color.GREEN);
-			hallwayButton5.x = 1256;
-			hallwayButton5.y = 1105;
-
-			// Core Button Hitbox
-			CollisionItem core = new CollisionItem(200, 32, Color.BLACK);
-			core.x = 1036;
-			core.y = 745;
-			boolean coreButtonPressed = false;
 
 			CollisionItem laserRoomVent = new CollisionItem(60, 48, Color.BLACK);
 			laserRoomVent.x = 532;
@@ -354,105 +284,80 @@ public class Main {
 
 				// Level-specific code
 				if (currentLevel == 0) {
-					if(!terminalSolved && player.collidingWith(terminal)) {
-						drawHint = true;
-						hintText = "(E) Hack";
-					} else if(terminalSolved && player.collidingWith(outsideDoor)) {
-						drawHint = true;
-						hintText = "(E) Enter";
-					} else {
-						drawHint = false;
-					}
-					if (window.keyListener.KEY_ACTION) {
-						if (terminalSolved && player.collidingWith(outsideDoor)) {
-							window.drawLoadingScreen("");
-							window.collisionItemLayer.clear(); // Remove all collision items
-							window.hiddenCollisionItemLayer.clear();
-							window.backgroundLayer.clear();
-							window.effectLayer.clear(); // TODO: Fade in/out
-							window.effectLayer.add(playerSprite);
-							//window.collisionItemLayer.add(player); // Re-add player
+					// First level, outside the building
+					// TODO: Make the terminal a pinpad the player needs to unscrew and rewire.
 
-							// Put player where they need to go
-							player.x = 415;
-							player.y = 1450;
+					if(outside.terminalSolved) {
+						if(player.collidingWith(outside.door)) {
+							drawHint = true;
+							hintText = "(E) Enter";
+							if(window.keyListener.KEY_ACTION) {
+								window.collisionItemLayer.clear(); // Remove all collision items
+								window.hiddenCollisionItemLayer.clear();
+								window.backgroundLayer.clear();
+								window.effectLayer.clear(); // TODO: Fade in/out
+								window.effectLayer.add(playerSprite);
+								//window.collisionItemLayer.add(player); // Re-add player
 
-							// Load in next level
-							Hallway hallway = new Hallway(window, linegen, fileLoader);
-							hallway.create();
-							window.renderBackground();
-							currentLevel = 1;
+								// Put player where they need to go
+								player.x = 415;
+								player.y = 1450;
+
+								// Load in next level
+								hallway.create();
+								window.renderBackground();
+								currentLevel = 1;
+							}
+						} else {
+							drawHint = false;
 						}
+					} else {
+						if(player.collidingWith(outside.terminal)) {
+							drawHint = true;
+							hintText = "(E) Hack";
 
-						if (!terminalSolved && player.collidingWith(terminal)) {
-							playSound(clip, sfxBeep0);
-							drawHackyThing(window, "Hacking Door...");
-							playSound(clip, sfxBeep1);
-							terminalSolved = true;
+							if(window.keyListener.KEY_ACTION) {
+								playSound(clip, sfxBeep0);
+								drawHackyThing(window, "Hacking...");
+								playSound(clip, sfxBeep1);
+								outside.terminalSolved = true;
+							}
+						} else {
+							drawHint = false;
 						}
 					}
 				} else if (currentLevel == 1) {
-					if(hallwayComplete && player.collidingWith(hallwayLoadingZone)) {
+					if(hallway.complete && player.collidingWith(hallway.loadingZone)) {
 						drawHint = true;
 						hintText = "(E) Enter Elevator";
 					} else {
 						drawHint = false;
 					}
-					if (hallwayButton0Pushed) window.drawWorldItem(hallwayButton0);
-					if (hallwayButton1Pushed) window.drawWorldItem(hallwayButton1);
-					if (hallwayButton2Pushed) window.drawWorldItem(hallwayButton2);
-					if (hallwayButton3Pushed) window.drawWorldItem(hallwayButton3);
-					if (hallwayButton4Pushed) window.drawWorldItem(hallwayButton4);
-					if (hallwayButton5Pushed) window.drawWorldItem(hallwayButton5);
+					if (hallway.button0Pushed) window.drawWorldItem(hallway.button0);
+					if (hallway.button1Pushed) window.drawWorldItem(hallway.button1);
+					if (hallway.button2Pushed) window.drawWorldItem(hallway.button2);
+					if (hallway.button3Pushed) window.drawWorldItem(hallway.button3);
+					if (hallway.button4Pushed) window.drawWorldItem(hallway.button4);
+					if (hallway.button5Pushed) window.drawWorldItem(hallway.button5);
 
-					if (!hallwayComplete) {
-						if (player.collidingWith(hallwayButton0)) {
-							hallwayButton0Pushed = true;
-						}
-						if (player.collidingWith(hallwayButton1)) {
-							hallwayButton0Pushed = false;
-							hallwayButton1Pushed = false;
-							hallwayButton2Pushed = false;
-							hallwayButton3Pushed = false;
-							hallwayButton4Pushed = false;
-							hallwayButton5Pushed = false;
+					if (!hallway.complete) {
+						if (player.collidingWith(hallway.button0)) hallway.button0Pushed = true;
+						if (player.collidingWith(hallway.button1)) hallway.setAll(false);
+						if (player.collidingWith(hallway.button2)) hallway.button2Pushed = true;
+						if (player.collidingWith(hallway.button3)) hallway.setAll(false);
+						if (player.collidingWith(hallway.button4)) hallway.button4Pushed = true;
+						if (player.collidingWith(hallway.button5)) hallway.setAll(false);
 
-						}
-						if (player.collidingWith(hallwayButton2)) hallwayButton2Pushed = true;
-						if (player.collidingWith(hallwayButton3)) {
-							hallwayButton0Pushed = false;
-							hallwayButton1Pushed = false;
-							hallwayButton2Pushed = false;
-							hallwayButton3Pushed = false;
-							hallwayButton4Pushed = false;
-							hallwayButton5Pushed = false;
-						}
-						if (player.collidingWith(hallwayButton4)) hallwayButton4Pushed = true;
-						if (player.collidingWith(hallwayButton5)) {
-							hallwayButton0Pushed = false;
-							hallwayButton1Pushed = false;
-							hallwayButton2Pushed = false;
-							hallwayButton3Pushed = false;
-							hallwayButton4Pushed = false;
-							hallwayButton5Pushed = false;
-						}
-
-
-						if (hallwayButton0Pushed && hallwayButton2Pushed && hallwayButton4Pushed)
-							hallwayComplete = true;
+						if (hallway.button0Pushed && hallway.button2Pushed && hallway.button4Pushed)
+							hallway.complete = true;
 					} else {
 						if (playSoundOnPuzzleFinish) { //935, 629
 							playSound(clip, sfxBeep1);
 							playSoundOnPuzzleFinish = false;
 						}
-						hallwayButton0Pushed = true;
-						hallwayButton1Pushed = true;
-						hallwayButton2Pushed = true;
-						hallwayButton3Pushed = true;
-						hallwayButton4Pushed = true;
-						hallwayButton5Pushed = true;
+						hallway.setAll(true);
 
-						if (player.collidingWith(hallwayLoadingZone) && window.keyListener.KEY_ACTION) {
+						if (player.collidingWith(hallway.loadingZone) && window.keyListener.KEY_ACTION) {
 							// Next level
 							window.drawLoadingScreen("");
 							window.collisionItemLayer.clear(); // Remove all collision items
@@ -514,7 +419,7 @@ public class Main {
 						window.renderBackground();
 
 						// Load in next level
-						mapgen.loadMap(fileLoader.load("/res/maps/maze.map"), window);
+						mapgen.loadMapOld(fileLoader.load("/res/maps/maze.map"), window);
 						currentLevel = 3;
 					}
 
@@ -548,70 +453,55 @@ public class Main {
 					}
 
 				} else if (currentLevel == 4) {
-					if (!coreButtonPressed && player.collidingWith(core)) {
+					if (player.collidingWith(core.buttonHitbox)) {
 						hintText = "(E) Push Button";
 						drawHint = true;
-					}
-					if (window.keyListener.KEY_ACTION) {
-						if (!coreButtonPressed && player.collidingWith(core)) {
-							// Core level
-							coreButtonPressed = true;
+						if (window.keyListener.KEY_ACTION) {
+							window.fill(Color.BLACK);
+							window.repaintAndWait(2000);
+							window.drawText((window.windowWidth / 2) - 50, window.windowHeight - 300, "Congratulations.", 20, Color.WHITE);
+							window.repaintAndWait(3000);
+							window.fill(Color.BLACK);
+							window.repaintAndWait(1000);
+							window.drawText((window.windowWidth / 2) - 100, window.windowHeight - 300, "You saved the world.", 20, Color.WHITE);
+							window.repaintAndWait(3000);
+							window.fill(Color.BLACK);
+							window.repaintAndWait(1000);
+							window.drawText((window.windowWidth / 2) - 150, window.windowHeight - 300, "However, it was at a great cost.", 20, Color.WHITE);
+							window.repaintAndWait(3000);
+							window.fill(Color.BLACK);
+							window.repaintAndWait(1000);
+							window.drawText((window.windowWidth / 2) - 150, window.windowHeight - 300, "Your sacrifice won't be forgotten.", 20, Color.WHITE);
+							window.repaintAndWait(3000);
+							window.fill(Color.BLACK);
+							window.repaintAndWait(100);
+
+							playSound(clip, explode);
+							int width = 1136;
+							int height = 640;
+							for( int i = 1; i < 70; i++) {
+								window.drawText(40, i * 10, "CONSOLE ERROR", 20, Color.RED);
+								window.repaint();
+
+								// Makes the window shake a bunch
+								if(i % 5 == 0) {
+									width -= 7;
+									height -= 5;
+								} else if(i % 2 == 0) {
+									width += 10;
+									height += 4;
+								} else if(i % 3 == 0) {
+									width = 1136;
+									height = 640;
+								}
+
+								window.setSize(width, height);
+								Thread.sleep(40);
+							}
+
+							System.exit(0);
 						}
 					}
-				}
-				
-				if(coreButtonPressed) {
-					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
-					window.repaint();
-					Thread.sleep(2000);
-					window.drawText((window.windowWidth / 2) - 50, window.windowHeight - 300, "Congrats.", 20, Color.WHITE);
-					window.repaint();
-					Thread.sleep(3000);
-					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
-					window.repaint();
-					Thread.sleep(1000);
-					window.drawText((window.windowWidth / 2) - 100, window.windowHeight - 300, "You saved the world.", 20, Color.WHITE);
-					window.repaint();
-					Thread.sleep(3000);
-					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
-					window.repaint();
-					Thread.sleep(1000);
-					window.drawText((window.windowWidth / 2) - 150, window.windowHeight - 300, "However, it was at a great cost.", 20, Color.WHITE);
-					window.repaint();
-					Thread.sleep(3000);
-					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
-					window.repaint();
-					Thread.sleep(1000);
-					window.drawText((window.windowWidth / 2) - 150, window.windowHeight - 300, "Your sacrifice wont be forgotten.", 20, Color.WHITE);
-					window.repaint();
-					Thread.sleep(3000);
-					window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0,0,0)); // Black background
-					window.repaint();
-					Thread.sleep(100);
-
-					playSound(clip, explode);
-					int width = 1136;
-					int height = 640;
-					for( int i = 1; i < 70; i++) {
-						window.drawText(40, i * 10, "CONSOLE ERROR", 20, Color.RED);
-						window.repaint();
-
-						if(i % 5 == 0) {
-							width -= 7;
-							height -= 5;
-						} else if(i % 2 == 0) {
-							width += 10;
-							height += 4;
-						} else if(i % 3 == 0) {
-							width = 1136;
-							height = 640;
-						}
-
-						window.setSize(width, height);
-						Thread.sleep(40);
-					}
-
-					System.exit(0);
 				}
 
 				// Pause menu
@@ -619,22 +509,20 @@ public class Main {
 					while (true) {
 						window.drawRectangle(0, 0, window.windowWidth, window.windowHeight, new Color(0, 0, 0)); // Black background
 
-						if (window.drawMenuButton((window.windowWidth / 2) - (pauseMenuButtonWidth / 2), window.windowHeight - 400, pauseMenuButtonWidth, pauseMenuButtonHeight, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
+						if (window.drawMenuButton((window.windowWidth / 2) - (pauseMenuButtonWidth / 2), window.windowHeight - 400, pauseMenuButtonWidth, pauseMenuButtonHeight, "RESUME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59)))
 							break;
-						}
 
 						if (window.drawMenuButton((window.windowWidth / 2) - (pauseMenuButtonWidth / 2), window.windowHeight - 280, pauseMenuButtonWidth, pauseMenuButtonHeight, "QUIT GAME", Color.WHITE, new Color(255, 66, 28), new Color(255, 91, 59))) {
 							gameRunning = false;
-							System.exit(0);
+							break;
 						}
 
-						window.repaint();
-						Thread.sleep(1000 / 60);
+						window.repaintAndWait(1000 / 60);
 					}
 				}
 
 				// Print debug information
-				if (DEBUG_BUILD && DEBUG_LEVEL == 0)
+				if (!RELEASE_BUILD)
 					System.out.println("FPS: " + (int) window.FPS + ", Delta: " + window.delta +
 							", X: " + (int) player.x + ", Y: " + (int) player.y);
 
@@ -649,35 +537,11 @@ public class Main {
 				window.repaint();
 			}
 			System.exit(0);
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-			while(true) {
-				window.drawLoadingScreen("ERROR! Game assets missing.");
-			}
-		} catch(IOException e) {
-			e.printStackTrace();
-			while(true) {
-				window.drawLoadingScreen("ERROR! Game assets missing.");
-			}
-		} catch(InterruptedException e) {
-			e.printStackTrace();
-			while(true) {
-				window.drawLoadingScreen("ERROR! Interrupted.");
-			}
-		} catch(LineUnavailableException e) {
-			e.printStackTrace();
-			while(true) {
-				window.drawLoadingScreen("ERROR! Line unavailable.");
-			}
-		} catch(UnsupportedAudioFileException e) {
-			e.printStackTrace();
-			while(true) {
-				window.drawLoadingScreen("ERROR! Missing audio codecs");
-			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			while(true) {
-				window.drawLoadingScreen("ERROR! Unknown error.");
+				window.drawLoadingScreen("Game crashed!");
+				window.repaintAndWait(1000 / 60);
 			}
 		}
 	}
