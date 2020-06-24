@@ -61,11 +61,27 @@ public class WorldItem {
 		hitboxHeight = hH;
 	}
 	
+	public WorldItem(int w, int h, Color color) {
+		sprite = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics = sprite.createGraphics();
+		graphics.setColor(color);
+		graphics.fillRect(0, 0, width, height);
+		graphics.dispose();
+		width = w;
+		height = h;
+		hitboxX = 0;
+		hitboxY = 0;
+		hitboxWidth = w;
+		hitboxHeight = h;
+	}
+	
 	public void resize(int w, int h) {
 		sprite = ImageUtils.resize(sprite, w, h);
 		for(int i = 0; i < 8; i++) {
 			isometricSprites[i] = ImageUtils.resize(isometricSprites[i], w, h);
 		}
+		width = w;
+		height = h;
 	}
 	
 	public void loadSprite(String path) {
@@ -142,10 +158,19 @@ public class WorldItem {
 		if(item == null) return false;
 		if(item == this) return false;
 		
-		for(int currentLayer = 0; currentLayer < 4; currentLayer ++) {
+		for(int currentLayer = 0; currentLayer < 3; currentLayer ++) {
 			if(item.collisionLayer[currentLayer] && collisionMask[currentLayer]) {
-				if(x < item.x + item.width && x + width > item.x && 
-						y < item.y + item.height&& y + height > item.y) {
+				int myX = (int) (x + hitboxX);
+				int myY = (int) (y + hitboxY);
+				int myW = hitboxWidth;
+				int myH = hitboxHeight;
+				int itemX = (int) (item.x + item.hitboxX);
+				int itemY = (int) (item.y + item.hitboxY);
+				int itemW = item.hitboxWidth;
+				int itemH = item.hitboxHeight;
+				
+				if(myX < itemX + itemW && myX + myW > itemX && 
+						myY < itemY + itemH && myY + myH > itemY) {
 					return true;
 				}
 			}

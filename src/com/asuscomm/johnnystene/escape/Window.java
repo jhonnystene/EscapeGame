@@ -16,6 +16,9 @@ public class Window extends JFrame {
 	public int height;
 	public String title;
 	
+	public long nextFrameTime = 0;
+	public int frameGap = 0;
+	
 	public Window(String t) {
 		super();
 		init(t, 800, 600);
@@ -54,12 +57,28 @@ public class Window extends JFrame {
 	}
 	
 	public void paint(Graphics g) {
+		while(System.nanoTime() < nextFrameTime) {}
 		g.drawImage(frameBuffer, 0, 0, this);
+		nextFrameTime = System.nanoTime() + frameGap;
+	}
+	
+	public void setFPSCap(int fps) {
+		frameGap = (1/fps)*1000000000;
 	}
 	
 	public void setNewSize(int w, int h) {
 		width = w;
 		height = h;
 		setSize(width, height);
+	}
+	
+	public void centerCamera(WorldItem item) {
+		camera.x = (int) item.x - ((width / 2) - (item.width / 2));
+		camera.y = (int) item.y - ((height / 2) - (item.height / 2));
+		
+		if(camera.x < 0) camera.x = 0;
+		if(camera.y < 0) camera.y = 0;
+		if(camera.x + width > 10240) camera.x = 10240 - width;
+		if(camera.y + height > 10240) camera.y = 10240 - height;
 	}
 }
