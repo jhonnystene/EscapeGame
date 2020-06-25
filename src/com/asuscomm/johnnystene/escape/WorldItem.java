@@ -101,6 +101,14 @@ public class WorldItem {
 		for(int i = 0; i < 8; i++) isometricSprites[i] = sprite;
 	}
 	
+	public void loadSprite(String path, int direction) {
+		try {
+			isometricSprites[direction] = ImageIO.read(this.getClass().getResourceAsStream(path));
+		} catch(Exception e) {
+			System.out.println("WorldItem load error! Can't load " + path);
+		}
+	}
+	
 	public void loadErrorSprite() {
 		// Load in error sprite
 		sprite = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
@@ -207,5 +215,19 @@ public class WorldItem {
 		if(isometricItem) {
 			lookTowards((int) moveX, (int) moveY);
 		}
+	}
+
+	public boolean inArea(int arg0, int arg1, int arg2, int arg3) {
+		int myX = (int) (x + hitboxX);
+		int myY = (int) (y + hitboxY);
+		int myW = hitboxWidth;
+		int myH = hitboxHeight;
+
+		if(myX < arg0 + arg2 && myX + myW > arg0 &&
+				myY < arg1 + arg3 && myY + myH > arg1) {
+			return true;
+		}
+
+		return false;
 	}
 }
