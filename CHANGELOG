@@ -1,7 +1,7 @@
 Version 1.1b:
 	+ Easier to mod - uses .map files for collision.
 	+ Rewrote whole engine to improve performance
-	- Removed vent puzzle in favor of a direct path to core
+	- Removed vent puzzle
 
 Version 1.0b:
 	+ Initial Release

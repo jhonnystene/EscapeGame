@@ -39,10 +39,6 @@ public class EscapeGameComponent {
 		hallwayMap.loadMapFile("/res/maps/collision/hallway.map");
 		outsideMap.items.add(player);
 		
-		World ventMap = new World("/res/maps/NewVents.png");
-		ventMap.loadMapFile("/res/maps/collision/vents.map");
-		ventMap.items.add(player);
-		
 		World upstairsMap = new World("/res/maps/Upstairs.png");
 		upstairsMap.loadMapFile("/res/maps/collision/upstairs.map");
 		outsideMap.items.add(player);
@@ -71,7 +67,8 @@ public class EscapeGameComponent {
 			 * 1 - Main Hallway (Goes to Upstairs or Keypad Hallway)
 			 * 2 - Upstairs (Goes to Vents)
 			 * 3 - Secondary (Keypad) Hallway (Goes to Core)
-			 * 4 - Vents (Goes to Core)
+			 * 4 - Unused
+			 * 5 - Core
 			 */
 
 			if(currentMapId == 0) { // Outside
@@ -81,9 +78,13 @@ public class EscapeGameComponent {
 				 * and as a hint have the needed buttons look worn down.
 				 */
 				if(outsideMapKeypadSolved) {
+					if(player.inArea(400, 1600, 100, 64) && window.keyboard.KEY_E) {
 
+					}
 				} else {
+					if(player.inArea(560, 1640, 64, 64) && window.keyboard.KEY_E) {
 
+					}
 				}
 			} else if(currentMapId == 1) { // Hallway
 				/*
@@ -102,10 +103,10 @@ public class EscapeGameComponent {
 				 * Map concept:
 				 * Leads directly to the core.
 				 */
-			} else if(currentMapId == 4) { // Vents
+			} else if(currentMapId == 4) { // Free
 				/*
 				 * Map concept:
-				 * Remove this map.
+				 * Free Map ID (Removed map)
 				 */
 			} else if(currentMapId == 5) { // Core
 				/*
