@@ -3,11 +3,13 @@ package com.asuscomm.johnnystene.escape;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
-public class Window extends JFrame {
+public class Window extends JPanel {
 	public BufferedImage frameBuffer;
-	
+	public JFrame window;
+
+
 	public Keyboard keyboard;
 	public Mouse mouse;
 	public Camera camera;
@@ -31,11 +33,13 @@ public class Window extends JFrame {
 	
 	private void init(String t, int w, int h) {
 		// Set basic window params
+		window = new JFrame();
 		title = t;
-		setTitle(title);
+		window.setTitle(title);
 		
 		width = w;
 		height = h;
+		window.setPreferredSize(new Dimension(width, height));
 		setSize(width, height);
 		
 		// Init submodules
@@ -43,7 +47,7 @@ public class Window extends JFrame {
 		mouse = new Mouse();
 		camera = new Camera();
 		
-		addKeyListener(keyboard);
+		window.addKeyListener(keyboard);
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 		
@@ -51,12 +55,18 @@ public class Window extends JFrame {
 		frameBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		
 		// Do JFrame things
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setVisible(true);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setLocationRelativeTo(null);
+		window.add(this);
+		window.pack();
+		window.setVisible(true);
+
+		width = getWidth();
+		height = getHeight();
 	}
 	
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		while(System.nanoTime() < nextFrameTime) {}
 		g.drawImage(frameBuffer, 0, 0, this);
 		nextFrameTime = System.nanoTime() + frameGap;
@@ -181,7 +191,7 @@ public class Window extends JFrame {
 		int width = metrics.stringWidth(string);
 		int height = metrics.getHeight();
 		x = x - (width / 2);
-		y = y - (height / 2);
+		//y = y - (height / 2);
 		graphics.setFont(font);
 		graphics.setColor(color);
 		graphics.drawString(string, x, y);
@@ -194,7 +204,7 @@ public class Window extends JFrame {
 			return true;
 		}
 
-		UIDrawCenteredString((x + (w / 2)), (y + (w / 2)), fontSize, text, textColor);
+		UIDrawCenteredString((x + (w / 2)), (y + (h / 2)), fontSize, text, textColor);
 		return false;
 	}
 }

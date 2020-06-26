@@ -4,12 +4,17 @@ Engine
  - Add sound playing
 
 Game
- - Rewrite level scripting to match new levels
+ - Inventory system
+ - Program keypad puzzle
+ - Program hallway keypad puzzle
  - Rewrite title screen
 
 Graphics
  - Create better, non-accidental CRT effect
  - Create new level art
+ - Create art for the keypad and keypad buttons
+ - Create art for the inventory UI
+ - Create art for the items to be stored upstairs
 
 Sound
  - Keypad button press

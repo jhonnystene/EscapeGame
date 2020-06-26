@@ -85,7 +85,18 @@ public class EscapeGameComponent {
 					}
 				} else {
 					if(player.inArea(560, 1640, 64, 64) && window.keyboard.KEY_E) {
+						// Temporary art for puzzle
+						while(!outsideMapKeypadSolved) {
+							window.UIDrawFilledRect(0, 0, window.width, window.height, Color.BLACK);
 
+							// Keypad placement
+							window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "5");
+
+							window.repaint();
+							try {
+								Thread.sleep(1000 / 60);
+							} catch(Exception e) { }
+						}
 					}
 				}
 			} else if(currentMapId == 1) { // Hallway
@@ -121,7 +132,7 @@ public class EscapeGameComponent {
 			currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height);
 
 			window.UIDrawFilledRect(0, window.height - 21, window.width, 21, Color.BLACK);
-			window.UIDrawCenteredString(window.width / 2, window.height ,12, "Escape The Robots And Oh Gosh They're Coming Run Beta Version 1.1b", Color.WHITE);
+			window.UIDrawCenteredString(window.width / 2, window.height - 6 ,12, "Escape The Robots And Oh Gosh They're Coming Run Beta Version 1.1b", Color.WHITE);
 
 			window.repaint();
 			try {
