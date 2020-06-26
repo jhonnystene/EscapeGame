@@ -1,0 +1,17 @@
+Todo for version 1.1b
+
+Engine
+ - Add sound playing
+
+Game
+ - Rewrite level scripting to match new levels
+ - Rewrite title screen
+
+Graphics
+ - Create better, non-accidental CRT effect
+ - Create new level art
+
+Sound
+ - Keypad button press
+ - Door open
+ - Door close

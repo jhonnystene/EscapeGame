@@ -1,6 +1,6 @@
 package com.asuscomm.johnnystene.escape;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -80,5 +80,121 @@ public class Window extends JFrame {
 		if(camera.y < 0) camera.y = 0;
 		if(camera.x + width > 10240) camera.x = 10240 - width;
 		if(camera.y + height > 10240) camera.y = 10240 - height;
+	}
+
+	public boolean mouseIn(int x, int y, int w, int h) {
+		if(mouse.x > x && mouse.x < x + w && mouse.y > y && mouse.y < y + h)
+			return true;
+
+		return false;
+	}
+
+	public int mouseStatus(int x, int y, int w, int h) {
+		if(mouseIn(x, y, w, h)) {
+			if(mouse.down) return 2;
+			else return 1;
+		} else return 0;
+	}
+
+	// UI Framework
+	public int UIDrawRect(int x, int y, int w, int h, Color color) {
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setColor(color);
+		graphics.drawRect(x, y, w, h);
+		graphics.dispose();
+		return mouseStatus(x, y, w, h);
+	}
+
+	public int UIDrawRect(int x, int y, int w, int h, Color color, Color hoverColor) {
+		Graphics2D graphics = frameBuffer.createGraphics();
+		if(mouseStatus(x, y, w, h) == 1) {
+			graphics.setColor(hoverColor);
+		} else graphics.setColor(color);
+		graphics.drawRect(x, y, w, h);
+		graphics.dispose();
+
+		return mouseStatus(x, y, w, h);
+	}
+
+	public int UIDrawFilledRect(int x, int y, int w, int h, Color color) {
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setColor(color);
+		graphics.fillRect(x, y, w, h);
+		graphics.dispose();
+		return mouseStatus(x, y, w, h);
+	}
+
+	public int UIDrawFilledRect(int x, int y, int w, int h, Color color, Color hoverColor) {
+		Graphics2D graphics = frameBuffer.createGraphics();
+		if(mouseStatus(x, y, w, h) == 1) {
+			graphics.setColor(hoverColor);
+		} else graphics.setColor(color);
+		graphics.fillRect(x, y, w, h);
+		graphics.dispose();
+
+		return mouseStatus(x, y, w, h);
+	}
+
+	public int UIDrawString(int x, int y, int size, String string) {
+		Font font = new Font("Sans Serif", Font.PLAIN, size);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		graphics.setFont(font);
+		graphics.drawString(string, x, y);
+		graphics.dispose();
+		return mouseStatus(x, y, metrics.stringWidth(string), metrics.getHeight());
+	}
+
+	public int UIDrawString(int x, int y, int size, String string, Color color) {
+		Font font = new Font("Sans Serif", Font.PLAIN, size);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		graphics.setColor(color);
+		graphics.setFont(font);
+		graphics.drawString(string, x, y);
+		graphics.dispose();
+		return mouseStatus(x, y, metrics.stringWidth(string), metrics.getHeight());
+	}
+
+	public int UIDrawCenteredString(int x, int y, int size, String string) {
+		Font font = new Font("Sans Serif", Font.PLAIN, size);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		int width = metrics.stringWidth(string);
+		int height = metrics.getHeight();
+		x = x - (width / 2);
+		y = y - (height / 2);
+		graphics.setFont(font);
+		graphics.drawString(string, x, y);
+		graphics.dispose();
+		return mouseStatus(x, y, width, height);
+	}
+
+	public int UIDrawCenteredString(int x, int y, int size, String string, Color color) {
+		Font font = new Font("Sans Serif", Font.PLAIN, size);
+		Graphics2D graphics = frameBuffer.createGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		FontMetrics metrics = graphics.getFontMetrics(font);
+		int width = metrics.stringWidth(string);
+		int height = metrics.getHeight();
+		x = x - (width / 2);
+		y = y - (height / 2);
+		graphics.setFont(font);
+		graphics.setColor(color);
+		graphics.drawString(string, x, y);
+		graphics.dispose();
+		return mouseStatus(x, y, width, height);
+	}
+
+	public boolean UIDrawButton(int x, int y, int w, int h, int fontSize, Color backColor, Color hoverColor, Color textColor, String text) {
+		if(UIDrawFilledRect(x, y, w, h, backColor, hoverColor) == 2) {
+			return true;
+		}
+
+		UIDrawCenteredString((x + (w / 2)), (y + (w / 2)), fontSize, text, textColor);
+		return false;
 	}
 }

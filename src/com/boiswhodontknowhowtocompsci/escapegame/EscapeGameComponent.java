@@ -4,6 +4,8 @@ import com.asuscomm.johnnystene.escape.Window;
 import com.asuscomm.johnnystene.escape.World;
 import com.asuscomm.johnnystene.escape.WorldItem;
 
+import java.awt.*;
+
 public class EscapeGameComponent {
 	public static void main(String[] args) {
 		// Setup window
@@ -117,6 +119,10 @@ public class EscapeGameComponent {
 
 			window.centerCamera(player);
 			currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height);
+
+			window.UIDrawFilledRect(0, window.height - 21, window.width, 21, Color.BLACK);
+			window.UIDrawCenteredString(window.width / 2, window.height ,12, "Escape The Robots And Oh Gosh They're Coming Run Beta Version 1.1b", Color.WHITE);
+
 			window.repaint();
 			try {
 				Thread.sleep(1000 / 60);
