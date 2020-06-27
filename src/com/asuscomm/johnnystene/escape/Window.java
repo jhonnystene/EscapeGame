@@ -67,13 +67,11 @@ public class Window extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		while(System.nanoTime() < nextFrameTime) {}
 		g.drawImage(frameBuffer, 0, 0, this);
-		nextFrameTime = System.nanoTime() + frameGap;
 	}
 	
 	public void setFPSCap(int fps) {
-		frameGap = (1/fps)*1000000000;
+		frameGap = (int) ((1.0/fps)*1000000000);
 	}
 	
 	public void setNewSize(int w, int h) {

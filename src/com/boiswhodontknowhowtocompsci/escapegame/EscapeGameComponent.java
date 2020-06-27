@@ -59,8 +59,6 @@ public class EscapeGameComponent {
 		outsideMap.loadMapFile("/res/maps/collision/outside.map");
 		outsideMap.items.add(player);
 		boolean outsideMapKeypadSolved = false;
-		InventoryItem testItem = new InventoryItem("Test Item", player.sprite, 0, 360, 1900);
-		outsideMap.pickups.add(testItem);
 
 		World hallwayMap = new World("/res/maps/Hallway.png");
 		hallwayMap.loadMapFile("/res/maps/collision/hallway.map");
@@ -76,8 +74,10 @@ public class EscapeGameComponent {
 		
 		World currentMap = outsideMap;
 		int currentMapId = 0;
+
+		boolean gameRunning = true;
 		
-		while(true) {
+		while(gameRunning) {
 			float moveX = 0;
 			float moveY = 0;
 			
