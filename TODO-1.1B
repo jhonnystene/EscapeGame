@@ -8,6 +8,7 @@ Game
  - Program keypad puzzle
  - Program hallway keypad puzzle
  - Rewrite title screen
+ - Fix level fade in
 
 Graphics
  - Create better, non-accidental CRT effect

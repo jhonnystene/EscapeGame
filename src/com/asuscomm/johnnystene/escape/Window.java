@@ -10,7 +10,6 @@ public class Window extends JPanel {
 	public BufferedImage frameBuffer;
 	public JFrame window;
 
-
 	public Keyboard keyboard;
 	public Mouse mouse;
 	public Camera camera;

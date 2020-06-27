@@ -94,10 +94,21 @@ public class EscapeGameComponent {
 				 */
 				if(outsideMapKeypadSolved) {
 					if(player.inArea(400, 1600, 100, 64) && window.keyboard.KEY_E) {
+						for(int i = 0; i < 255; i++) {
+							window.UIDrawFilledRect(0, 0, window.width, window.height, new Color(0, 0, 0, i));
+							window.repaint();
+						}
 						player.x = 415;
 						player.y = 1450;
 						currentMap = hallwayMap;
 						currentMapId = 1;
+						window.centerCamera(player);
+						window.repaint();
+						for(int i = 255; i > 0; i--) {
+							// TODO: Fix fade in
+							window.UIDrawFilledRect(0, 0, window.width, window.height, new Color(0, 0, 0, i));
+							window.repaint();
+						}
 					}
 				} else {
 					if(player.inArea(560, 1640, 64, 64) && window.keyboard.KEY_E) {
