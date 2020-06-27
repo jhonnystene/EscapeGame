@@ -170,12 +170,10 @@ public class EscapeGameComponent {
 								} else userEntered = "";
 							}
 
-							System.out.println(userEntered);
+							while(window.mouse.down) { window.repaint(); }
 
-							try {
-								Thread.sleep(50); // TODO: Proper debouncing
-							} catch(Exception e) {}
 							window.repaint();
+
 							try {
 								Thread.sleep(1000 / 60);
 							} catch(Exception e) { }
