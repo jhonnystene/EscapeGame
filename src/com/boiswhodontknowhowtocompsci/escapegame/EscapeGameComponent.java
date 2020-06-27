@@ -1,3 +1,23 @@
+/*
+ * Escape The Robots And Oh Gosh They're Coming Run
+ * Copyright (c) 2020 Johnny Stene, Ethan Meier, Ethan Stevenson, Isaac Meetsma, Aiden Schlegel, Caleb McCandless
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either Version 3 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * You may contact Johnny Stene at <jhonnystene@gmail.com>.
+ */
+
 package com.boiswhodontknowhowtocompsci.escapegame;
 
 import com.asuscomm.johnnystene.escape.InventoryItem;
