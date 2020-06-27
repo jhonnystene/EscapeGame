@@ -1,6 +1,7 @@
 package com.asuscomm.johnnystene.escape;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -188,10 +189,11 @@ public class Window extends JPanel {
 		Graphics2D graphics = frameBuffer.createGraphics();
 		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		FontMetrics metrics = graphics.getFontMetrics(font);
-		int width = metrics.stringWidth(string);
-		int height = metrics.getHeight();
+		Rectangle2D dimensions = metrics.getStringBounds(string, graphics);
+		int width = (int) dimensions.getWidth();
+		int height = (int) dimensions.getHeight();
 		x = x - (width / 2);
-		//y = y - (height / 2);
+		y = y + metrics.getDescent();
 		graphics.setFont(font);
 		graphics.setColor(color);
 		graphics.drawString(string, x, y);

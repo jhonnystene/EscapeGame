@@ -87,10 +87,25 @@ public class EscapeGameComponent {
 					if(player.inArea(560, 1640, 64, 64) && window.keyboard.KEY_E) {
 						// Temporary art for puzzle
 						while(!outsideMapKeypadSolved) {
+							// TODO: Actually get text input and check against correct PIN
 							window.UIDrawFilledRect(0, 0, window.width, window.height, Color.BLACK);
 
 							// Keypad placement
+							window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "1");
+							window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "2");
+							window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "3");
+
+							window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "4");
 							window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "5");
+							window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "6");
+
+							window.UIDrawButton((window.width / 2) - 100, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "7");
+							window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "8");
+							window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "9");
+
+							window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "0");
+							if(window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "Done"))
+								outsideMapKeypadSolved = true;
 
 							window.repaint();
 							try {
@@ -132,7 +147,7 @@ public class EscapeGameComponent {
 			currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height);
 
 			window.UIDrawFilledRect(0, window.height - 21, window.width, 21, Color.BLACK);
-			window.UIDrawCenteredString(window.width / 2, window.height - 6 ,12, "Escape The Robots And Oh Gosh They're Coming Run Beta Version 1.1b", Color.WHITE);
+			window.UIDrawCenteredString(window.width / 2, window.height - 10 ,12, "Escape The Robots And Oh Gosh They're Coming Run Beta Version 1.1b", Color.WHITE);
 
 			window.repaint();
 			try {
