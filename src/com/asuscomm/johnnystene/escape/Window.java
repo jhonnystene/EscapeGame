@@ -18,9 +18,6 @@ public class Window extends JPanel {
 	public int height;
 	public String title;
 	
-	public long nextFrameTime = 0;
-	public int frameGap = 0;
-	
 	public Window(String t) {
 		super();
 		init(t, 800, 600);
@@ -68,10 +65,6 @@ public class Window extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(frameBuffer, 0, 0, this);
-	}
-	
-	public void setFPSCap(int fps) {
-		frameGap = (int) ((1.0/fps)*1000000000);
 	}
 	
 	public void setNewSize(int w, int h) {
