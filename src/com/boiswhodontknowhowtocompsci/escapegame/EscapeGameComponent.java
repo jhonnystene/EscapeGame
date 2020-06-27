@@ -117,17 +117,22 @@ public class EscapeGameComponent {
 						for(int i = 0; i < 255; i++) {
 							window.UIDrawFilledRect(0, 0, window.width, window.height, new Color(0, 0, 0, i));
 							window.repaint();
+							try {
+								Thread.sleep(4);
+							} catch(Exception e) {}
 						}
 						player.x = 415;
 						player.y = 1450;
 						currentMap = hallwayMap;
 						currentMapId = 1;
 						window.centerCamera(player);
-						window.repaint();
 						for(int i = 255; i > 0; i--) {
-							// TODO: Fix fade in
+							currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height, DEBUG_BUILD);
 							window.UIDrawFilledRect(0, 0, window.width, window.height, new Color(0, 0, 0, i));
 							window.repaint();
+							try {
+								Thread.sleep(2);
+							} catch(Exception e) {}
 						}
 					}
 				} else {
@@ -135,7 +140,6 @@ public class EscapeGameComponent {
 						// Temporary art for puzzle
 						String userEntered = "";
 						while(!outsideMapKeypadSolved) {
-							// TODO: Actually get text input and check against correct PIN
 							window.UIDrawFilledRect(0, 0, window.width, window.height, Color.BLACK);
 
 							// Keypad placement
