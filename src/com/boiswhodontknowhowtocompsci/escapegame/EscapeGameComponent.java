@@ -39,15 +39,15 @@ public class EscapeGameComponent {
 		
 		World hallwayMap = new World("/res/maps/Hallway.png");
 		hallwayMap.loadMapFile("/res/maps/collision/hallway.map");
-		outsideMap.items.add(player);
+		hallwayMap.items.add(player);
 		
 		World upstairsMap = new World("/res/maps/Upstairs.png");
 		upstairsMap.loadMapFile("/res/maps/collision/upstairs.map");
-		outsideMap.items.add(player);
+		upstairsMap.items.add(player);
 		
 		World coreMap = new World("/res/maps/Core.png");
 		coreMap.loadMapFile("/res/maps/collision/core.map");
-		outsideMap.items.add(player);
+		coreMap.items.add(player);
 		
 		World currentMap = outsideMap;
 		int currentMapId = 0;
@@ -81,7 +81,10 @@ public class EscapeGameComponent {
 				 */
 				if(outsideMapKeypadSolved) {
 					if(player.inArea(400, 1600, 100, 64) && window.keyboard.KEY_E) {
-
+						player.x = 415;
+						player.y = 1450;
+						currentMap = hallwayMap;
+						currentMapId = 1;
 					}
 				} else {
 					if(player.inArea(560, 1640, 64, 64) && window.keyboard.KEY_E) {
