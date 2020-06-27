@@ -33,7 +33,6 @@ public class EscapeGameComponent {
 	public static void main(String[] args) {
 		// Setup window
 		Window window = new Window("Escape The Robots And Oh Gosh They're Coming Run");
-		window.setFPSCap(60);
 		
 		// Setup player
 		WorldItem player = new WorldItem("/res/player/static/S.png");

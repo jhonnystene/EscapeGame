@@ -72,10 +72,8 @@ public class World {
 	
 	public void renderTo(BufferedImage image, int viewportX, int viewportY, int viewportW, int viewportH, boolean debug) {
 		Graphics2D graphics = image.createGraphics();
-		graphics.setColor(Color.BLACK);
-		graphics.drawRect(viewportX, viewportY, viewportW, viewportH);
 		graphics.drawImage(backdrop, 0 - viewportX, 0 - viewportY, null);
-		
+
 		for(WorldItem item : items) {
 			graphics.drawImage(item.sprite, (int) item.x - viewportX, (int) item.y - viewportY, null);
 			if(debug) {
