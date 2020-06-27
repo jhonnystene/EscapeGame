@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 
 public class World {
 	public ArrayList<WorldItem> items;
+	public ArrayList<InventoryItem> pickups;
 	public BufferedImage backdrop;
 	
 	public int width;
@@ -20,6 +21,7 @@ public class World {
 	
 	public World() {
 		items = new ArrayList<>();
+		pickups = new ArrayList<>();
 		width = 10240;
 		height = 10240;
 		backdrop = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -27,6 +29,7 @@ public class World {
 	
 	public World(String path) {
 		items = new ArrayList<>();
+		pickups = new ArrayList<>();
 		width = 10240;
 		height = 10240;
 		backdrop = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -40,18 +43,34 @@ public class World {
 		}
 	}
 	
-	public void renderTo(BufferedImage image) {
+	public void renderTo(BufferedImage image, boolean debug) {
 		Graphics2D graphics = image.createGraphics();
 		Raster newFB = backdrop.getData(new Rectangle(0, 0, width, height));
 		image.setData(newFB);
 		
 		for(WorldItem item : items) {
 			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, null);
+			if(debug) {
+				graphics.setColor(Color.BLACK);
+				graphics.drawRect((int) item.x, (int) item.y, item.width, item.height);
+				graphics.setColor(Color.BLUE);
+				graphics.drawRect((int) item.x + item.hitboxX, (int) item.y + item.hitboxY, item.hitboxWidth, item.hitboxHeight);
+			}
+		}
+
+		for(InventoryItem item : pickups) {
+			if(item.inWorld) {
+				graphics.drawImage(item.image, item.x, item.y, null);
+				if(debug) {
+					graphics.setColor(Color.RED);
+					graphics.drawRect(item.x, item.y, item.width, item.height);
+				}
+			}
 		}
 		graphics.dispose();
 	}
 	
-	public void renderTo(BufferedImage image, int viewportX, int viewportY, int viewportW, int viewportH) {
+	public void renderTo(BufferedImage image, int viewportX, int viewportY, int viewportW, int viewportH, boolean debug) {
 		Graphics2D graphics = image.createGraphics();
 		graphics.setColor(Color.BLACK);
 		graphics.drawRect(viewportX, viewportY, viewportW, viewportH);
@@ -59,7 +78,24 @@ public class World {
 		
 		for(WorldItem item : items) {
 			graphics.drawImage(item.sprite, (int) item.x - viewportX, (int) item.y - viewportY, null);
+			if(debug) {
+				graphics.setColor(Color.BLACK);
+				graphics.drawRect((int) item.x - viewportX, (int) item.y - viewportY, item.width, item.height);
+				graphics.setColor(Color.BLUE);
+				graphics.drawRect(((int) item.x + item.hitboxX) - viewportX, ((int) item.y + item.hitboxY) - viewportY, item.hitboxWidth, item.hitboxHeight);
+			}
 		}
+
+		for(InventoryItem item : pickups) {
+			if(item.inWorld) {
+				graphics.drawImage(item.image, item.x - viewportX, item.y - viewportY, null);
+				if(debug) {
+					graphics.setColor(Color.RED);
+					graphics.drawRect(item.x - viewportX, item.y - viewportY, item.width, item.height);
+				}
+			}
+		}
+
 		graphics.dispose();
 	}
 	

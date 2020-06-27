@@ -1,5 +1,6 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
+import com.asuscomm.johnnystene.escape.InventoryItem;
 import com.asuscomm.johnnystene.escape.Window;
 import com.asuscomm.johnnystene.escape.World;
 import com.asuscomm.johnnystene.escape.WorldItem;
@@ -7,6 +8,8 @@ import com.asuscomm.johnnystene.escape.WorldItem;
 import java.awt.*;
 
 public class EscapeGameComponent {
+	public static final boolean DEBUG_BUILD = true;
+
 	public static void main(String[] args) {
 		// Setup window
 		Window window = new Window("Escape The Robots And Oh Gosh They're Coming Run");
@@ -36,7 +39,9 @@ public class EscapeGameComponent {
 		outsideMap.loadMapFile("/res/maps/collision/outside.map");
 		outsideMap.items.add(player);
 		boolean outsideMapKeypadSolved = false;
-		
+		InventoryItem testItem = new InventoryItem("Test Item", player.sprite, 0, 360, 1900);
+		outsideMap.pickups.add(testItem);
+
 		World hallwayMap = new World("/res/maps/Hallway.png");
 		hallwayMap.loadMapFile("/res/maps/collision/hallway.map");
 		hallwayMap.items.add(player);
@@ -62,6 +67,14 @@ public class EscapeGameComponent {
 			if(window.keyboard.KEY_S) moveY += 10;
 			
 			player.moveAndCollide(moveX, moveY, currentMap.items);
+			// Check if we should pick up an item
+			for(InventoryItem item : currentMap.pickups) {
+				if(player.inArea(item.x, item.y, item.width, item.height) && item.inWorld) {
+					// Pickup
+					System.out.println("Pickup: " + item.name);
+					item.inWorld = false;
+				}
+			}
 
 			/*
 			 * MAP IDS LIST
@@ -76,7 +89,7 @@ public class EscapeGameComponent {
 			if(currentMapId == 0) { // Outside
 				/*
 				 * Map concept:
-				 * Have a standard T-9 keypad rather than the terminal. Make the password the year the game takes place,
+				 * Make the password the year the game takes place,
 				 * and as a hint have the needed buttons look worn down.
 				 */
 				if(outsideMapKeypadSolved) {
@@ -168,10 +181,18 @@ public class EscapeGameComponent {
 			}
 
 			window.centerCamera(player);
-			currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height);
+			currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height, DEBUG_BUILD);
 
-			window.UIDrawFilledRect(0, window.height - 21, window.width, 21, Color.BLACK);
-			window.UIDrawCenteredString(window.width / 2, window.height - 10 ,12, "Escape The Robots And Oh Gosh They're Coming Run Beta Version 1.1b", Color.WHITE);
+			if(DEBUG_BUILD) {
+				// TODO: Put this in the engine so we can just pass an ArrayList of strings and have the box size adjust dynamically.
+				window.UIDrawFilledRect(0, window.height - 21, window.width, 21, Color.BLACK);
+				window.UIDrawCenteredString(window.width / 2, window.height - 10, 12, "Debug Build", Color.WHITE);
+
+				window.UIDrawFilledRect(0, 0, 100, 45, Color.BLACK);
+				window.UIDrawString(5, 15, 12, "X: " + player.x);
+				window.UIDrawString(5, 25, 12, "Y: " + player.y);
+				window.UIDrawString(5, 35, 12, "Version 1.1b");
+			}
 
 			window.repaint();
 			try {

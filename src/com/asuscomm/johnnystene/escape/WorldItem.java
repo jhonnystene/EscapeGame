@@ -31,7 +31,7 @@ public class WorldItem {
 	public static int SE = 6;
 	public static int S = 7;
 	
-	BufferedImage sprite;
+	public BufferedImage sprite;
 	public BufferedImage[] isometricSprites = new BufferedImage[8];
 	public boolean isometricItem = false;
 	

@@ -2,7 +2,6 @@ Todo for version 1.1b
 
 Engine
  - Add sound playing
- - Figure out why the fuck I can't center text (it's metrics.getHeight but I don't know how to fucking fix it)
 
 Game
  - Inventory system

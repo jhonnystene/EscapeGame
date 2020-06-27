@@ -2,6 +2,8 @@ Version 1.1b:
 	+ Easier to mod - uses .map files for collision.
 	+ Rewrote whole engine to improve performance
 	- Removed vent puzzle
+	+ Door entry puzzle is now a puzzle (pinpad)
+	+ Add pickups
 
 Version 1.0b:
 	+ Initial Release
