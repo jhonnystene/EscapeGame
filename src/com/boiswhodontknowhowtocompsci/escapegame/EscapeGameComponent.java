@@ -33,6 +33,9 @@ public class EscapeGameComponent {
 	public static void main(String[] args) {
 		// Setup window
 		Window window = new Window("Escape The Robots And Oh Gosh They're Coming Run");
+		Window debugWindow;
+
+		if(DEBUG_BUILD) debugWindow = new Window("Debug Window", 200, 100);
 		
 		// Setup player
 		WorldItem player = new WorldItem("/res/player/static/S.png");
@@ -77,6 +80,8 @@ public class EscapeGameComponent {
 		boolean gameRunning = true;
 		
 		while(gameRunning) {
+			if(window.keyboard.KEY_ESCAPE) gameRunning = false;
+
 			float moveX = 0;
 			float moveY = 0;
 			
@@ -118,7 +123,7 @@ public class EscapeGameComponent {
 							window.repaint();
 							try {
 								Thread.sleep(4);
-							} catch(Exception e) {}
+							} catch(Exception ignored) {}
 						}
 						player.x = 415;
 						player.y = 1450;
@@ -131,7 +136,7 @@ public class EscapeGameComponent {
 							window.repaint();
 							try {
 								Thread.sleep(2);
-							} catch(Exception e) {}
+							} catch(Exception ignored) {}
 						}
 					}
 				} else {
@@ -143,28 +148,28 @@ public class EscapeGameComponent {
 
 							// Keypad placement
 							if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "1"))
-								userEntered = userEntered + "1";
+								userEntered += "1";
 							if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "2"))
-								userEntered = userEntered + "2";
+								userEntered += "2";
 							if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "3"))
-								userEntered = userEntered + "3";
+								userEntered += "3";
 
 							if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "4"))
-								userEntered = userEntered + "4";
+								userEntered += "4";
 							if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "5"))
-								userEntered = userEntered + "5";
+								userEntered += "5";
 							if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "6"))
-								userEntered = userEntered + "6";
+								userEntered += "6";
 
 							if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "7"))
-								userEntered = userEntered + "7";
+								userEntered += "7";
 							if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "8"))
-								userEntered = userEntered + "8";
+								userEntered += "8";
 							if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "9"))
-								userEntered = userEntered + "9";
+								userEntered += "9";
 
 							if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "0"))
-								userEntered = userEntered + "0";
+								userEntered += "0";
 
 							if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "Done")) {
 								// TODO: Glow an LED red or green
@@ -179,7 +184,7 @@ public class EscapeGameComponent {
 
 							try {
 								Thread.sleep(1000 / 60);
-							} catch(Exception e) { }
+							} catch(Exception ignored) { }
 						}
 					}
 				}
@@ -220,16 +225,21 @@ public class EscapeGameComponent {
 				window.UIDrawFilledRect(0, window.height - 21, window.width, 21, Color.BLACK);
 				window.UIDrawCenteredString(window.width / 2, window.height - 10, 12, "Debug Build", Color.WHITE);
 
-				window.UIDrawFilledRect(0, 0, 100, 45, Color.BLACK);
-				window.UIDrawString(5, 15, 12, "X: " + player.x);
-				window.UIDrawString(5, 25, 12, "Y: " + player.y);
-				window.UIDrawString(5, 35, 12, "Version 1.1b");
+				debugWindow.UIDrawFilledRect(0, 0, window.width, window.height, Color.BLACK);
+				debugWindow.UIDrawString(5, 15, 12, "X: " + player.x);
+				debugWindow.UIDrawString(5, 25, 12, "Y: " + player.y);
+				debugWindow.UIDrawString(5, 35, 12, "Version 1.1b");
+				debugWindow.UIDrawString(5, 45, 12, "Collision Objects: " + currentMap.items.size());
+				debugWindow.UIDrawString(5, 55, 12, "Pickup Objects: " + currentMap.pickups.size());
+				debugWindow.UIDrawString(5, 65, 12, "Map ID: " + currentMapId);
+				debugWindow.repaint();
 			}
 
 			window.repaint();
 			try {
 				Thread.sleep(1000 / 60);
-			} catch(Exception e) { }
+			} catch(Exception ignored) { }
 		}
+		System.exit(0);
 	}
 }
