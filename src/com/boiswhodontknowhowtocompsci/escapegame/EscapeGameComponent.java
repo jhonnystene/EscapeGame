@@ -62,7 +62,7 @@ public class EscapeGameComponent {
 		outsideMap.items.add(player);
 		boolean outsideMapKeypadSolved = false;
 
-		World hallwayMap = new World("/res/maps/Hallway.png");
+		World hallwayMap = new World("/res/maps/Hallway-B11-Programmer-Art.png");
 		hallwayMap.loadMapFile("/res/maps/collision/hallway.map");
 		hallwayMap.items.add(player);
 		
@@ -194,6 +194,33 @@ public class EscapeGameComponent {
 				 * Have an elevator leading upstairs, and a locked door leading to the core hallway. The player needs
 				 * to get the screwdriver and wire cutters from upstairs to unscrew and rewire the panel.
 				 */
+
+				if(player.inArea(382, 1368, 74, 32) && window.keyboard.KEY_E) { // Locked door
+
+				}
+
+				if(player.inArea(1095, 947, 142, 32) && window.keyboard.KEY_E) { // Upstairs elevator
+					for(int i = 0; i < 255; i++) {
+						window.UIDrawFilledRect(0, 0, window.width, window.height, new Color(0, 0, 0, i));
+						window.repaint();
+						try {
+							Thread.sleep(4);
+						} catch(Exception ignored) {}
+					}
+					player.x = 415;
+					player.y = 1450;
+					currentMap = upstairsMap;
+					currentMapId = 2;
+					window.centerCamera(player);
+					for(int i = 255; i > 0; i--) {
+						currentMap.renderTo(window.frameBuffer, window.camera.x, window.camera.y, window.width, window.height, DEBUG_BUILD);
+						window.UIDrawFilledRect(0, 0, window.width, window.height, new Color(0, 0, 0, i));
+						window.repaint();
+						try {
+							Thread.sleep(2);
+						} catch(Exception ignored) {}
+					}
+				}
 			} else if(currentMapId == 2) { // Upstairs
 				/*
 				 * Map concept:
