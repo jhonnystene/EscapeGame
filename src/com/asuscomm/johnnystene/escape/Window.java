@@ -1,6 +1,6 @@
 package com.asuscomm.johnnystene.escape;
 
-import java.awt.*;
+import java.awt.*; // this was intellij's fault not mine
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
