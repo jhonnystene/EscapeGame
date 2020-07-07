@@ -1,4 +1,4 @@
-package com.asuscomm.johnnystene.escape;
+package net.ddns.johnnystene.infinitytoolkit.engine;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

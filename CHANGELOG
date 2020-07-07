@@ -4,6 +4,11 @@ Version 1.1b:
 	- Removed vent puzzle
 	+ Door entry puzzle is now a puzzle (pinpad)
 	+ Add pickups
+	+ Add locked door in hallway
+	- Removed unneeded puzzle in hallway
+	- Removed laser
+    - Removed unneeded rooms in hallway
+    + Improved collision outside map
 
 Version 1.0b:
 	+ Initial Release

@@ -1,4 +1,4 @@
-package com.asuscomm.johnnystene.escape;
+package net.ddns.johnnystene.infinitytoolkit.engine;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -215,6 +215,11 @@ public class WorldItem {
 		if(isometricItem) {
 			lookTowards((int) moveX, (int) moveY);
 		}
+
+		if(x < 0) x = 0;
+		if(x > 10240) x = 10240;
+		if(y < 0) y = 0;
+		if(y > 10240) y = 10240;
 	}
 
 	public boolean inArea(int arg0, int arg1, int arg2, int arg3) {

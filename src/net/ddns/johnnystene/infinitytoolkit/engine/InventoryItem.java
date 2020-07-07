@@ -1,6 +1,6 @@
-package com.asuscomm.johnnystene.escape;
+package net.ddns.johnnystene.infinitytoolkit.engine;
 
-import com.asuscomm.johnnystene.escape.ImageUtils;
+import net.ddns.johnnystene.infinitytoolkit.engine.ImageUtils;
 
 import java.awt.image.BufferedImage;
 

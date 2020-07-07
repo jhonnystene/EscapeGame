@@ -1,4 +1,4 @@
-package com.asuscomm.johnnystene.escape;
+package net.ddns.johnnystene.infinitytoolkit.engine;
 
 public class Camera {
 	public int x;

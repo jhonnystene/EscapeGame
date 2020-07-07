@@ -1,6 +1,6 @@
 // No, I didn't write this from scratch. Wrote a python script to do it for me haha
 
-package com.asuscomm.johnnystene.escape;
+package net.ddns.johnnystene.infinitytoolkit.engine;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

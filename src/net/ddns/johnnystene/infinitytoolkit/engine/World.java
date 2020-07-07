@@ -1,4 +1,4 @@
-package com.asuscomm.johnnystene.escape;
+package net.ddns.johnnystene.infinitytoolkit.engine;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -43,10 +43,10 @@ public class World {
 		}
 	}
 	
-	public void renderTo(BufferedImage image, boolean debug) {
-		Graphics2D graphics = image.createGraphics();
-		Raster newFB = backdrop.getData(new Rectangle(0, 0, width, height));
-		image.setData(newFB);
+	public void renderTo(Graphics2D graphics, boolean debug) {
+		//Raster newFB = backdrop.getData(new Rectangle(0, 0, width, height));
+		//image.setData(newFB);
+		graphics.drawImage(backdrop, 0, 0, null);
 		
 		for(WorldItem item : items) {
 			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, null);
@@ -70,8 +70,7 @@ public class World {
 		graphics.dispose();
 	}
 	
-	public void renderTo(BufferedImage image, int viewportX, int viewportY, int viewportW, int viewportH, boolean debug) {
-		Graphics2D graphics = image.createGraphics();
+	public void renderTo(Graphics2D graphics, int viewportX, int viewportY, int viewportW, int viewportH, boolean debug) {
 		graphics.drawImage(backdrop, 0 - viewportX, 0 - viewportY, null);
 
 		for(WorldItem item : items) {
