@@ -1,7 +1,5 @@
 package net.ddns.johnnystene.infinitytoolkit.engine;
 
-// TODO: Reimplement all of the UI functions
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,21 +27,22 @@ public class Window extends JFrame {
         drawSurface = new JComponent() { // Create a custom JComponent to draw on
             @Override
             public void paintComponent(Graphics g) {
-                super.paintComponent(g);
                 if(finishedDrawing) {
+                    super.paintComponent(g);
                     g.drawImage(frameBuffer, 0, 0, this);
                     finishedDrawing = false;
                 }
             }
         };
+        drawSurface.setDoubleBuffered(true);
 
         // For some reason JFrame can't just, y'know, handle its own input
         keyboard = new Keyboard();
         mouse = new Mouse();
         camera = new Camera();
         addKeyListener(keyboard);
-        addMouseListener(mouse);
-        addMouseMotionListener(mouse);
+        drawSurface.addMouseListener(mouse);
+        drawSurface.addMouseMotionListener(mouse);
 
         setTitle(title);
         setPreferredSize(new Dimension(width, height));

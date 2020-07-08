@@ -17,6 +17,13 @@ public class Game extends Thread {
         window = new Window(title, width, height);
     }
 
+    public void doNothing() {
+        PrintStream fuck = System.out;
+        System.setOut(new PrintStream(new OutputStream() {public void write(int b) {}}));
+        System.out.println("Waiting for render to finish...");
+        System.setOut(fuck);
+    }
+
     public void run() {
         try {
             if(window == null) {
@@ -27,12 +34,7 @@ public class Game extends Thread {
                     doTick();
                     window.finishedDrawing = true;
                 } else {
-                    // this is fucked but it won't render without it
-                    // java just straight up freezes
-                    PrintStream fuck = System.out;
-                    System.setOut(new PrintStream(new OutputStream() {public void write(int b) {}}));
-                    System.out.println("Waiting for render to finish...");
-                    System.setOut(fuck);
+                    doNothing();
                 }
             }
         } catch(Exception e) {
