@@ -67,7 +67,7 @@ public class Window extends JFrame {
     public void renderWorld(World world) {
         Graphics2D graphics = frameBuffer.createGraphics();
         for(WorldItem item : world.items) {
-            graphics.drawImage(item.sprite, (int) item.x - camera.x, (int) item.y - camera.y, this);
+            graphics.drawImage(item.sprite.image, (int) item.x - camera.x, (int) item.y - camera.y, this);
         }
     }
 
@@ -193,12 +193,13 @@ public class Window extends JFrame {
         return mouseStatus(x, y, width, height);
     }
 
-    public boolean UIDrawButton(int x, int y, int w, int h, int fontSize, Color backColor, Color hoverColor, Color textColor, String text) {
+    public boolean UIDrawButton(int x, int y, int w, int h, int fontSize, Color backColor, Color hoverColor, Color textColor, String text, boolean centerText) {
         if(UIDrawFilledRect(x, y, w, h, backColor, hoverColor) == 2) {
             return true;
         }
 
-        UIDrawCenteredString((x + (w / 2)), (y + (h / 2)), fontSize, text, textColor);
+        if(centerText) UIDrawCenteredString((x + (w / 2)), (y + (h / 2)), fontSize, text, textColor);
+        else UIDrawString(x, y + 15, fontSize, text, textColor);
         return false;
     }
 }

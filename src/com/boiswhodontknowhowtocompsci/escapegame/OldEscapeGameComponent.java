@@ -149,6 +149,7 @@ public class OldEscapeGameComponent {
 								window.UIDrawFilledRect(0, 0, window.width, window.height, Color.BLACK);
 
 								// Keypad placement
+								/*
 								if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "1"))
 									userEntered += "1";
 								if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "2"))
@@ -178,7 +179,7 @@ public class OldEscapeGameComponent {
 									if (userEntered.equals("1234")) {
 										outsideMapKeypadSolved = true;
 									} else userEntered = "";
-								}
+								}*/
 
 								while (window.mouse.down) {
 									window.repaint();

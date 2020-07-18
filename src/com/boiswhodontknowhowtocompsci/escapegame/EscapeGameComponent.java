@@ -1,5 +1,6 @@
 package com.boiswhodontknowhowtocompsci.escapegame;
 
+import net.ddns.johnnystene.infinitytoolkit.engine.AnimatedSprite;
 import net.ddns.johnnystene.infinitytoolkit.engine.Game;
 import net.ddns.johnnystene.infinitytoolkit.engine.World;
 import net.ddns.johnnystene.infinitytoolkit.engine.WorldItem;
@@ -21,18 +22,40 @@ public class EscapeGameComponent extends Game {
     public World currentMap;
     public int currentMapId;
 
+    public AnimatedSprite[] playerIdleSprites = new AnimatedSprite[8];
+    public AnimatedSprite[] playerWalkSprites = new AnimatedSprite[8];
+
     public EscapeGameComponent() {
         super("Escape Game", 800, 600);
         // Setup player
+        playerIdleSprites[WorldItem.N] = new AnimatedSprite("/res/player/Idle/Back");
+        playerIdleSprites[WorldItem.NE] = new AnimatedSprite("/res/player/Idle/Back-Right");
+        playerIdleSprites[WorldItem.NW] = new AnimatedSprite("/res/player/Idle/Back-Left");
+        playerIdleSprites[WorldItem.E] = new AnimatedSprite("/res/player/Idle/Right");
+        playerIdleSprites[WorldItem.W] = new AnimatedSprite("/res/player/Idle/Left");
+        playerIdleSprites[WorldItem.SE] = new AnimatedSprite("/res/player/Idle/Front-Right");
+        playerIdleSprites[WorldItem.S] = new AnimatedSprite("/res/player/Idle/Front");
+        playerIdleSprites[WorldItem.SW] = new AnimatedSprite("/res/player/Idle/Front-Left");
+        for(AnimatedSprite sprite : playerIdleSprites) {
+            sprite.frameInterval = 5;
+            sprite.resize(118, 118);
+        }
+
+        playerWalkSprites[WorldItem.N] = new AnimatedSprite("/res/player/Walk/Back");
+        playerWalkSprites[WorldItem.NE] = new AnimatedSprite("/res/player/Walk/Back-Right");
+        playerWalkSprites[WorldItem.NW] = new AnimatedSprite("/res/player/Walk/Back-Left");
+        playerWalkSprites[WorldItem.E] = new AnimatedSprite("/res/player/Walk/Right");
+        playerWalkSprites[WorldItem.W] = new AnimatedSprite("/res/player/Walk/Left");
+        playerWalkSprites[WorldItem.SE] = new AnimatedSprite("/res/player/Walk/Front-Right");
+        playerWalkSprites[WorldItem.S] = new AnimatedSprite("/res/player/Walk/Front");
+        playerWalkSprites[WorldItem.SW] = new AnimatedSprite("/res/player/Walk/Front-Left");
+        for(AnimatedSprite sprite : playerWalkSprites) {
+            sprite.frameInterval = 5;
+            sprite.resize(118, 118);
+        }
+
         player = new WorldItem("/res/player/static/S.png");
-        player.loadSprite("/res/player/static/N.png", WorldItem.N);
-        player.loadSprite("/res/player/static/NE.png", WorldItem.NE);
-        player.loadSprite("/res/player/static/E.png", WorldItem.E);
-        player.loadSprite("/res/player/static/SE.png", WorldItem.SE);
-        player.loadSprite("/res/player/static/S.png", WorldItem.S);
-        player.loadSprite("/res/player/static/SW.png", WorldItem.SW);
-        player.loadSprite("/res/player/static/W.png", WorldItem.W);
-        player.loadSprite("/res/player/static/NW.png", WorldItem.NW);
+        player.isometricSprites = playerWalkSprites;
         player.isometricItem = true;
         player.resize(118, 118);
         player.x = 360;
@@ -66,6 +89,12 @@ public class EscapeGameComponent extends Game {
 
     @Override
     public void doTick() {
+        for(AnimatedSprite sprite : playerIdleSprites) {
+            sprite.update();
+        }
+        for(AnimatedSprite sprite : playerWalkSprites) {
+            sprite.update();
+        }
         if(window.keyboard.KEY_ESCAPE) System.exit(0);
 
         float moveX = 0;
@@ -74,6 +103,13 @@ public class EscapeGameComponent extends Game {
         if(window.keyboard.KEY_S) moveY += 10;
         if(window.keyboard.KEY_A) moveX -= 10;
         if(window.keyboard.KEY_D) moveX += 10;
+
+        if(moveX != 0) player.isometricSprites = playerWalkSprites;
+        else if(moveY != 0) player.isometricSprites = playerWalkSprites;
+        else {
+            player.isometricSprites = playerIdleSprites;
+            player.pointInDirection(player.direction);
+        }
 
         player.moveAndCollide(moveX, moveY, currentMap.items);
         window.centerCamera(player);
@@ -117,31 +153,31 @@ public class EscapeGameComponent extends Game {
                             window.UIDrawFilledRect(0, 0, window.width, window.height, Color.BLACK);
 
                             // Keypad placement
-                            if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "1"))
+                            if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "1", true))
                                 userEntered += "1";
-                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "2"))
+                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "2", true))
                                 userEntered += "2";
-                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "3"))
+                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 100, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "3", true))
                                 userEntered += "3";
 
-                            if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "4"))
+                            if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "4", true))
                                 userEntered += "4";
-                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "5"))
+                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "5", true))
                                 userEntered += "5";
-                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "6"))
+                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) - 25, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "6", true))
                                 userEntered += "6";
 
-                            if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "7"))
+                            if (window.UIDrawButton((window.width / 2) - 100, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "7", true))
                                 userEntered += "7";
-                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "8"))
+                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "8", true))
                                 userEntered += "8";
-                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "9"))
+                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 50, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "9", true))
                                 userEntered += "9";
 
-                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "0"))
+                            if (window.UIDrawButton((window.width / 2) - 25, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "0", true))
                                 userEntered += "0";
 
-                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "Done")) {
+                            if (window.UIDrawButton((window.width / 2) + 50, (window.height / 2) + 125, 50, 50, 20, Color.GRAY, Color.LIGHT_GRAY, Color.BLACK, "Done", true)) {
                                 // TODO: Glow an LED red or green
                                 if (userEntered.equals("1234")) {
                                     outsideMapKeypadSolved = true;

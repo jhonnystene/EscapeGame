@@ -31,10 +31,22 @@ public class WorldItem {
 	public static int SE = 6;
 	public static int S = 7;
 	
-	public BufferedImage sprite;
-	public BufferedImage[] isometricSprites = new BufferedImage[8];
+	public Sprite sprite;
+	public Sprite[] isometricSprites = new Sprite[8];
+	public int direction = 0;
 	public boolean isometricItem = false;
-	
+
+	public WorldItem(Sprite[] sprites) {
+		isometricSprites = sprites;
+		sprite = isometricSprites[0];
+		width = sprite.image.getWidth();
+		height = sprite.image.getHeight();
+		hitboxX = 0;
+		hitboxY = 0;
+		hitboxWidth = width;
+		hitboxHeight = height;
+	}
+
 	public WorldItem(String path) {
 		x = 0;
 		y = 0;
@@ -47,6 +59,18 @@ public class WorldItem {
 		y = sY;
 		
 		loadSprite(path);
+	}
+
+	public WorldItem(Sprite s) {
+		sprite = s;
+		x = 0;
+		y = 0;
+	}
+
+	public WorldItem(Sprite s, int sX, int sY) {
+		sprite = s;
+		x = sX;
+		y = sY;
 	}
 	
 	public WorldItem(String path, int sX, int sY, int hX, int hY, int hW, int hH) {
@@ -62,8 +86,8 @@ public class WorldItem {
 	}
 	
 	public WorldItem(int w, int h, Color color) {
-		sprite = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = sprite.createGraphics();
+		sprite = new Sprite(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics = sprite.image.createGraphics();
 		graphics.setColor(color);
 		graphics.fillRect(0, 0, width, height);
 		graphics.dispose();
@@ -76,67 +100,32 @@ public class WorldItem {
 	}
 	
 	public void resize(int w, int h) {
-		sprite = ImageUtils.resize(sprite, w, h);
+		sprite.resize(w, h);
 		for(int i = 0; i < 8; i++) {
-			isometricSprites[i] = ImageUtils.resize(isometricSprites[i], w, h);
+			isometricSprites[i].resize(w, h);
 		}
 		width = w;
 		height = h;
 	}
 	
 	public void loadSprite(String path) {
-		try {
-			sprite = ImageIO.read(this.getClass().getResourceAsStream(path));
-			width = sprite.getWidth();
-			height = sprite.getHeight();
-			hitboxX = 0;
-			hitboxY = 0;
-			hitboxWidth = width;
-			hitboxHeight = height;
-		} catch(Exception e) {
-			System.out.println("WorldItem load error! Can't load " + path);
-			loadErrorSprite();
-		}
-		
+		sprite = new Sprite(path);
 		for(int i = 0; i < 8; i++) isometricSprites[i] = sprite;
 	}
 	
 	public void loadSprite(String path, int direction) {
-		try {
-			isometricSprites[direction] = ImageIO.read(this.getClass().getResourceAsStream(path));
-		} catch(Exception e) {
-			System.out.println("WorldItem load error! Can't load " + path);
-		}
+		isometricSprites[direction] = new Sprite(path);
 	}
 	
-	public void loadErrorSprite() {
-		// Load in error sprite
-		sprite = new BufferedImage(64, 64, BufferedImage.TYPE_INT_RGB);
-		Graphics2D graphics = sprite.createGraphics();
-		graphics.setColor(Color.BLACK);
-		graphics.fillRect(0, 0, 64, 64);
-		graphics.setColor(Color.MAGENTA);
-		graphics.fillRect(0, 0, 32, 32);
-		graphics.fillRect(32, 32, 64, 64);
-		graphics.dispose();
-		
-		// Set params to match
-		width = 64;
-		height = 64;
-		hitboxX = 0;
-		hitboxY = 0;
-		hitboxWidth = 64;
-		hitboxHeight = 64;
-	}
-	
-	public void pointInDirection(int direction) {
+	public void pointInDirection(int d) {
 		if(isometricItem) {
 			if(direction < 8)
-				sprite = isometricSprites[direction];
+				sprite = isometricSprites[d];
 			else 
 				System.out.println("Warning: Tried to point an isometric sprite in a non-existant direction.");
 		} else
 			System.out.println("Warning: Tried to point a non-isometric sprite in a direction.");
+		direction = d;
 	}
 	
 	public void lookTowards(int x, int y) {

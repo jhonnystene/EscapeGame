@@ -30,8 +30,8 @@ public class World {
 	public World(String path) {
 		items = new ArrayList<>();
 		pickups = new ArrayList<>();
-		width = 10240;
-		height = 10240;
+		width = 4096;
+		height = 4096;
 		backdrop = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		try { 
 			BufferedImage temp = ImageIO.read(this.getClass().getResourceAsStream(path));
@@ -49,7 +49,7 @@ public class World {
 		graphics.drawImage(backdrop, 0, 0, null);
 		
 		for(WorldItem item : items) {
-			graphics.drawImage(item.sprite, (int) item.x, (int) item.y, null);
+			graphics.drawImage(item.sprite.image, (int) item.x, (int) item.y, null);
 			if(debug) {
 				graphics.setColor(Color.BLACK);
 				graphics.drawRect((int) item.x, (int) item.y, item.width, item.height);
@@ -74,7 +74,7 @@ public class World {
 		graphics.drawImage(backdrop, 0 - viewportX, 0 - viewportY, null);
 
 		for(WorldItem item : items) {
-			graphics.drawImage(item.sprite, (int) item.x - viewportX, (int) item.y - viewportY, null);
+			graphics.drawImage(item.sprite.image, (int) item.x - viewportX, (int) item.y - viewportY, null);
 			if(debug) {
 				graphics.setColor(Color.BLACK);
 				graphics.drawRect((int) item.x - viewportX, (int) item.y - viewportY, item.width, item.height);
